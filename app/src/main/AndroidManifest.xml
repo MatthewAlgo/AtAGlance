@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.matthewsgalaxy.weatherapp0001">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="app.matthewsgalaxy.ataglance">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.WeatherApp0001"
-
+        android:icon="@mipmap/weatherico"
+        android:label="AtAGlance"
+        android:roundIcon="@mipmap/weatherico"
         android:usesCleartextTraffic="true"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false"
-        >
+        android:supportsRtl="true"
+        tools:targetApi="m">
+        android:theme="@style/Theme.NavDrawerApp">
+
         <activity
-            android:name=".NavDrawer"
-            android:label="@string/title_activity_nav_drawer"
-            android:theme="@style/Theme.WeatherApp0001.NoActionBar"></activity>
-        <activity android:name=".MainActivity">
+            android:name="app.matthewsgalaxy.ataglance.MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AtAGlance.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

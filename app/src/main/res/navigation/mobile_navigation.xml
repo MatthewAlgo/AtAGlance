@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="app.matthewsgalaxy.weatherapp0001.ui.home.HomeFragment"
+        android:name="app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_ataglance" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="app.matthewsgalaxy.weatherapp0001.ui.gallery.GalleryFragment"
+        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedForecast.ExtendedForecastFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_extendedforecast" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="app.matthewsgalaxy.weatherapp0001.ui.slideshow.SlideshowFragment"
+        android:name="app.matthewsgalaxy.ataglance.ui.ScienceNews.ScienceNewsFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_sciencenews" />
 </navigation>

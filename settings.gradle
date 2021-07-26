@@ -1,2 +1,2 @@
-rootProject.name = "WeatherApp0.001"
+rootProject.name = "AtAGlance"
 include ':app'

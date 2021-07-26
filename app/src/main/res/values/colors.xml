@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="TextSubtitle">#4e4e4e</color>
+    <color name="NewsForBackGround">#f9f9fa</color>
+    <color name="TextTitle">#262626</color>
 </resources>
