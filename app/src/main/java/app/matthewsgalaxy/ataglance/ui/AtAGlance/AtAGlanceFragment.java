@@ -52,6 +52,7 @@ import okhttp3.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.location.LocationManager.GPS_PROVIDER;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 
 public class AtAGlanceFragment extends Fragment {
@@ -95,7 +96,7 @@ public class AtAGlanceFragment extends Fragment {
     public static ConnectivityManager connectivityManager;
     public static NetworkInfo wifiInfo, mobileInfo;
     public static boolean connected = false;
-    public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD, NEWSAPI_SCIENCE;
+    public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD, NEWSAPI_SCIENCE,NEWSAPI_TECHNOLOGY;
     public static String ResponseJSON;
 
     public static boolean DAYLIGHT = true;
@@ -103,9 +104,10 @@ public class AtAGlanceFragment extends Fragment {
     public static Time CurrentTime;
 
 
-    // For the science news part
+    // FOR THE NEWS PARTS
     protected FragmentAtaglanceBinding binding;
     ScienceNewsPart MyScienceNewsPart;
+    TechnologyNewsPart MyTechnologyNewsPart;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -149,6 +151,7 @@ public class AtAGlanceFragment extends Fragment {
 
 
         MyScienceNewsPart = new ScienceNewsPart(binding);
+        MyTechnologyNewsPart = new TechnologyNewsPart(binding);
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR WEATHER REQUESTS
 
@@ -228,11 +231,13 @@ public class AtAGlanceFragment extends Fragment {
             APIURL_FORECAST = "http://api.openweathermap.org/data/2.5/" + "forecast" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
             NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
             NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
+            NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
 
             DoInBackgroundRequest("forecast");
             DoInBackgroundRequest("weather");
             DoInBackgroundRequest("news_world");
             DoInBackgroundRequest("news_science");
+            DoInBackgroundRequest("news_technology");
             return true;
         }
     }
@@ -282,11 +287,13 @@ public class AtAGlanceFragment extends Fragment {
                         APIURL_FORECAST = "http://api.openweathermap.org/data/2.5/" + "forecast" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
                         NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
                         NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
+                        NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
 
                         DoInBackgroundRequest("forecast");
                         DoInBackgroundRequest("weather");
                         DoInBackgroundRequest("news_world");
                         DoInBackgroundRequest("news_science");
+                        DoInBackgroundRequest("news_technology");
 
                     }
 
@@ -298,10 +305,14 @@ public class AtAGlanceFragment extends Fragment {
                     APIURL_FORECAST = "https://samples.openweathermap.org/data/2.5/forecast?q=London&appid=b1b15e88fa797225412429c1c50c122a1";
                     NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
                     NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
+                    NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
+
 
                     DoInBackgroundRequest("forecast");
                     DoInBackgroundRequest("weather");
                     DoInBackgroundRequest("news_world");
+                    DoInBackgroundRequest("news_science");
+                    DoInBackgroundRequest("news_technology");
 
                 }
                 return;
@@ -377,6 +388,8 @@ public class AtAGlanceFragment extends Fragment {
             request = new Request.Builder().url(NEWSAPI_WORLD).build();
         }else if(REQUEST_TYPE_LOC == "news_science"){
             request = new Request.Builder().url(NEWSAPI_SCIENCE).build();
+        }else if(REQUEST_TYPE_LOC == "news_technology"){
+            request = new Request.Builder().url(NEWSAPI_TECHNOLOGY).build();
         }
 
         client.newCall(request).enqueue(new Callback() {
@@ -521,6 +534,8 @@ public class AtAGlanceFragment extends Fragment {
 
                             }else if(REQUEST_TYPE_LOC.equals("news_science")) {
                                 MyScienceNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
+                            }else if(REQUEST_TYPE_LOC.equals("news_technology")) {
+                                MyTechnologyNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
                             }
                         }
 
@@ -914,7 +929,7 @@ public class AtAGlanceFragment extends Fragment {
                         ImageNews.setImageResource(R.drawable.materialwall);
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).resize(700, 500).onlyScaleDown().into(ImageNews); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).into(ImageNews); // Set Image
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -940,7 +955,7 @@ public class AtAGlanceFragment extends Fragment {
 
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).resize(700, 500).onlyScaleDown().into(ImageNews); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).into(ImageNews); // Set Image
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -968,4 +983,5 @@ public class AtAGlanceFragment extends Fragment {
             }
         });
     }
+
 }

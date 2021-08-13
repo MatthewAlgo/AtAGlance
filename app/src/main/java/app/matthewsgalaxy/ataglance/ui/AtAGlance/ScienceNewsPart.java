@@ -133,14 +133,14 @@ public class ScienceNewsPart extends AtAGlanceFragment {
         PrevArticleChip2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(MyTitlesArrayListForWorldNews !=null) {
+                if(MyTitlesArrayListForScienceNews !=null) {
                     if (CurrentArticleNumber > 0) {
                         CurrentArticleNumber--;
 
                         ImageNews2.setImageResource(R.drawable.materialwall);
-                        if(!MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber)!=null) {
+                        if(!MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber)).resize(700, 500).onlyScaleDown().into(ImageNews2); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).resize(700, 500).onlyScaleDown().into(ImageNews2); // Set Image
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -148,8 +148,8 @@ public class ScienceNewsPart extends AtAGlanceFragment {
                         }else{
                             ImageNews2.setImageResource(R.drawable.materialwall);
                         }
-                        ChipNewsTitle2.setText(MyTitlesArrayListForWorldNews.get(CurrentArticleNumber)); // Set title
-                        NewsDescriptionText2.setText(MyDescriptionsArrayListForWorldNews.get(CurrentArticleNumber)); // Set Description
+                        ChipNewsTitle2.setText(MyTitlesArrayListForScienceNews.get(CurrentArticleNumber)); // Set title
+                        NewsDescriptionText2.setText(MyDescriptionsArrayListForScienceNews.get(CurrentArticleNumber)); // Set Description
                     }
                 }
             }
@@ -157,7 +157,7 @@ public class ScienceNewsPart extends AtAGlanceFragment {
         ChipURLLink2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(MyURLArrayListForWorldNews !=null) {
+                if(MyURLArrayListForScienceNews !=null) {
                     try {
                         StringToOpenInBrowser(MyURLArrayListForScienceNews.get(CurrentArticleNumber));
                     }catch (Exception e){
@@ -176,9 +176,9 @@ public class ScienceNewsPart extends AtAGlanceFragment {
                         // Initially set Image Value to a nice resource
                         ImageNews2.setImageResource(R.drawable.materialwall);
 
-                        if(MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber)!=null) {
+                        if(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CurrentArticleNumber)).resize(700, 500).onlyScaleDown().into(ImageNews2); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).into(ImageNews2); // Set Image
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -186,8 +186,8 @@ public class ScienceNewsPart extends AtAGlanceFragment {
                         }else{
                             ImageNews2.setImageResource(R.drawable.materialwall);
                         }
-                        ChipNewsTitle2.setText(MyTitlesArrayListForWorldNews.get(CurrentArticleNumber)); // Set title
-                        NewsDescriptionText2.setText(MyDescriptionsArrayListForWorldNews.get(CurrentArticleNumber)); // Set Description
+                        ChipNewsTitle2.setText(MyTitlesArrayListForScienceNews.get(CurrentArticleNumber)); // Set title
+                        NewsDescriptionText2.setText(MyDescriptionsArrayListForScienceNews.get(CurrentArticleNumber)); // Set Description
                     }
                 }
 
@@ -200,15 +200,15 @@ public class ScienceNewsPart extends AtAGlanceFragment {
         ChipNewsTitle2.setText(MyTitlesArrayListForScienceNews.get(0));
 
         MyDescriptionsArrayListForScienceNews = ParseJSONWorldNews(JsonRequest,"news_descr");
-        if(MyDescriptionsArrayListForWorldNews.get(0)!=null) {
-            NewsDescriptionText2.setText(MyDescriptionsArrayListForWorldNews.get(0));
+        if(MyDescriptionsArrayListForScienceNews.get(0)!=null) {
+            NewsDescriptionText2.setText(MyDescriptionsArrayListForScienceNews.get(0));
         }
 
-        MyURLArrayListForWorldNews = ParseJSONWorldNews(JsonRequest,"news_url");
+        MyURLArrayListForScienceNews = ParseJSONWorldNews(JsonRequest,"news_url");
 
         // To load the first corresponding image
         MyIMGURLArrayListForScienceNews = ParseJSONWorldNews(JsonRequest,"news_url_to_img");
-        Picasso.get().load(MyIMGURLArrayListForScienceNews.get(0)).resize(700, 500).onlyScaleDown().into(ImageNews2); // Set Image
+        Picasso.get().load(MyIMGURLArrayListForScienceNews.get(0)).into(ImageNews2); // Set Image
     }
 
 }
