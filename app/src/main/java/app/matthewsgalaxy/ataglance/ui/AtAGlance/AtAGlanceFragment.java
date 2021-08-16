@@ -1,6 +1,7 @@
 package app.matthewsgalaxy.ataglance.ui.AtAGlance;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,7 +43,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import app.matthewsgalaxy.ataglance.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
+import app.matthewsgalaxy.ataglance.SetImagesForImageViewIcon;
 import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -52,7 +55,11 @@ import okhttp3.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.location.LocationManager.GPS_PROVIDER;
-import static androidx.core.content.ContextCompat.getSystemService;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONCurrentWeather;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONForecast;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ToCamelCaseWord;
 
 
 public class AtAGlanceFragment extends Fragment {
@@ -96,7 +103,8 @@ public class AtAGlanceFragment extends Fragment {
     public static ConnectivityManager connectivityManager;
     public static NetworkInfo wifiInfo, mobileInfo;
     public static boolean connected = false;
-    public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD, NEWSAPI_SCIENCE,NEWSAPI_TECHNOLOGY;
+    public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD,
+            NEWSAPI_SCIENCE, NEWSAPI_TECHNOLOGY, NEWSAPI_POLITICS, NEWSAPI_BUSINESS, NEWSAPI_ENTERTAINMENT;
     public static String ResponseJSON;
 
     public static boolean DAYLIGHT = true;
@@ -108,6 +116,9 @@ public class AtAGlanceFragment extends Fragment {
     protected FragmentAtaglanceBinding binding;
     ScienceNewsPart MyScienceNewsPart;
     TechnologyNewsPart MyTechnologyNewsPart;
+    BusinessNewsPart MyBusinessNewsPart;
+    PoliticsNewsPart MyPoliticsNewsPart;
+    EntertainmentNewsPart MyEntertainmentNewsPart;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -152,6 +163,10 @@ public class AtAGlanceFragment extends Fragment {
 
         MyScienceNewsPart = new ScienceNewsPart(binding);
         MyTechnologyNewsPart = new TechnologyNewsPart(binding);
+        MyBusinessNewsPart = new BusinessNewsPart(binding);
+        MyPoliticsNewsPart = new PoliticsNewsPart(binding);
+        MyEntertainmentNewsPart = new EntertainmentNewsPart(binding);
+
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR WEATHER REQUESTS
 
@@ -161,7 +176,7 @@ public class AtAGlanceFragment extends Fragment {
             Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
         }
         // Set Click Listeners for the Chips
-        SetOnClickListenersForWorldNewsChips();
+        SetOnClickListenersForWorldNewsChipsPlusURLChipsForParts();
         return root;
     }
 
@@ -203,6 +218,7 @@ public class AtAGlanceFragment extends Fragment {
             return false;
         } else {
             // We have the permission
+            // We get the current location
             LocationManager locationManager = (LocationManager) requireActivity().getSystemService(LOCATION_SERVICE);
             LocationListener loc_listener = new LocationListener() {
 
@@ -217,29 +233,45 @@ public class AtAGlanceFragment extends Fragment {
 
                 public void onStatusChanged(String p, int status, Bundle extras) {}
             };
-            locationManager.requestLocationUpdates(GPS_PROVIDER, 400, 1, loc_listener);
-            Location Loc = locationManager.getLastKnownLocation(GPS_PROVIDER);
-            try {
-                LATITUDE = Loc.getLatitude();
-                LONGITUDE = Loc.getLongitude();
-            } catch (NullPointerException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Error Fetching Latitude and Longitude Data");
+            if(LONGITUDE == 0 && LATITUDE == LONGITUDE) {
+                locationManager.requestLocationUpdates(GPS_PROVIDER, 400, 1, loc_listener);
+                Location Loc = locationManager.getLastKnownLocation(GPS_PROVIDER);
+
+                try {
+                    LATITUDE = Loc.getLatitude();
+                    LONGITUDE = Loc.getLongitude();
+                } catch (NullPointerException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("Error Fetching Latitude and Longitude Data");
+                }
             }
-
-            APIURL_WEATHER = "http://api.openweathermap.org/data/2.5/" + "weather" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
-            APIURL_FORECAST = "http://api.openweathermap.org/data/2.5/" + "forecast" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
-            NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
-            NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
-            NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
-
-            DoInBackgroundRequest("forecast");
-            DoInBackgroundRequest("weather");
-            DoInBackgroundRequest("news_world");
-            DoInBackgroundRequest("news_science");
-            DoInBackgroundRequest("news_technology");
+            InitURLsAndExecuteBackGroundRequests(true);
             return true;
         }
+    }
+    public void InitURLsAndExecuteBackGroundRequests(boolean LocAccepted){
+        if(LocAccepted) {
+            APIURL_WEATHER = "http://api.openweathermap.org/data/2.5/" + "weather" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
+            APIURL_FORECAST = "http://api.openweathermap.org/data/2.5/" + "forecast" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
+        }else{
+            APIURL_WEATHER = "https://samples.openweathermap.org/data/2.5/weather?q=London&appid=b1b15e88fa797225412429c1c50c122a1"; // TEST -> London, GB
+            APIURL_FORECAST = "https://samples.openweathermap.org/data/2.5/forecast?q=London&appid=b1b15e88fa797225412429c1c50c122a1";
+        }
+        NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
+        NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
+        NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
+        NEWSAPI_POLITICS = "https://newsapi.org/v2/top-headlines?language=en&category=politics&apiKey=" + APIKEY_NEWS;
+        NEWSAPI_BUSINESS = "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=" + APIKEY_NEWS;
+        NEWSAPI_ENTERTAINMENT = "https://newsapi.org/v2/top-headlines?language=en&category=entertainment&apiKey=" + APIKEY_NEWS;
+
+        DoInBackgroundRequest("forecast");
+        DoInBackgroundRequest("weather");
+        DoInBackgroundRequest("news_world");
+        DoInBackgroundRequest("news_science");
+        DoInBackgroundRequest("news_technology");
+        DoInBackgroundRequest("news_business");
+        DoInBackgroundRequest("news_politics");
+        DoInBackgroundRequest("news_entertainment");
     }
 
     @Override
@@ -282,37 +314,14 @@ public class AtAGlanceFragment extends Fragment {
                             System.out.println(e.getMessage());
                             System.out.println("Error Fetching Latitude and Longitude Data");
                         }
-
-                        APIURL_WEATHER = "http://api.openweathermap.org/data/2.5/" + "weather" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
-                        APIURL_FORECAST = "http://api.openweathermap.org/data/2.5/" + "forecast" + "?lat=" + Double.toString(LATITUDE) + "&lon=" + Double.toString(LONGITUDE) + "&appid=" + APIKEY; // Auto location
-                        NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
-                        NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
-                        NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
-
-                        DoInBackgroundRequest("forecast");
-                        DoInBackgroundRequest("weather");
-                        DoInBackgroundRequest("news_world");
-                        DoInBackgroundRequest("news_science");
-                        DoInBackgroundRequest("news_technology");
-
+                        InitURLsAndExecuteBackGroundRequests(true);
                     }
 
                 } else {
 
                     // PERMISSION DENIED
                     Toast.makeText(requireContext(), "Location Permission Not Accepted, Limited Features!",Toast.LENGTH_SHORT).show();
-                    APIURL_WEATHER = "https://samples.openweathermap.org/data/2.5/weather?q=London&appid=b1b15e88fa797225412429c1c50c122a1"; // TEST -> London, GB
-                    APIURL_FORECAST = "https://samples.openweathermap.org/data/2.5/forecast?q=London&appid=b1b15e88fa797225412429c1c50c122a1";
-                    NEWSAPI_WORLD = "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=" + APIKEY_NEWS;
-                    NEWSAPI_SCIENCE = "https://newsapi.org/v2/top-headlines?language=en&category=science&apiKey=" + APIKEY_NEWS;
-                    NEWSAPI_TECHNOLOGY = "https://newsapi.org/v2/top-headlines?language=en&category=technology&apiKey=" + APIKEY_NEWS;
-
-
-                    DoInBackgroundRequest("forecast");
-                    DoInBackgroundRequest("weather");
-                    DoInBackgroundRequest("news_world");
-                    DoInBackgroundRequest("news_science");
-                    DoInBackgroundRequest("news_technology");
+                    InitURLsAndExecuteBackGroundRequests(false);
 
                 }
                 return;
@@ -372,6 +381,8 @@ public class AtAGlanceFragment extends Fragment {
         binding = null;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //////// FUNCTIONS TO BUILD THE APP ITSELF
     public void StartIntent(Intent INTENT) {
         startActivity(INTENT);
@@ -390,6 +401,12 @@ public class AtAGlanceFragment extends Fragment {
             request = new Request.Builder().url(NEWSAPI_SCIENCE).build();
         }else if(REQUEST_TYPE_LOC == "news_technology"){
             request = new Request.Builder().url(NEWSAPI_TECHNOLOGY).build();
+        }else if(REQUEST_TYPE_LOC == "news_business"){
+            request = new Request.Builder().url(NEWSAPI_BUSINESS).build();
+        }else if(REQUEST_TYPE_LOC == "news_politics"){
+            request = new Request.Builder().url(NEWSAPI_POLITICS).build();
+        }else if(REQUEST_TYPE_LOC == "news_entertainment"){
+            request = new Request.Builder().url(NEWSAPI_ENTERTAINMENT).build();
         }
 
         client.newCall(request).enqueue(new Callback() {
@@ -520,7 +537,7 @@ public class AtAGlanceFragment extends Fragment {
                                     chipHILO.setText("High - "+ String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax"))-273.15)+"C"+ " | Low - "+String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin"))-273.15)+"C");
                                 }
                             }else if(REQUEST_TYPE_LOC.equals("news_world")){
-                                MyTitlesArrayListForWorldNews = ParseJSONWorldNews(ResponseJSON,"news_title");
+                                MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(ResponseJSON,"news_title");
                                 NewsTitleChip.setText(MyTitlesArrayListForWorldNews.get(0));
 
                                 MyDescriptionsArrayListForWorldNews = ParseJSONWorldNews(ResponseJSON,"news_descr");
@@ -530,12 +547,21 @@ public class AtAGlanceFragment extends Fragment {
 
                                 // To load the first corresponding image
                                 MyIMGURLArrayListForWorldNews = ParseJSONWorldNews(ResponseJSON,"news_url_to_img");
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).resize(700, 500).onlyScaleDown().into(ImageNews); // Set Image
-
+                                if(MyIMGURLArrayListForWorldNews.get(0) == null || MyIMGURLArrayListForWorldNews.get(0) == "null"){
+                                    ImageNews.setImageResource(R.drawable.materialwall);
+                                }else {
+                                    Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                                }
                             }else if(REQUEST_TYPE_LOC.equals("news_science")) {
                                 MyScienceNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
                             }else if(REQUEST_TYPE_LOC.equals("news_technology")) {
                                 MyTechnologyNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
+                            }else if(REQUEST_TYPE_LOC.equals("news_business")){
+                                MyBusinessNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
+                            }else if(REQUEST_TYPE_LOC.equals("news_politics")) {
+                                MyPoliticsNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
+                            }else if(REQUEST_TYPE_LOC.equals("news_entertainment")){
+                                MyEntertainmentNewsPart.WhatToHappenWhenRequestIsProvided(ResponseJSON);
                             }
                         }
 
@@ -546,378 +572,7 @@ public class AtAGlanceFragment extends Fragment {
         });
     }
 
-    public static ArrayList<String> ParseJSONForecast(String ResourceString, String WhatDoYouWantFromMe) {
-        ArrayList<String> MyConditions = new ArrayList<>(); // ARRAY TO BE RETURNED
-
-        try {
-            JSONObject JsonReader = new JSONObject(ResourceString);
-
-            // Check if the COD returned by the JSON is OKAY
-            if(WhatDoYouWantFromMe.equals("cod")){
-                MyConditions.add(Integer.toString(JsonReader.getInt("cod")));
-            }
-
-
-            JSONArray listOfHourly = JsonReader.getJSONArray("list");
-            // Looping Through the list of objects
-            for (int i = 0; i < listOfHourly.length(); ++i) {
-
-                JSONObject JObjRead = listOfHourly.getJSONObject(i);
-
-                // Get the contents of date / time -> a string
-                String Date_time_text = JObjRead.getString("dt_txt");
-                if(WhatDoYouWantFromMe.equals("time")) {
-                    MyConditions.add(ParseTimeString(Date_time_text));
-                }
-                // Get the contents of "main" -> An object
-                JSONObject MyMainObject = (JSONObject) JObjRead.get("main");
-
-
-                // Get the contents of the temperature inside main
-                if(WhatDoYouWantFromMe.equals("temperature")) {
-                    String MyTempString = (String) Double.valueOf(MyMainObject.getDouble("temp")).toString();
-                    MyConditions.add(MyTempString);
-                }
-
-                //////////////////////////////////////// Get the contents of "weather" -> It is a list with an object
-                JSONArray WeatherObject = (JSONArray) JObjRead.get("weather");
-
-                // Get The Object Inside The "weather" Array...
-                JSONObject ObjInsideWeather = (JSONObject) WeatherObject.get(0);
-
-                // FOR THE CONDITIONS ///////////////////////////////////////////////////////////
-                if(WhatDoYouWantFromMe.equals("description")) {
-                    String Conditions = (String) ObjInsideWeather.get("description");
-                    // System.out.println(Conditions); -> Prints conditions to the console (Debug)
-                    Conditions = Conditions.toUpperCase();
-                    MyConditions.add(Conditions);
-                }
-
-                if(WhatDoYouWantFromMe.equals("id_icon")) {
-                    String IconID = (String) Integer.toString(ObjInsideWeather.getInt("id"));
-                    MyConditions.add(IconID);
-                }
-            }
-            // Return an array that contains whatever -> String form
-            return MyConditions;
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String ParseJSONCurrentWeather(String ResourceString, String Request_Descr) {
-        try {
-            JSONObject JsonReader = new JSONObject(ResourceString);
-
-            // Get the response code
-            if(Request_Descr.equals("cod")){
-                return Integer.toString(JsonReader.getInt("cod"));
-            }
-            if(Request_Descr.equals("time")){
-                return Integer.toString(JsonReader.getInt("dt"));
-            }
-
-            // Gets the city name if it is specified by the parameter
-            if (Request_Descr.equals("city_name")) {
-                String CName = JsonReader.getString("name");
-                return CName;
-            }
-
-            // Gets the visibility
-            if (Request_Descr.equals("visibility")) {
-                int Vis = JsonReader.getInt("visibility");
-                return Integer.toString(Vis);
-            }
-            // Gets the wind speed and wind direction
-            if(Request_Descr == "w_speed"){
-                JSONObject WindObject = (JSONObject) JsonReader.get("wind");
-                double Wspeed = WindObject.getDouble("speed");
-                return Double.toString(Wspeed);
-            }
-            if(Request_Descr == "w_dir"){
-                JSONObject WindObject = (JSONObject) JsonReader.get("wind");
-                double Wdir = WindObject.getDouble("deg");
-                return Double.toString(Wdir);
-            }
-
-            // Gets the current cloud coverage
-            if (Request_Descr.equals("cloud_cov")) {
-                JSONObject MyClouds = (JSONObject) JsonReader.get("clouds");
-                String cov = MyClouds.getString("all");
-                return cov;
-            }
-
-            // Get The Object Inside The "weather" Array...
-            JSONArray WeatherObject = (JSONArray) JsonReader.get("weather");
-            JSONObject ObjInsideWeather = (JSONObject) WeatherObject.get(0);
-            if (Request_Descr == "description") {
-                String Conditions = (String) ObjInsideWeather.get("description");
-                return ToCamelCaseWord(Conditions);
-            } else if (Request_Descr == "main_text") {
-                String Conditions = (String) ObjInsideWeather.get("main");
-                return Conditions;
-            } else if (Request_Descr == "conditions_id") {
-                int Conditions = (int) ObjInsideWeather.getInt("id");
-                return Integer.toString(Conditions);
-            }
-
-            // Get The object inside the main object
-            JSONObject MainObject = (JSONObject) JsonReader.get("main");
-            double Temperature = MainObject.getDouble("temp");
-            if (Request_Descr == "temperature") {
-                return Double.valueOf(Temperature).toString();
-            }
-            double Pressure = MainObject.getDouble("pressure");
-            if (Request_Descr == "pressure") {
-                return Double.valueOf(Pressure).toString();
-            }
-            double Humidity = MainObject.getDouble("humidity");
-            if (Request_Descr == "humidity") {
-                return Double.valueOf(Humidity).toString();
-            }
-            double tmin = MainObject.getDouble("temp_min");
-            if (Request_Descr == "tmin") {
-                return Double.valueOf(tmin).toString();
-            }
-            double tmax = MainObject.getDouble("temp_max");
-            if (Request_Descr == "tmax") {
-                return Double.valueOf(tmax).toString();
-            }
-
-            // At the end
-            return null;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            System.out.println("ERROR WHILE READING WEATHER DATA");
-            return null;
-        }
-    }
-
-    // Diferrent Formatting functions
-    public static String ToCamelCaseWord(String Word) {
-        String ToBeBuilt = new String();
-        for (int i = 0; i < Word.length(); ++i) {
-            if (i == 0) {
-                ToBeBuilt = new StringBuilder().append(ToBeBuilt).append(Character.toUpperCase(Word.charAt(i))).toString();
-            } else {
-                if (Word.charAt(i - 1) == ' ') {
-                    ToBeBuilt = new StringBuilder().append(ToBeBuilt).append(Character.toUpperCase(Word.charAt(i))).toString();
-                } else {
-                    ToBeBuilt = new StringBuilder().append(ToBeBuilt).append(Character.toLowerCase(Word.charAt(i))).toString();
-                }
-            }
-        }
-        return ToBeBuilt;
-    }
-
-    public static void ModifyImageToConditions(ImageView ImageViewConds, boolean DAYLIGHT_LOC, String CONDS) {
-        // MODIFY THE ICON
-        if (CONDS != null) { // If The command is processed correctly
-            if (DAYLIGHT_LOC) {
-                if (CONDS.equals("800")) {
-                    ImageViewConds.setImageResource(R.drawable.clear_day);
-                } else if (CONDS.equals("801")) {
-                    ImageViewConds.setImageResource(R.drawable.mostly_clear_day);
-                } else if (CONDS.equals("802")) {
-                    ImageViewConds.setImageResource(R.drawable.partly_cloudy_day);
-                } else if (CONDS.equals("803")) {
-                    ImageViewConds.setImageResource(R.drawable.mostly_cloudy_day);
-                } else if (CONDS.equals("804")) {
-                    ImageViewConds.setImageResource(R.drawable.cloudy_night_2);
-
-
-                } else if (CONDS.equals("701")) { //Mist
-                    ImageViewConds.setImageResource(R.drawable.fog_day);
-                } else if (CONDS.equals("711")) { //Smoke
-                    ImageViewConds.setImageResource(R.drawable.fog_night);
-                } else if (CONDS.equals("721")) { //Haze
-                    ImageViewConds.setImageResource(R.drawable.fog_day);
-                } else if (CONDS.equals("731")) { //Dust
-                    ImageViewConds.setImageResource(R.drawable.fog_night);
-                } else if (CONDS.equals("741")) { //Fog
-                    ImageViewConds.setImageResource(R.drawable.fog_night);
-                } else if (CONDS.equals("751")) { //Sand
-                    ImageViewConds.setImageResource(R.drawable.fog_night);
-                } else if (CONDS.equals("761")) { //Dust
-                    ImageViewConds.setImageResource(R.drawable.fog_night);
-                } else if (CONDS.equals("762")) { //Ash
-                    ImageViewConds.setImageResource(R.drawable.ash);
-                } else if (CONDS.equals("771")) { //Squall
-                    ImageViewConds.setImageResource(R.drawable.squall);
-
-
-                } else if (CONDS.equals("500")) { //Light Rain
-                    ImageViewConds.setImageResource(R.drawable.light_rain);
-                } else if (CONDS.equals("501")) { //Moderate Rain
-                    ImageViewConds.setImageResource(R.drawable.rain_night);
-                } else if (CONDS.equals("502")) { //Heavy Rain
-                    ImageViewConds.setImageResource(R.drawable.rain_night);
-                } else if (CONDS.equals("503")) { // Very Heavy Rain
-                    ImageViewConds.setImageResource(R.drawable.very_heavy_rain_night);
-                } else if (CONDS.equals("504")) { // Extreme Rain
-                    ImageViewConds.setImageResource(R.drawable.extreme_rain_night);
-                } else if (CONDS.equals("511")) { // Freezing Rain
-                    ImageViewConds.setImageResource(R.drawable.freezing_rain);
-                } else if (CONDS.equals("520")) { // Light intensity shower Rain
-                    ImageViewConds.setImageResource(R.drawable.light_rain_shower_day);
-                } else if (CONDS.equals("521")) { // Shower Rain
-                    ImageViewConds.setImageResource(R.drawable.scattered_showers_day);
-                } else if (CONDS.equals("522")) { // Heavy intensity Shower Rain
-                    ImageViewConds.setImageResource(R.drawable.heavy_shower_rain_day);
-                } else if (CONDS.equals("531")) { // Ragged Shower Rain
-                    ImageViewConds.setImageResource(R.drawable.ragged_shower_rain_day);
-
-                } else if (CONDS.equals("300")) { // Light Intensity Drizzle
-                    ImageViewConds.setImageResource(R.drawable.light_drizzle);
-                } else if (CONDS.equals("301")) { // Drizzle
-                    ImageViewConds.setImageResource(R.drawable.drizzle);
-                }else if (CONDS.equals("302")) { // Drizzle
-                    ImageViewConds.setImageResource(R.drawable.heavy_intensity_drizzle);
-                }else if (CONDS.equals("310")) { // Drizzle Rain
-                    ImageViewConds.setImageResource(R.drawable.drizzle_rain);
-                }else if (CONDS.equals("312")) { // Drizzle Rain Heavy
-                    ImageViewConds.setImageResource(R.drawable.heavy_intensity_drizzle_rain);
-                }else if (CONDS.equals("313")) { // Drizzle
-                    ImageViewConds.setImageResource(R.drawable.drizzle_rain);
-                }else if (CONDS.equals("314")) { // Heavy Shower Rain And Drizzle
-                    ImageViewConds.setImageResource(R.drawable.heavy_intensity_drizzle_rain);
-                }else if (CONDS.equals("321")) { // Shower Drizzle
-                    ImageViewConds.setImageResource(R.drawable.drizzle);
-                }
-
-                else if (CONDS.equals("600")) { // Light Snow
-                    ImageViewConds.setImageResource(R.drawable.light_shower_snow);
-                }else if (CONDS.equals("601")) { // Snow
-                    ImageViewConds.setImageResource(R.drawable.snow_day);
-                }else if (CONDS.equals("602")) { // HeavySnow
-                    ImageViewConds.setImageResource(R.drawable.heavy_snow);
-                }else if (CONDS.equals("611")) { // Sleet
-                    ImageViewConds.setImageResource(R.drawable.sleet_day);
-                }else if (CONDS.equals("612")) { // Light Shower Sleet
-                    ImageViewConds.setImageResource(R.drawable.light_shower_sleet);
-                }else if (CONDS.equals("613")) { // Sleet
-                    ImageViewConds.setImageResource(R.drawable.shower_sleet);
-                }else if (CONDS.equals("615")) { // Light Rain And Snow
-                    ImageViewConds.setImageResource(R.drawable.light_shower_sleet);
-                } else if (CONDS.equals("616")) { // Sleet
-                    ImageViewConds.setImageResource(R.drawable.sleet_day);
-                } else if (CONDS.equals("620")) { // Light Shower Snow
-                    ImageViewConds.setImageResource(R.drawable.light_shower_snow);
-                }else if (CONDS.equals("621")) { // Shower Snow
-                    ImageViewConds.setImageResource(R.drawable.snow_day);
-                }else if (CONDS.equals("622")) { // Sleet
-                    ImageViewConds.setImageResource(R.drawable.heavy_snow);
-                }
-
-                else if (CONDS.equals("200")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_light_rain);
-                }else if (CONDS.equals("201")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_day);
-                }else if (CONDS.equals("202")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_heavy_rain);
-                }else if (CONDS.equals("210")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.thunder_day);
-                }else if (CONDS.equals("211")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.thunder_day);
-                }else if (CONDS.equals("212")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.thunder_day);
-                }else if (CONDS.equals("221")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_light_rain);
-                }else if (CONDS.equals("230")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_light_drizzle);
-                }else if (CONDS.equals("231")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_drizzle);
-                }else if (CONDS.equals("232")) { // ThunderStorm
-                    ImageViewConds.setImageResource(R.drawable.tstorm_with_heavy_drizzle);
-                }
-
-
-            } else {
-                //TODO: NIGHTTIME
-            }
-        } else {
-            System.out.println("There has been a problem in processing the json or the data might be incorrect");
-        }
-    }
-    public static String ParseTimeString(String Str){
-        return Str.substring(Str.indexOf("-")+1, Str.lastIndexOf(":")) + "h";
-    }
-
-    // To fetch if app is online
-    public boolean isOnline() {
-        try {
-            connectivityManager = (ConnectivityManager) requireActivity()
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            connected = networkInfo != null && networkInfo.isAvailable() &&
-                    networkInfo.isConnected();
-            return connected;
-
-
-        } catch (Exception e) {
-            System.out.println("CheckConnectivity Exception: " + e.getMessage());
-            Log.v("connectivity", e.toString());
-        }
-        return connected;
-    }
-    public void WriteStringToFile(String s, String Fname) throws IOException {
-        File file = new File(requireActivity().getFilesDir(),Fname);
-        FileWriter fileWriter = new FileWriter(file);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(s);
-        bufferedWriter.close();
-    }
-    public static ArrayList<String> ParseJSONWorldNews(String RequestJSON, String WhatDoYouWantFromMe){
-        // Declare the main JSON Reader
-        ArrayList<String> MyArrayList = new ArrayList<>();
-        try {
-            JSONObject JSReader = new JSONObject(RequestJSON);
-            if (WhatDoYouWantFromMe.equals("status")) {
-                MyArrayList.add(JSReader.getString("status"));
-            }
-
-            // Getting the list of News Articles (Array of objects)
-            JSONArray NewsHeadlines= JSReader.getJSONArray("articles");
-            for(int i=0;i<NewsHeadlines.length();++i){
-                JSONObject NEWS_HEADLINE = NewsHeadlines.getJSONObject(i);
-
-                // SOURCE NAMES
-                if(WhatDoYouWantFromMe.equals("news_sources")) {
-                    JSONObject SOURCE_OBJECT = NEWS_HEADLINE.getJSONObject("source");
-                    MyArrayList.add(SOURCE_OBJECT.getString("name"));
-                }
-                if(WhatDoYouWantFromMe.equals("news_title")){
-                    MyArrayList.add(NEWS_HEADLINE.getString("title"));
-                }
-                if(WhatDoYouWantFromMe.equals("news_descr")){
-                    MyArrayList.add(NEWS_HEADLINE.getString("description"));
-                }
-                if(WhatDoYouWantFromMe.equals("news_url")){
-                    MyArrayList.add(NEWS_HEADLINE.getString("url"));
-                }
-                if(WhatDoYouWantFromMe.equals("news_url_to_img")){
-                    MyArrayList.add(NEWS_HEADLINE.getString("urlToImage"));
-                }
-                if(WhatDoYouWantFromMe.equals("date_published")){
-                    MyArrayList.add(NEWS_HEADLINE.getString("publishedAt"));
-                }
-
-            }
-            return MyArrayList; // Return the data in the end
-        }catch(JSONException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public void StringToOpenInBrowser(String url){
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
-    }
-    private void SetOnClickListenersForWorldNewsChips(){
+    private void SetOnClickListenersForWorldNewsChipsPlusURLChipsForParts(){
         // Set Click Listeners for the Chips
         PrevArticleChip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -929,7 +584,7 @@ public class AtAGlanceFragment extends Fragment {
                         ImageNews.setImageResource(R.drawable.materialwall);
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).into(ImageNews); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -955,7 +610,7 @@ public class AtAGlanceFragment extends Fragment {
 
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).into(ImageNews); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -975,13 +630,126 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if(MyURLArrayListForWorldNews !=null) {
                     try {
-                        StringToOpenInBrowser(MyURLArrayListForWorldNews.get(CURRENT_ARTICLE));
+                        SetOnClickListenersForUrlInBrowser(MyURLArrayListForWorldNews.get(CURRENT_ARTICLE));
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                 }
             }
         });
+
+        //// Set other onClick Listeners for different parts -> Fragment has to be recognized by the activity
+        /// For science news Part
+        ////////////////////////////
+        MyScienceNewsPart.ChipURLLink2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(MyScienceNewsPart.MyURLArrayListForScienceNews !=null) {
+                    try {
+
+                        SetOnClickListenersForUrlInBrowser(MyScienceNewsPart.MyURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber));
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        //////////////////////////
+        /// For Technology news Part
+        MyTechnologyNewsPart.ChipURLLink3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MyTechnologyNewsPart.MyURLArrayListForTechnologyNews != null) {
+                    try {
+                        SetOnClickListenersForUrlInBrowser(MyTechnologyNewsPart.MyURLArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        /////////////////////////////////
+        /// For Business news Part
+        MyBusinessNewsPart.ChipURLLink4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MyBusinessNewsPart.MyURLArrayListForBusinessNews != null) {
+                    try {
+                        SetOnClickListenersForUrlInBrowser(MyBusinessNewsPart.MyURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        ///////////////////////////////
+        /// For Politics news Part
+        MyPoliticsNewsPart.ChipURLLink5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MyPoliticsNewsPart.MyURLArrayListForPoliticsNews != null) {
+                    try {
+                        SetOnClickListenersForUrlInBrowser(MyPoliticsNewsPart.MyURLArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        ///////////////////////////////
+        /// For Entertainment news Part
+        MyEntertainmentNewsPart.ChipURLLink6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews != null) {
+                    try {
+                        SetOnClickListenersForUrlInBrowser(MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+    /// To Open the URL's in browser
+
+    /// Functions that depend on the current fragment -> (StartActivity + requireActivity and others)
+    public void SetOnClickListenersForUrlInBrowser(String URL){
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
+            startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "No application can handle this request."
+                    + " Please install a webbrowser", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+    public void WriteStringToFile(String s, String Fname) throws IOException {
+        File file = new File(requireActivity().getFilesDir(),Fname);
+        FileWriter fileWriter = new FileWriter(file);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(s);
+        bufferedWriter.close();
+    }
+    // To fetch if app is online
+    public boolean isOnline() {
+        try {
+            connectivityManager = (ConnectivityManager) requireActivity()
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            connected = networkInfo != null && networkInfo.isAvailable() &&
+                    networkInfo.isConnected();
+            return connected;
+
+
+        } catch (Exception e) {
+            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+            Log.v("connectivity", e.toString());
+        }
+        return connected;
     }
 
 }

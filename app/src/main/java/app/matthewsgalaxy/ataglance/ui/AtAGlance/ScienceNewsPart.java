@@ -1,5 +1,7 @@
 package app.matthewsgalaxy.ataglance.ui.AtAGlance;
 
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import app.matthewsgalaxy.ataglance.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 
@@ -129,7 +132,7 @@ public class ScienceNewsPart extends AtAGlanceFragment {
         ImageNews2 = b.ImageNews2;
         SetOnClickListeners();
     }
-    public void SetOnClickListeners(){
+    private void SetOnClickListeners(){
         PrevArticleChip2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +143,7 @@ public class ScienceNewsPart extends AtAGlanceFragment {
                         ImageNews2.setImageResource(R.drawable.materialwall);
                         if(!MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).resize(700, 500).onlyScaleDown().into(ImageNews2); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -154,18 +157,7 @@ public class ScienceNewsPart extends AtAGlanceFragment {
                 }
             }
         });
-        ChipURLLink2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(MyURLArrayListForScienceNews !=null) {
-                    try {
-                        StringToOpenInBrowser(MyURLArrayListForScienceNews.get(CurrentArticleNumber));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+
         NextArticleChip2.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -178,7 +170,7 @@ public class ScienceNewsPart extends AtAGlanceFragment {
 
                         if(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).into(ImageNews2); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -208,7 +200,12 @@ public class ScienceNewsPart extends AtAGlanceFragment {
 
         // To load the first corresponding image
         MyIMGURLArrayListForScienceNews = ParseJSONWorldNews(JsonRequest,"news_url_to_img");
-        Picasso.get().load(MyIMGURLArrayListForScienceNews.get(0)).into(ImageNews2); // Set Image
+        MyIMGURLArrayListForScienceNews = ParseJSONWorldNews(JsonRequest, "news_url_to_img");
+        if(MyIMGURLArrayListForScienceNews.get(0) == null || MyIMGURLArrayListForScienceNews.get(0) == "null"){
+            ImageNews2.setImageResource(R.drawable.materialwall);
+        }else {
+            Picasso.get().load(MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(ImageNews2); // Set Image
+        }
     }
 
 }

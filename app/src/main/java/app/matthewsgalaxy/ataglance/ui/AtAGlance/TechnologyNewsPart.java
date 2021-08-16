@@ -1,7 +1,9 @@
 package app.matthewsgalaxy.ataglance.ui.AtAGlance;
 
-import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import app.matthewsgalaxy.ataglance.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 
@@ -132,7 +135,7 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
         SetOnClickListeners();
     }
 
-    public void SetOnClickListeners() {
+    private void SetOnClickListeners() {
         PrevArticleChip3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +146,7 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
                         ImageNews3.setImageResource(R.drawable.materialwall);
                         if (!MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).resize(700, 500).onlyScaleDown().into(ImageNews3); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews3.setImageResource(R.drawable.materialwall);
@@ -157,18 +160,7 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
                 }
             }
         });
-        ChipURLLink3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (MyURLArrayListForTechnologyNews != null) {
-                    try {
-                        StringToOpenInBrowser(MyURLArrayListForTechnologyNews.get(CurrentArticleNumber));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+
         NextArticleChip3.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -181,7 +173,7 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
 
                         if (MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).into(ImageNews3); // Set Image
+                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews3.setImageResource(R.drawable.materialwall);
@@ -198,6 +190,7 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
         });
     }
 
+
     public void WhatToHappenWhenRequestIsProvided(String JsonRequest) {
         MyTitlesArrayListForTechnologyNews = ParseJSONWorldNews(JsonRequest, "news_title");
         ChipNewsTitle3.setText(MyTitlesArrayListForTechnologyNews.get(0));
@@ -211,7 +204,11 @@ public class TechnologyNewsPart extends AtAGlanceFragment {
 
         // To load the first corresponding image
         MyIMGURLArrayListForTechnologyNews = ParseJSONWorldNews(JsonRequest, "news_url_to_img");
-        Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(0)).into(ImageNews3); // Set Image
+        if(MyIMGURLArrayListForTechnologyNews.get(0) == null || MyIMGURLArrayListForTechnologyNews.get(0) == "null"){
+            ImageNews3.setImageResource(R.drawable.materialwall);
+        }else {
+            Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(ImageNews3); // Set Image
+        }
     }
 
 }
