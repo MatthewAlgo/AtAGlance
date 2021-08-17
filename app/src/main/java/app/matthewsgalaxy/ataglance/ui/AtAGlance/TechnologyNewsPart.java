@@ -1,9 +1,7 @@
 package app.matthewsgalaxy.ataglance.ui.AtAGlance;
 
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONWorldNews;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +11,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import app.matthewsgalaxy.ataglance.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 

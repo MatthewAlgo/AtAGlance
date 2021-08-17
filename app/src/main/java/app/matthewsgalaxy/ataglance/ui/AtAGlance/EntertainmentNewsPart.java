@@ -1,6 +1,6 @@
 package app.matthewsgalaxy.ataglance.ui.AtAGlance;
 
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONWorldNews;
 
 import android.view.View;
 import android.widget.ImageView;

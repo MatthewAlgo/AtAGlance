@@ -12,14 +12,21 @@
         tools:layout="@layout/fragment_ataglance" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_extendedforecast"
         android:name="app.matthewsgalaxy.ataglance.ui.ExtendedForecast.ExtendedForecastFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_extendedforecast"
         tools:layout="@layout/fragment_extendedforecast" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="app.matthewsgalaxy.ataglance.ui.ScienceNews.ScienceNewsFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_sciencenews" />
+        android:id="@+id/nav_extendedheadlines"
+        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedHeadlines.extendedHeadlinesFragment"
+        android:label="@string/menu_extendedheadlines"
+        tools:layout="@layout/fragment_extendedheadlines" />
+
+    <fragment
+        android:id="@+id/nav_searchinterests"
+        android:name="app.matthewsgalaxy.ataglance.ui.SearchInterests.searchInterestsFragment"
+        android:label="@string/menu_searchinterests"
+        tools:layout="@layout/fragment_searchinterests" />
+
 </navigation>

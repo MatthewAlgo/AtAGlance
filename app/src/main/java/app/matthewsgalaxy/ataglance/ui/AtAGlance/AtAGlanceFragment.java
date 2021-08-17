@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -43,9 +40,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
-import app.matthewsgalaxy.ataglance.DifferentFunctions;
+import app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
-import app.matthewsgalaxy.ataglance.SetImagesForImageViewIcon;
 import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -55,11 +51,11 @@ import okhttp3.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static android.location.LocationManager.GPS_PROVIDER;
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ModifyImageToConditions;
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONCurrentWeather;
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONForecast;
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ParseJSONWorldNews;
-import static app.matthewsgalaxy.ataglance.DifferentFunctions.ToCamelCaseWord;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONCurrentWeather;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONForecast;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ToCamelCaseWord;
 
 
 public class AtAGlanceFragment extends Fragment {
@@ -107,7 +103,10 @@ public class AtAGlanceFragment extends Fragment {
             NEWSAPI_SCIENCE, NEWSAPI_TECHNOLOGY, NEWSAPI_POLITICS, NEWSAPI_BUSINESS, NEWSAPI_ENTERTAINMENT;
     public static String ResponseJSON;
 
-    public static boolean DAYLIGHT = true;
+    public static boolean isDaylightAtCall = true;
+    public static Pair<Integer, Integer> SunriseGlobalHourPair, SunsetGlobalHourPair;
+    public static String SunriseGlobalHourString, SunsetGlobalHourString;
+
     public static Date CurrentDate;
     public static Time CurrentTime;
 
@@ -264,8 +263,8 @@ public class AtAGlanceFragment extends Fragment {
         NEWSAPI_BUSINESS = "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=" + APIKEY_NEWS;
         NEWSAPI_ENTERTAINMENT = "https://newsapi.org/v2/top-headlines?language=en&category=entertainment&apiKey=" + APIKEY_NEWS;
 
-        DoInBackgroundRequest("forecast");
         DoInBackgroundRequest("weather");
+        DoInBackgroundRequest("forecast");
         DoInBackgroundRequest("news_world");
         DoInBackgroundRequest("news_science");
         DoInBackgroundRequest("news_technology");
@@ -440,16 +439,27 @@ public class AtAGlanceFragment extends Fragment {
 
                                     // IF THE REQUEST WAS MADE FOR THE WEATHER FORECAST////////////////////////////////////////////////////////////////////////
                                     ArrayList<String> ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("id_icon"));
+                                    ArrayList<String> TimeStamps = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
+
                                     // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
-                                    ModifyImageToConditions(ImageHour1, true, ConditionsInJson.get(0));
-                                    ModifyImageToConditions(ImageHour2, true, ConditionsInJson.get(1));
-                                    ModifyImageToConditions(ImageHour3, true, ConditionsInJson.get(2));
-                                    ModifyImageToConditions(ImageHour4, true, ConditionsInJson.get(3));
-                                    ModifyImageToConditions(ImageHour5, true, ConditionsInJson.get(4));
-                                    ModifyImageToConditions(ImageHour6, true, ConditionsInJson.get(5));
-                                    ModifyImageToConditions(ImageHour7, true, ConditionsInJson.get(6));
-                                    ModifyImageToConditions(ImageHour8, true, ConditionsInJson.get(7));
-                                    ModifyImageToConditions(ImageHour9, true, ConditionsInJson.get(8));
+                                    ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(0));
+                                    ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(1));
+                                    ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(2));
+                                    ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(3));
+                                    ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(4));
+                                    ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(5));
+                                    ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(6));
+                                    ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(7));
+                                    ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8)),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(8));
 
                                     // Change Chip Values according to temperatures predicted
                                     ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("temperature"));
@@ -492,6 +502,34 @@ public class AtAGlanceFragment extends Fragment {
                                     // System.out.println(Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "cod"))); -> Call returns 200 if OK
                                     String ToModifyCurrentConds = ParseJSONCurrentWeather(ResponseJSON, "description");
                                     String LocationByLatAndLong = ParseJSONCurrentWeather(ResponseJSON, "city_name");
+
+                                    String TimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "time");
+                                    String SunriseTimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "sunrise");
+                                    String SunsetTimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "sunset");
+                                    // TIMESTAMP VALUES IN GMT!
+
+                                    /// Process the timestamps
+                                    SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix);
+                                    SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix);
+                                    SunriseGlobalHourString = SunriseTimeStampUnix;
+                                    SunsetGlobalHourString = SunsetTimeStampUnix;
+                                    // We have sunrise / sunset stored globally
+
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).second);
+
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).second);
+
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).second);
+
+                                    isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix));
+
+                                    System.out.println(isDaylightAtCall);
+
+
                                     chipCurrentWeatherPromptJava.setText("Current Weather Conditions for " + LocationByLatAndLong);
                                     MainConditionTextJava.setText(ToCamelCaseWord(ToModifyCurrentConds));
                                     String ToModifyCurrentCondsImage = ParseJSONCurrentWeather(ResponseJSON, "conditions_id");
@@ -528,7 +566,7 @@ public class AtAGlanceFragment extends Fragment {
                                     chipWind.setText("Speed - "+ String.format("%.2f", (Double) WindSpeed) + "km/h" + " - " + WindConditions);
 
                                     // MODIFY THE MAIN ICON
-                                    ModifyImageToConditions(MainCurrentCondition, DAYLIGHT, ToModifyCurrentCondsImage);
+                                    ModifyImageToConditions(MainCurrentCondition, isDaylightAtCall, ToModifyCurrentCondsImage);
 
                                     // MODIFY THE TEMPERATURE
                                     String ToModifyCurrentTemperature = ParseJSONCurrentWeather(ResponseJSON, "temperature");

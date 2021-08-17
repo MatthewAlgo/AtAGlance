@@ -1,4 +1,4 @@
-package app.matthewsgalaxy.ataglance;
+package app.matthewsgalaxy.ataglance.additionalClasses;
 
 import android.widget.ImageView;
 

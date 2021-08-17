@@ -1,31 +1,13 @@
-package app.matthewsgalaxy.ataglance;
+package app.matthewsgalaxy.ataglance.additionalClasses;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
-import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.connected;
-import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.connectivityManager;
-
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.util.Log;
+import android.util.Pair;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment;
 
 public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
@@ -98,6 +80,15 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                 if(WhatDoYouWantFromMe.equals("time")) {
                     MyConditions.add(ParseTimeString(Date_time_text));
                 }
+
+                // If we want the time for each hour
+                if(WhatDoYouWantFromMe.equals("time_stamp")){
+                    String Stamp = JObjRead.getString("dt");
+                    MyConditions.add(Stamp);
+                }
+
+
+
                 // Get the contents of "main" -> An object
                 JSONObject MyMainObject = (JSONObject) JObjRead.get("main");
 
@@ -144,7 +135,7 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                 return Integer.toString(JsonReader.getInt("cod"));
             }
             if(Request_Descr.equals("time")){
-                return Integer.toString(JsonReader.getInt("dt"));
+                return Long.toString(JsonReader.getLong("dt"));
             }
 
             // Gets the city name if it is specified by the parameter
@@ -158,6 +149,20 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                 int Vis = JsonReader.getInt("visibility");
                 return Integer.toString(Vis);
             }
+
+            // Gets the sunrise and sunset
+            if(Request_Descr == "sunrise"){
+                JSONObject SysObject = (JSONObject) JsonReader.get("sys");
+                long sunrise = SysObject.getLong("sunrise");
+                return Long.toString(sunrise);
+            }
+            if(Request_Descr == "sunset"){
+                JSONObject SysObject = (JSONObject) JsonReader.get("sys");
+                long sunset = SysObject.getLong("sunset");
+                return Long.toString(sunset);
+            }
+
+
             // Gets the wind speed and wind direction
             if(Request_Descr == "w_speed"){
                 JSONObject WindObject = (JSONObject) JsonReader.get("wind");
@@ -253,5 +258,52 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
     }
 
     // Other Functions
+
+    public static Pair<Integer, Integer> GetHourAndMinutesFromTimeStamp(String UnixTimeStamp){
+        int timeStampValue = Integer.parseInt(UnixTimeStamp);
+        // System.out.println("MINUTES: " + timeStampValue / 60 % 60);
+        // System.out.println("HOUR: " + timeStampValue / 3600 % 24);
+        return new Pair<Integer, Integer>(timeStampValue/60%60, timeStampValue / 3600 %24);
+    }
+    public static boolean isDaylightFunction(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){
+        // First Check For Hours
+        if(CurrentHour.second > SunriseHour.second){
+            // We are more than sunrise in terms of hours
+            if(CurrentHour.second < SunsetHour.second){
+                // We are just right in terms of hours
+                return true;
+            }else if(CurrentHour.second == SunsetHour.second){
+                // We are right in the sunset hour -> We check for minutes
+                if(CurrentHour.first <= SunsetHour.first){
+                    // We are okay with the minutes -> it is still daylight
+                    return true;
+                }else{
+                    // The sun already set
+                    return false;
+                }
+            }else{
+                // The sunset came in terms of hours
+                return false;
+
+            }
+        }else if(CurrentHour.second == SunriseHour.second){
+            // The hour coincides with the sunrise hour
+            if(CurrentHour.first >= SunriseHour.first){
+                // We are okay in terms of minutes
+                return true;
+            }else if(CurrentHour.first < SunriseHour.first){
+                // We are not ok
+                return false;
+            }
+        }else{
+            // The sun did not rise yet in terms of hours
+            return false;
+        }
+
+
+
+
+        return true;
+    }
 
 }

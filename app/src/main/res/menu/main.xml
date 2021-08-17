@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--
+    <!-- android::onclick="RefreshActivity" -->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="Refresh"
-        android:onClick="RefreshActivity"
         app:showAsAction="never" />
-        -->
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="About Me"
+        app:showAsAction="never" />
+
 </menu>
