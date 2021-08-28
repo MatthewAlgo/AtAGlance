@@ -8,7 +8,10 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.21408711770157554" />
         <entry key="app/src/main/res/layout/fragment_ataglance.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_extendedforecast.xml" value="0.29546638874413755" />
+        <entry key="app/src/main/res/layout/fragment_extendedheadlines.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/layout/fragment_searchinterests.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.23015075376884422" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/menu/main.xml" value="0.25" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.18541666666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.18541666666666667" />
