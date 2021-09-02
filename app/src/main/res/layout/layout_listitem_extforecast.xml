@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ConstraintForecastRecView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/rounded_corners"
+    android:orientation="vertical">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipLastUpdatedForecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Updated At"
+            app:chipBackgroundColor="@color/purple_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" /> />
+
+        <ImageView
+            android:id="@+id/MainImageViewForecast"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/clear_day"
+            app:layout_constraintEnd_toEndOf="@+id/chipLastUpdatedForecast"
+            app:layout_constraintStart_toStartOf="@+id/chipLastUpdatedForecast"
+            app:layout_constraintTop_toBottomOf="@+id/chipLastUpdatedForecast" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/MainConditionTextForecast"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weather Conditions"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="@+id/MainImageViewForecast"
+            app:layout_constraintStart_toStartOf="@+id/MainImageViewForecast"
+            app:layout_constraintTop_toBottomOf="@+id/MainImageViewForecast" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTemperatureForecast"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="°C/°F/°K"
+            android:textSize="@android:dimen/app_icon_size"
+            app:chipIcon="@mipmap/pngthermo"
+            app:layout_constraintEnd_toEndOf="@+id/MainConditionTextForecast"
+            app:layout_constraintStart_toStartOf="@+id/MainConditionTextForecast"
+            app:layout_constraintTop_toBottomOf="@+id/MainConditionTextForecast" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHumidityForecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Humidity"
+            app:chipIcon="@mipmap/drop"
+            app:layout_constraintEnd_toEndOf="@+id/chipTemperatureForecast"
+            app:layout_constraintStart_toStartOf="@+id/chipTemperatureForecast"
+            app:layout_constraintTop_toBottomOf="@+id/chipTemperatureForecast" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipWindForecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:text="Wind"
+            app:chipIcon="@mipmap/windypng"
+            app:layout_constraintEnd_toEndOf="@+id/chipHumidityForecast"
+            app:layout_constraintStart_toStartOf="@+id/chipHumidityForecast"
+            app:layout_constraintTop_toBottomOf="@+id/chipHumidityForecast" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHILOForecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="High / Low Temperature"
+            app:chipIcon="@mipmap/hi_lo_temp"
+            app:layout_constraintEnd_toEndOf="@+id/chipWindForecast"
+            app:layout_constraintStart_toStartOf="@+id/chipWindForecast"
+            app:layout_constraintTop_toBottomOf="@+id/chipWindForecast" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

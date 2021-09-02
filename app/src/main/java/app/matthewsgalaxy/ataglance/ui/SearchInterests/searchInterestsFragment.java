@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 
 import app.matthewsgalaxy.ataglance.databinding.FragmentSearchinterestsBinding;
@@ -14,10 +14,13 @@ import app.matthewsgalaxy.ataglance.databinding.FragmentSearchinterestsBinding;
 public class searchInterestsFragment extends Fragment {
     private FragmentSearchinterestsBinding binding;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        binding = FragmentSearchinterestsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        return root;
     }
 
     @Override

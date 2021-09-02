@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_extendedforecast"
-        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedForecast.ExtendedForecastFragment"
+        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedForecast.extendedForecastFragment"
         android:label="@string/menu_extendedforecast"
         tools:layout="@layout/fragment_extendedforecast" />
 

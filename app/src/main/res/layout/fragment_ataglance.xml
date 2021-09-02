@@ -26,9 +26,9 @@
                 >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ConstraintCurrentConds"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ConstraintCurrentConds"
                     android:background="@drawable/rounded_corners"
                     android:orientation="vertical">
 
@@ -46,8 +46,8 @@
                         android:id="@+id/chipLastUpdated"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:chipBackgroundColor="@color/teal_200"
                         android:text="Last Updated At"
+                        app:chipBackgroundColor="@color/teal_200"
                         app:layout_constraintEnd_toEndOf="@+id/chipCurrentWeatherPrompt"
                         app:layout_constraintStart_toStartOf="@+id/chipCurrentWeatherPrompt"
                         app:layout_constraintTop_toBottomOf="@+id/chipCurrentWeatherPrompt" />
@@ -128,12 +128,12 @@
                     >
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipInfoForecast"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:chipBackgroundColor="@color/purple_200"
                         android:layout_centerHorizontal="true"
-                        android:id="@+id/ChipInfoForecast"
-                        android:text="At A Glance - 24-Hour Forecast" />
+                        android:text="At A Glance - 24-Hour Forecast"
+                        app:chipBackgroundColor="@color/purple_200" />
 
                     <HorizontalScrollView
                         android:layout_width="wrap_content"

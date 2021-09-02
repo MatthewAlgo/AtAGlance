@@ -11,15 +11,16 @@
 
     <application
         android:allowBackup="true"
+        android:theme="@style/Theme.AppCompat"
         android:icon="@mipmap/weatherico"
         android:label="AtAGlance"
         android:roundIcon="@mipmap/weatherico"
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         tools:targetApi="m">
-        android:theme="@style/Theme.NavDrawerApp">
 
         <activity
+            android:exported="true"
             android:name="app.matthewsgalaxy.ataglance.MainActivity"
             android:label="@string/app_name"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

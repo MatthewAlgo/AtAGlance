@@ -12,15 +12,15 @@
         <item
             android:id="@+id/nav_extendedforecast"
             android:icon="@drawable/ic_baseline_cloud_24"
-            android:title="Extended Forecast" />
+            android:title="@string/menu_extendedforecast" />
         <item
             android:id="@+id/nav_extededheadlines"
             android:icon="@drawable/ic_baseline_read_more_24"
-            android:title = "More Headlines" />
+            android:title = "@string/menu_extendedheadlines" />
         <item
-            android:id="@+id/nav_searchforheadlines"
+            android:id="@+id/nav_searchforinterests"
             android:icon="@drawable/ic_baseline_article_24"
-            android:title = "Search Interests" />
+            android:title = "@string/menu_searchinterests" />
 
     </group>
 </menu>
