@@ -1,5 +1,11 @@
 package app.matthewsgalaxy.ataglance.adapterClasses;
 
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ProcessTimeStamp;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.SunriseGlobalHourString;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.SunsetGlobalHourString;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,27 +22,37 @@ import com.google.android.material.chip.Chip;
 import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.R;
+import app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions;
 
 public class RecyclerViewForecastAdapter extends RecyclerView.Adapter<RecyclerViewForecastAdapter.ViewHolder> {
     private static final String TAG = "Cannot invoke method length() on null object";
 
-    private ArrayList<String> ArrayListConditions = new ArrayList<String>();
-    private ArrayList<String> ImageCodes = new ArrayList<String>();
+    private ArrayList<String> ArrayListConditions;
+    private ArrayList<String> ImageCodes;
+    private ArrayList<String> TemperaturesArray;
+    private ArrayList<String> WindConditions = new ArrayList<>();
+    private ArrayList<String> CurrentTime;
+    private ArrayList<String> MinMaxTemp = new ArrayList<>();
+
+
     private Context mContext;
 
-    public RecyclerViewForecastAdapter(ArrayList<String> arrayListConditions, ArrayList<String> imageCodes, Context mContext) {
+    public RecyclerViewForecastAdapter(ArrayList<String> arrayListConditions, ArrayList<String> imageCodes,ArrayList<String> temperaturesArray, ArrayList<String> windConditions, ArrayList<String> currentTime, ArrayList<String> minMaxTemp, Context mContext) {
         ArrayListConditions = arrayListConditions;
         ImageCodes = imageCodes;
+        TemperaturesArray = temperaturesArray;
+        WindConditions = windConditions;
+        CurrentTime = currentTime;
+        MinMaxTemp = minMaxTemp;
         this.mContext = mContext;
     }
-    public RecyclerViewForecastAdapter(){}
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem_extforecast, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        return null;
+        return holder;
     }
 
     @Override
@@ -44,18 +60,22 @@ public class RecyclerViewForecastAdapter extends RecyclerView.Adapter<RecyclerVi
         Log.d(TAG, "onBindViewHolder: called");
         // Load The Features
 
-        ArrayListConditions.add("Foggy"); ArrayListConditions.add("Windy");
-        ImageCodes.add("233");  ImageCodes.add("233");
-
-
+        // Modify The Text for conditions
         holder.MainConditionTextForecast.setText(ArrayListConditions.get(position));
+        // Modify Image According to conditions
+        ModifyImageToConditions(holder.MainImageViewForecast, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(GlobalTimeForExtendedForecast.get(position)),
+                DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ImageCodes.get(position));
 
+        // Modify the temperature chip text according to the temperatures array
+        holder.chipTemperatureForecast.setText(String.format("%.2f", (Double) Double.parseDouble(TemperaturesArray.get(position)) - 273.15) + "°C");
 
+        // Modify the timestamp chip text according to the array
+        holder.chipLastUpdatedForecast.setText(ProcessTimeStamp(GlobalTimeForExtendedForecast.get(position))); // PROCESSED DIRECTLY FROM GLOBAL VARIABLE
     }
 
     @Override
     public int getItemCount() {
-        return 2; // How many list items are in my list
+        return ArrayListConditions.size(); // How many list items are in my list
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{ // Holding Views

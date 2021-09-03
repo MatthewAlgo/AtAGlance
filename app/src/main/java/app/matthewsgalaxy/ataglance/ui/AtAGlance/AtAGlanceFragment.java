@@ -101,7 +101,7 @@ public class AtAGlanceFragment extends Fragment {
     public static boolean connected = false;
     public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD,
             NEWSAPI_SCIENCE, NEWSAPI_TECHNOLOGY, NEWSAPI_POLITICS, NEWSAPI_BUSINESS, NEWSAPI_ENTERTAINMENT;
-    public static String ResponseJSON;
+    public static String ResponseJSON, ResponseJsonForecast, ResponseJsonWeather;
 
     public static boolean isDaylightAtCall = true;
     public static Pair<Integer, Integer> SunriseGlobalHourPair, SunsetGlobalHourPair;
@@ -109,6 +109,7 @@ public class AtAGlanceFragment extends Fragment {
 
     public static Date CurrentDate;
     public static Time CurrentTime;
+    public static ArrayList<String> GlobalTimeForExtendedForecast;
 
 
     // FOR THE NEWS PARTS
@@ -167,7 +168,7 @@ public class AtAGlanceFragment extends Fragment {
         MyEntertainmentNewsPart = new EntertainmentNewsPart(binding);
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
-        APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR WEATHER REQUESTS
+        APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
 
         if(isOnline()){
             checkLocationPermission();
@@ -429,6 +430,8 @@ public class AtAGlanceFragment extends Fragment {
 
                             // Parse JSON and Get an ArrayList of conditions
                             if (REQUEST_TYPE_LOC.equals("forecast")) {
+                                // We set the forecast String
+                                ResponseJsonForecast = MyResp;
 
                                 if(Integer.parseInt(ParseJSONForecast(ResponseJSON, "cod").get(0)) != 200){
                                     // Something bad happened
@@ -440,6 +443,8 @@ public class AtAGlanceFragment extends Fragment {
                                     // IF THE REQUEST WAS MADE FOR THE WEATHER FORECAST////////////////////////////////////////////////////////////////////////
                                     ArrayList<String> ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("id_icon"));
                                     ArrayList<String> TimeStamps = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
+
+                                    GlobalTimeForExtendedForecast = ParseJSONForecast(ResponseJSON, new String("time"));
 
                                     // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
                                     ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0)),
@@ -485,6 +490,7 @@ public class AtAGlanceFragment extends Fragment {
                                     ChipHourUpperText9.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(8));
                                 }
                             } else if (REQUEST_TYPE_LOC.equals("weather")) {
+                                ResponseJsonWeather = MyResp;
                                 // IF THE REQUEST WAS MADE ONLY FOR THE CURRENT WEATHER///////////////////////////////////////////////////////////////////
                                 if (Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "cod")) != 200) {
                                     // Something bad happened
@@ -789,5 +795,6 @@ public class AtAGlanceFragment extends Fragment {
         }
         return connected;
     }
+
 
 }

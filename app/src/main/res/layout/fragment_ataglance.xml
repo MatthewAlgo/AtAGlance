@@ -156,13 +156,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp">
+
                                 <com.google.android.material.chip.Chip
+                                    android:id="@+id/ChipHourUpperText1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerHorizontal="true"
-                                    android:id="@+id/ChipHourUpperText1"
 
-                                    android:text="TIME"/>
+                                    android:text="TIME" />
                                 <ImageView
                                     android:src="@drawable/cloudy_night_2"
                                     android:layout_width="50dp"

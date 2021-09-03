@@ -2,6 +2,9 @@ package app.matthewsgalaxy.ataglance.ui.ExtendedForecast;
 
 import static android.content.ContentValues.TAG;
 
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONForecast;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import app.matthewsgalaxy.ataglance.R;
+import java.util.ArrayList;
+
 import app.matthewsgalaxy.ataglance.adapterClasses.RecyclerViewForecastAdapter;
+import app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.databinding.FragmentExtendedforecastBinding;
 
 public class extendedForecastFragment extends Fragment {
@@ -26,6 +31,7 @@ public class extendedForecastFragment extends Fragment {
 
         binding = FragmentExtendedforecastBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         InitRecyclerView();
         return root;
     }
@@ -40,10 +46,35 @@ public class extendedForecastFragment extends Fragment {
         Log.d(TAG, "InitRecyclerView: init recyclerview");
         RecyclerView recyclerView = binding.recyclerviewforecast;
 
+        // For debugging purposes
+        ArrayList<String> ArrayListConditions;
+        ArrayList<String> ImageCodes;
+        ArrayList<String> Temperatures;
+        ArrayList<String> WindConditions = new ArrayList<>();
+        ArrayList<String> CurrentTimeLOC;
+        ArrayList<String> MinMaxTemp = new ArrayList<>();
 
-        RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter();
+        // Init the array of conditions
+        ArrayListConditions = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "description");
+        for(int i=0;i<ArrayListConditions.size();++i){
+            ArrayListConditions.set(i, DifferentFunctions.ToCamelCaseWord(ArrayListConditions.get(i)));
+        }
+
+        // Init the image codes array
+        ImageCodes = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "id_icon");
+
+        // Init the Temperatures array
+        Temperatures = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("temperature"));
+
+        // Init the timestamps array
+        CurrentTimeLOC = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("time"));;
+
+        RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter(ArrayListConditions,
+                ImageCodes,Temperatures,WindConditions,CurrentTimeLOC,MinMaxTemp,getContext()); // Call the Constructor for the adapter
+
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
 
     }
 

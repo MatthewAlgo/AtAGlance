@@ -1,5 +1,6 @@
 package app.matthewsgalaxy.ataglance.additionalClasses;
 
+import android.util.Pair;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ public interface DifferentFunctionsDeclaration {
     public static String ToCamelCaseWord(String Word){
         return null;
     }
+    public static Pair<Integer, Integer> GetHourAndMinutesFromTimeStamp(String UnixTimeStamp){return null;}
+    public static boolean isDaylightFunction(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){return false;}
+    public static String ReturnForecastResponseJSON(){return null;}
+    public static String ReturnWeatherResponseJSON(){return null;}
+
 
     // Other Functions
 

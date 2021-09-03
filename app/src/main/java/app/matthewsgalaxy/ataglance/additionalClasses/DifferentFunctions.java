@@ -1,5 +1,8 @@
 package app.matthewsgalaxy.ataglance.additionalClasses;
 
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.ResponseJsonForecast;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.ResponseJsonWeather;
+
 import android.util.Pair;
 import android.widget.ImageView;
 
@@ -8,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
@@ -266,6 +271,41 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         return new Pair<Integer, Integer>(timeStampValue/60%60, timeStampValue / 3600 %24);
     }
     public static boolean isDaylightFunction(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){
+        // Temporary Implementation
+        if(CurrentHour.second > 6){
+            if(CurrentHour.second < 18){
+                return true;
+            }
+            else if(CurrentHour.second == 18){
+            // We are right in the sunset hour -> We check for minutes
+            if(CurrentHour.first < 30){
+                // We are okay with the minutes -> it is still daylight
+                return true;
+            }else{
+                // The sun already set
+                return false;
+            }
+        }else{
+            // The sunset came in terms of hours
+            return false;
+
+        }
+    }else if(CurrentHour.second == 6){
+        // The hour coincides with the sunrise hour
+        if(CurrentHour.first >= 30){
+            // We are okay in terms of minutes
+            return true;
+        }else if(CurrentHour.first < 30){
+            // We are not ok
+            return false;
+        }
+    }else{
+        // The sun did not rise yet in terms of hours
+        return false;
+    }
+        /*
+
+
         // First Check For Hours
         if(CurrentHour.second > SunriseHour.second){
             // We are more than sunrise in terms of hours
@@ -304,6 +344,34 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
 
         return true;
+        */
+        return true;
+
+    }
+    public static String ReturnForecastResponseJSON(){
+        if(ResponseJsonForecast.length() > 0){
+            return ResponseJsonForecast;
+        }else{
+            return null;
+            // Error or empty string
+        }
+
+    }
+    public static String ReturnWeatherResponseJSON(){
+        if(ResponseJsonWeather.length() > 0){
+            return ResponseJsonWeather;
+        }else{
+            return null;
+            // Error or empty string
+        }
+
+    }
+    public static String ProcessTimeStamp(String timeStamp){
+        Date Date = new Date(Long.parseLong(timeStamp) * 1000L);
+        Calendar Cal = Calendar.getInstance();
+        Cal.setTime(Date);
+
+        return Cal.getTime().toString();
     }
 
 }

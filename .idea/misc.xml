@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/fragment_ataglance.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_extendedforecast.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_searchinterests.xml" value="0.2453125" />
-        <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.2" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.2453125" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.2453125" />
       </map>
