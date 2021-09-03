@@ -3,7 +3,9 @@ package app.matthewsgalaxy.ataglance.ui.ExtendedForecast;
 import static android.content.ContentValues.TAG;
 
 import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONForecast;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalHumidityForExtendedForecast;
 import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
+import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalWSpeedForExtendedForecast;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -53,6 +55,9 @@ public class extendedForecastFragment extends Fragment {
         ArrayList<String> WindConditions = new ArrayList<>();
         ArrayList<String> CurrentTimeLOC;
         ArrayList<String> MinMaxTemp = new ArrayList<>();
+        ArrayList<String> Humidityarray = new ArrayList<>();
+        ArrayList<String> Windspeedarr = new ArrayList<>();
+
 
         // Init the array of conditions
         ArrayListConditions = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "description");
@@ -67,10 +72,16 @@ public class extendedForecastFragment extends Fragment {
         Temperatures = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("temperature"));
 
         // Init the timestamps array
-        CurrentTimeLOC = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("time"));;
+        CurrentTimeLOC = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("time"));
+
+        // Init the Humidity array
+        Humidityarray = GlobalHumidityForExtendedForecast;
+
+        // Init the Wind Speed Array
+        Windspeedarr = GlobalWSpeedForExtendedForecast;
 
         RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter(ArrayListConditions,
-                ImageCodes,Temperatures,WindConditions,CurrentTimeLOC,MinMaxTemp,getContext()); // Call the Constructor for the adapter
+                ImageCodes, Temperatures, Windspeedarr, CurrentTimeLOC, MinMaxTemp, Humidityarray, getContext()); // Call the Constructor for the adapter
 
         recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());

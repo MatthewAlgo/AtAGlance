@@ -1,7 +1,10 @@
 package app.matthewsgalaxy.ataglance.adapterClasses;
 
 import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONCurrentWeather;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ParseJSONForecast;
 import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ProcessTimeStamp;
+import static app.matthewsgalaxy.ataglance.additionalClasses.DifferentFunctions.ReturnForecastResponseJSON;
 import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
 import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.SunriseGlobalHourString;
 import static app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment.SunsetGlobalHourString;
@@ -30,20 +33,24 @@ public class RecyclerViewForecastAdapter extends RecyclerView.Adapter<RecyclerVi
     private ArrayList<String> ArrayListConditions;
     private ArrayList<String> ImageCodes;
     private ArrayList<String> TemperaturesArray;
-    private ArrayList<String> WindConditions = new ArrayList<>();
+    private ArrayList<String> WindConditions;
     private ArrayList<String> CurrentTime;
     private ArrayList<String> MinMaxTemp = new ArrayList<>();
+    private ArrayList<String> HumidityArr = new ArrayList<>();
 
 
     private Context mContext;
 
-    public RecyclerViewForecastAdapter(ArrayList<String> arrayListConditions, ArrayList<String> imageCodes,ArrayList<String> temperaturesArray, ArrayList<String> windConditions, ArrayList<String> currentTime, ArrayList<String> minMaxTemp, Context mContext) {
+    public RecyclerViewForecastAdapter(ArrayList<String> arrayListConditions, ArrayList<String> imageCodes,ArrayList<String> temperaturesArray,
+                                       ArrayList<String> windConditions, ArrayList<String> currentTime, ArrayList<String> minMaxTemp, ArrayList<String> humidityArr,
+                                       Context mContext) {
         ArrayListConditions = arrayListConditions;
         ImageCodes = imageCodes;
         TemperaturesArray = temperaturesArray;
         WindConditions = windConditions;
         CurrentTime = currentTime;
         MinMaxTemp = minMaxTemp;
+        HumidityArr = humidityArr;
         this.mContext = mContext;
     }
 
@@ -71,6 +78,19 @@ public class RecyclerViewForecastAdapter extends RecyclerView.Adapter<RecyclerVi
 
         // Modify the timestamp chip text according to the array
         holder.chipLastUpdatedForecast.setText(ProcessTimeStamp(GlobalTimeForExtendedForecast.get(position))); // PROCESSED DIRECTLY FROM GLOBAL VARIABLE
+
+        // Modify the humidity array
+        double ValueOfHumidity = Double.parseDouble(HumidityArr.get(position)); String AdditionalConditions = null;
+        if (ValueOfHumidity < 20) { AdditionalConditions = "Dry"; } else if (ValueOfHumidity >= 20 && ValueOfHumidity <= 60) { AdditionalConditions = "Comfortable"; } else if (ValueOfHumidity > 60) { AdditionalConditions = "Humid"; }
+        holder.chipHumidityForecast.setText(HumidityArr.get(position) + "% - " + AdditionalConditions);
+
+        // Modify the wind conditions Chip
+        String WindConditionsStr = null; double WindSpeed = Double.parseDouble(WindConditions.get(position))*0.001*3600 ;
+        if(WindSpeed == 0){ WindConditionsStr = "No Wind"; }if(WindSpeed < 5 && WindSpeed > 0){ WindConditionsStr = "Light Breeze"; }if(WindSpeed >= 5 && WindSpeed <20){ WindConditionsStr = "Light Wind"; }if(WindSpeed >= 20 && WindSpeed <30){ WindConditionsStr = "Moderate Wind"; }if(WindSpeed >= 30){ WindConditionsStr = "Strong Wind"; }
+        holder.chipWindForecast.setText("Speed - "+ String.format("%.2f", (Double) WindSpeed) + "km/h" + " - " + WindConditionsStr);
+
+        // Set the High / Low Temperature Chip
+        holder.chipHILOForecast.setText("High - "+ String.format("%.1f",Double.parseDouble(ParseJSONForecast(ReturnForecastResponseJSON(), "tmax").get(position))-273.15)+"°C"+ " | Low - "+String.format("%.1f",Double.parseDouble(DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "tmin").get(position))-273.15)+"°C");
     }
 
     @Override

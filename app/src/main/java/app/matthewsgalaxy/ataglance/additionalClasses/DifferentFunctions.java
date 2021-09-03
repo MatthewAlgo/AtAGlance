@@ -103,6 +103,16 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                     String MyTempString = (String) Double.valueOf(MyMainObject.getDouble("temp")).toString();
                     MyConditions.add(MyTempString);
                 }
+                if(WhatDoYouWantFromMe.equals("humidity")) {
+                    String MyTempString = (String) Double.valueOf(MyMainObject.getDouble("humidity")).toString();
+                    MyConditions.add(MyTempString);
+                }
+                if (WhatDoYouWantFromMe.equals("tmin")) {
+                    MyConditions.add(MyMainObject.getString("temp_min"));
+                }
+                if (WhatDoYouWantFromMe.equals("tmax")) {
+                    MyConditions.add(MyMainObject.getString("temp_max"));
+                }
 
                 //////////////////////////////////////// Get the contents of "weather" -> It is a list with an object
                 JSONArray WeatherObject = (JSONArray) JObjRead.get("weather");
@@ -113,14 +123,19 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                 // FOR THE CONDITIONS ///////////////////////////////////////////////////////////
                 if(WhatDoYouWantFromMe.equals("description")) {
                     String Conditions = (String) ObjInsideWeather.get("description");
-                    // System.out.println(Conditions); -> Prints conditions to the console (Debug)
-                    Conditions = Conditions.toUpperCase();
+                    //Conditions = Conditions.toUpperCase();
                     MyConditions.add(Conditions);
                 }
 
                 if(WhatDoYouWantFromMe.equals("id_icon")) {
                     String IconID = (String) Integer.toString(ObjInsideWeather.getInt("id"));
                     MyConditions.add(IconID);
+                }
+
+                JSONObject WindObject = (JSONObject) JObjRead.get("wind");
+                if(WhatDoYouWantFromMe.equals("w_speed")){
+                    String Wspeed = WindObject.getString("speed");
+                    MyConditions.add(Wspeed);
                 }
             }
             // Return an array that contains whatever -> String form

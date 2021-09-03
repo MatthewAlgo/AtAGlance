@@ -109,7 +109,8 @@ public class AtAGlanceFragment extends Fragment {
 
     public static Date CurrentDate;
     public static Time CurrentTime;
-    public static ArrayList<String> GlobalTimeForExtendedForecast;
+    public static ArrayList<String> GlobalTimeForExtendedForecast, GlobalHumidityForExtendedForecast,
+            GlobalWSpeedForExtendedForecast;
 
 
     // FOR THE NEWS PARTS
@@ -444,7 +445,9 @@ public class AtAGlanceFragment extends Fragment {
                                     ArrayList<String> ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("id_icon"));
                                     ArrayList<String> TimeStamps = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
 
-                                    GlobalTimeForExtendedForecast = ParseJSONForecast(ResponseJSON, new String("time"));
+                                    GlobalTimeForExtendedForecast = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
+                                    GlobalHumidityForExtendedForecast = ParseJSONForecast(ResponseJSON, "humidity");
+                                    GlobalWSpeedForExtendedForecast = DifferentFunctions.ParseJSONForecast(ResponseJSON, "w_speed");
 
                                     // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
                                     ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0)),
@@ -507,7 +510,10 @@ public class AtAGlanceFragment extends Fragment {
                                     // MODIFY THE DESCRIPTION TEXTVIEW
                                     // System.out.println(Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "cod"))); -> Call returns 200 if OK
                                     String ToModifyCurrentConds = ParseJSONCurrentWeather(ResponseJSON, "description");
+
                                     String LocationByLatAndLong = ParseJSONCurrentWeather(ResponseJSON, "city_name");
+                                    // Try to fetch city name - This should not be equal to "Globe"
+                                    if(LocationByLatAndLong == "Globe") { Toast.makeText(getContext(), "Error while fetching your current location. Please try again later.", Toast.LENGTH_LONG);}
 
                                     String TimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "time");
                                     String SunriseTimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "sunrise");
@@ -539,36 +545,16 @@ public class AtAGlanceFragment extends Fragment {
                                     chipCurrentWeatherPromptJava.setText("Current Weather Conditions for " + LocationByLatAndLong);
                                     MainConditionTextJava.setText(ToCamelCaseWord(ToModifyCurrentConds));
                                     String ToModifyCurrentCondsImage = ParseJSONCurrentWeather(ResponseJSON, "conditions_id");
+
                                     // Set humidity in forecast
                                     String HumidityRightNow = ParseJSONCurrentWeather(ResponseJSON, "humidity");
                                     String AdditionalConditions = "Unknown condition";
-                                    double valuehumid = Double.parseDouble(HumidityRightNow);
-                                    if (valuehumid < 20) {
-                                        AdditionalConditions = "Dry";
-                                    } else if (valuehumid >= 20 && valuehumid <= 60) {
-                                        AdditionalConditions = "Comfortable";
-                                    } else if (valuehumid > 60) {
-                                        AdditionalConditions = "Humid";
-                                    }
+                                    double valuehumid = Double.parseDouble(HumidityRightNow); if (valuehumid < 20) { AdditionalConditions = "Dry"; } else if (valuehumid >= 20 && valuehumid <= 60) { AdditionalConditions = "Comfortable"; } else if (valuehumid > 60) { AdditionalConditions = "Humid"; }
                                     chipHumidity.setText(HumidityRightNow + "% - " + AdditionalConditions);
 
-                                    String WindConditions = null; double WindSpeed = Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "w_speed"))*0.001*3600 ;
-                                    if(WindSpeed == 0){
-                                        WindConditions = "No Wind";
-                                    }
-                                    if(WindSpeed < 5 && WindSpeed > 0){
-                                        WindConditions = "Light Breeze";
-                                    }
-                                    if(WindSpeed >= 5 && WindSpeed <20){
-                                        WindConditions = "Light Wind";
-                                    }
-                                    if(WindSpeed >= 20 && WindSpeed <30){
-                                        WindConditions = "Moderate Wind";
-                                    }
-                                    if(WindSpeed >= 30){
-                                        WindConditions = "Strong Wind";
-                                    }
 
+                                    String WindConditions = null; double WindSpeed = Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "w_speed"))*0.001*3600 ;
+                                    if(WindSpeed == 0){ WindConditions = "No Wind"; }if(WindSpeed < 5 && WindSpeed > 0){ WindConditions = "Light Breeze"; }if(WindSpeed >= 5 && WindSpeed <20){ WindConditions = "Light Wind"; }if(WindSpeed >= 20 && WindSpeed <30){ WindConditions = "Moderate Wind"; }if(WindSpeed >= 30){ WindConditions = "Strong Wind"; }
                                     chipWind.setText("Speed - "+ String.format("%.2f", (Double) WindSpeed) + "km/h" + " - " + WindConditions);
 
                                     // MODIFY THE MAIN ICON
@@ -578,7 +564,7 @@ public class AtAGlanceFragment extends Fragment {
                                     String ToModifyCurrentTemperature = ParseJSONCurrentWeather(ResponseJSON, "temperature");
                                     TempChip.setText(String.format("%.2f", (Double) Double.parseDouble(ToModifyCurrentTemperature) - 273.15) + "°C");
 
-                                    chipHILO.setText("High - "+ String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax"))-273.15)+"C"+ " | Low - "+String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin"))-273.15)+"C");
+                                    chipHILO.setText("High - "+ String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax"))-273.15)+"°C"+ " | Low - "+String.format("%.1f",Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin"))-273.15)+"°C");
                                 }
                             }else if(REQUEST_TYPE_LOC.equals("news_world")){
                                 MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(ResponseJSON,"news_title");
