@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="app.matthewsgalaxy.ataglance.ui.AtAGlance.AtAGlanceFragment"
+        android:name="app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_ataglance" />
 
     <fragment
         android:id="@+id/nav_extendedforecast"
-        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedForecast.extendedForecastFragment"
+        android:name="app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForecastFragment"
         android:label="@string/menu_extendedforecast"
         tools:layout="@layout/fragment_extendedforecast" />
 
     <fragment
         android:id="@+id/nav_extendedheadlines"
-        android:name="app.matthewsgalaxy.ataglance.ui.ExtendedHeadlines.extendedHeadlinesFragment"
+        android:name="app.matthewsgalaxy.ataglance.UserInterface.ExtendedHeadlines.extendedHeadlinesFragment"
         android:label="@string/menu_extendedheadlines"
         tools:layout="@layout/fragment_extendedheadlines" />
 
     <fragment
         android:id="@+id/nav_searchinterests"
-        android:name="app.matthewsgalaxy.ataglance.ui.SearchInterests.searchInterestsFragment"
+        android:name="app.matthewsgalaxy.ataglance.UserInterface.SearchInterests.searchInterestsFragment"
         android:label="@string/menu_searchinterests"
         tools:layout="@layout/fragment_searchinterests" />
 

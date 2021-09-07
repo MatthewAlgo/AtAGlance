@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AtAGlance.AtAGlanceFragment"
+    tools:context=".UserInterface.AtAGlance.AtAGlanceFragment"
     android:background="@color/purple_700">
 
     <RelativeLayout
@@ -437,9 +437,10 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/NewsCardView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="324dp"
+                        android:layout_height="285dp"
                         android:layout_below="@+id/ChipWorldNews"
+                        android:layout_marginTop="1dp"
                         app:cardBackgroundColor="#0000FF"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="10dp"

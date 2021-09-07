@@ -1,26 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".ui.ExtendedHeadlines.extendedHeadlinesFragment"
-    >
-    <TextView
-        android:id="@+id/text_gallery"
+    tools:context=".UserInterface.ExtendedForecast.extendedForecastFragment">
+    <!-- World News -->
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Top World News Right Now"
+        android:id="@+id/chip_ehead_world"
+        android:textStyle="bold|italic"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/recyclerviewheadlines_wrld"
+        android:layout_below="@+id/chip_ehead_world">
+    </androidx.recyclerview.widget.RecyclerView>
+    <!-- Science News -->
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/recyclerviewheadlines_wrld"
+        android:text="Top Science News Right Now"
+        android:id="@+id/chip_ehead_sci"
+        android:textStyle="bold|italic"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewheadlines_sci"
+        android:layout_below="@+id/chip_ehead_sci">
+    </androidx.recyclerview.widget.RecyclerView>
+    <!-- Business News -->
+
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/recyclerviewheadlines_sci"
+        android:text="Top Business News Right Now"
+        android:id="@+id/chip_ehead_busi"
+        android:textStyle="bold|italic"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewheadlines_busi"
+        android:layout_below="@+id/chip_ehead_busi">
+    </androidx.recyclerview.widget.RecyclerView>
+    <!-- Politics News -->
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Top Politics News Right Now"
+        android:id="@+id/chip_ehead_poli"
+        android:textStyle="bold|italic"
+        android:layout_below="@+id/recyclerviewheadlines_busi"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewheadlines_poli"
+        android:layout_below="@+id/chip_ehead_poli">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <!-- Entertainment News -->
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Top Entertainment News Right Now"
+        android:id="@+id/chip_ehead_enter"
+        android:layout_below="@+id/recyclerviewheadlines_poli"
+        android:textStyle="bold|italic"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewheadlines_enter"
+        android:layout_below="@+id/chip_ehead_enter">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>
