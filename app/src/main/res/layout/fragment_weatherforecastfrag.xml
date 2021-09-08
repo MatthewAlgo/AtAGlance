@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".UserInterface.ExtendedForecast.extendedForecastFragment">
+
+    <com.google.android.material.chip.Chip
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Extended Forecast - 5 Days"
+        app:chipBackgroundColor="#ff0000"
+        android:id="@+id/ChipTitle"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="#0f00f0"
+        android:layout_margin="5dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/ChipTitle"
+        android:id="@+id/recyclerviewforecast">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+</RelativeLayout>

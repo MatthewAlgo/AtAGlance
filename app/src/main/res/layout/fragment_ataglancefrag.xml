@@ -1,0 +1,1101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserInterface.AtAGlance.AtAGlanceFragment"
+    android:background="@color/purple_700">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/Scrollview">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="20dp"
+                android:orientation="horizontal"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ConstraintCurrentConds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCurrentWeatherPrompt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Weather Conditions"
+                        app:chipBackgroundColor="@color/purple_200"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipLastUpdated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last Updated At"
+                        app:chipBackgroundColor="@color/teal_200"
+                        app:layout_constraintEnd_toEndOf="@+id/chipCurrentWeatherPrompt"
+                        app:layout_constraintStart_toStartOf="@+id/chipCurrentWeatherPrompt"
+                        app:layout_constraintTop_toBottomOf="@+id/chipCurrentWeatherPrompt" />
+
+                    <ImageView
+                        android:id="@+id/MainImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/clear_day"
+                        app:layout_constraintEnd_toEndOf="@+id/chipLastUpdated"
+                        app:layout_constraintStart_toStartOf="@+id/chipLastUpdated"
+                        app:layout_constraintTop_toBottomOf="@+id/chipLastUpdated" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/MainConditionText"
+                        style="@style/TextAppearance.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CURRENT CONDITIONS"
+                        android:textAllCaps="false"
+                        app:layout_constraintEnd_toEndOf="@+id/MainImageView"
+                        app:layout_constraintStart_toStartOf="@+id/MainImageView"
+                        app:layout_constraintTop_toBottomOf="@+id/MainImageView" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipTemperature"
+                        style="@style/TextAppearance.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="°C/°F/°K"
+                        android:textSize="@android:dimen/app_icon_size"
+                        app:chipIcon="@mipmap/pngthermo"
+                        app:layout_constraintEnd_toEndOf="@+id/MainConditionText"
+                        app:layout_constraintStart_toStartOf="@+id/MainConditionText"
+                        app:layout_constraintTop_toBottomOf="@+id/MainConditionText" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HUMIDITY"
+                        app:chipIcon="@mipmap/drop"
+                        app:layout_constraintEnd_toEndOf="@+id/chipTemperature"
+                        app:layout_constraintStart_toStartOf="@+id/chipTemperature"
+                        app:layout_constraintTop_toBottomOf="@+id/chipTemperature" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:text="WIND"
+                        app:chipIcon="@mipmap/windypng"
+                        app:layout_constraintEnd_toEndOf="@+id/chipHumidity"
+                        app:layout_constraintStart_toStartOf="@+id/chipHumidity"
+                        app:layout_constraintTop_toBottomOf="@+id/chipHumidity" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipHILO"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HIGH / LOW"
+                        app:chipIcon="@mipmap/hi_lo_temp"
+                        app:layout_constraintEnd_toEndOf="@+id/chipWind"
+                        app:layout_constraintStart_toStartOf="@+id/chipWind"
+                        app:layout_constraintTop_toBottomOf="@+id/chipWind" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ConstraintCurrentConds"
+                    android:background="@drawable/rounded_corners"
+                    android:id="@+id/RelativeForecast"
+                    android:padding="20dp"
+                    >
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipInfoForecast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="At A Glance - 24-Hour Forecast"
+                        app:chipBackgroundColor="@color/purple_200" />
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:padding="20dp"
+                        android:layout_below="@+id/ChipInfoForecast"
+                        android:id="@+id/Horziscroll"
+
+                        >
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:layout_centerInParent="true"
+                            >
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/ChipHourUpperText1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+
+                                    android:text="TIME" />
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText1"
+                                    android:id="@+id/ImageHour1"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour1"
+                                    android:layout_below="@+id/ImageHour1"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText2"
+
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText2"
+                                    android:id="@+id/ImageHour2"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour2"
+                                    android:layout_below="@+id/ImageHour2"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText3"
+
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText3"
+                                    android:id="@+id/ImageHour3"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour3"
+                                    android:layout_below="@+id/ImageHour3"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/ChipHourUpperText4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="TIME" />
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText4"
+                                    android:id="@+id/ImageHour4"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour4"
+                                    android:layout_below="@+id/ImageHour4"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText5"
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText5"
+                                    android:id="@+id/ImageHour5"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour5"
+                                    android:layout_below="@+id/ImageHour5"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText6"
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText6"
+                                    android:id="@+id/ImageHour6"
+                                    android:layout_height="50dp"/>
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/ChipHour6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/ImageHour6"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="°C/°F/°K" />
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText7"
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText7"
+                                    android:id="@+id/ImageHour7"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour7"
+                                    android:layout_below="@+id/ImageHour7"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText8"
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText8"
+                                    android:id="@+id/ImageHour8"
+                                    android:layout_height="50dp"/>
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="°C/°F/°K"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHour8"
+                                    android:layout_below="@+id/ImageHour8"/>
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+                                <com.google.android.material.chip.Chip
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:id="@+id/ChipHourUpperText9"
+                                    android:text="TIME"/>
+                                <ImageView
+                                    android:src="@drawable/cloudy_night_2"
+                                    android:layout_width="50dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@+id/ChipHourUpperText9"
+                                    android:id="@+id/ImageHour9"
+                                    android:layout_height="50dp"/>
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/ChipHour9"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/ImageHour9"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="°C/°F/°K" />
+
+                            </RelativeLayout>
+                            <!-- END OF HOUR SECTION -->
+
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeForecast"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipWorldNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest World News"
+                        app:chipBackgroundColor="@color/purple_200" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipWorldNews"
+                        android:layout_marginTop="1dp"
+                        app:cardBackgroundColor="#0000FF"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:id="@+id/RellayoutWithNewsImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/ImageNews"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="@color/purple_200"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="@color/teal_200" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeLatestNews"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipScienceNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest Science News"
+                        app:chipBackgroundColor="@color/purple_200" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipScienceNews"
+                        app:cardBackgroundColor="#FFFF00"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/ImageNews2"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews2"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="@color/purple_200"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="#ff0000" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText2">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+
+                <!-- Technology NEWS -->
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeLatestNews2"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipTechnologyNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest Technology News"
+                        app:chipBackgroundColor="#f0ff0f" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipTechnologyNews"
+                        app:cardBackgroundColor="#fe00fe"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:id="@+id/RellayoutWithNewsImage3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/ImageNews3"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews3"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView3"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="@color/purple_200"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle3"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="#ff0000" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText3">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+                <!-- Business NEWS -->
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeLatestNews3"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipBusinessNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest Business News"
+                        app:chipBackgroundColor="#1ff000" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipBusinessNews"
+                        app:cardBackgroundColor="#1ff000"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:id="@+id/RellayoutWithNewsImage4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/ImageNews4"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews4"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView4"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="#f000ff"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle4"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="#ff0000" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText4">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+                <!-- Politics NEWS -->
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeLatestNews4"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipPoliticsNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest Politics News"
+                        app:chipBackgroundColor="#1ff000" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipPoliticsNews"
+                        app:cardBackgroundColor="#ff0000"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:id="@+id/RellayoutWithNewsImage5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/ImageNews5"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews5"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView5"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="#ff0000"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle5"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="#f000ff" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText5">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+                <!-- Entertainment NEWS -->
+                <RelativeLayout
+                    android:id="@+id/RelativeLatestNews6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/RelativeLatestNews5"
+                    android:background="@drawable/rounded_corners"
+                    android:padding="20dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipEntertainmentNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Latest Entertainment News"
+                        app:chipBackgroundColor="#ff0000" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/NewsCardView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipEntertainmentNews"
+                        app:cardBackgroundColor="#0fff00"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true">
+
+                        <RelativeLayout
+                            android:id="@+id/RellayoutWithNewsImage6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:id="@+id/ImageNews6"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="10dp"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:src="@drawable/materialwall" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ImageNews6"
+                                android:layout_centerHorizontal="true"
+                                android:text="Press Here For Details" />
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/ChipNewsTitle6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/NewsCardView6"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Title"
+                        android:textColor="#0fff0f"
+                        android:textStyle="bold|italic" />
+
+                    <TextView
+                        android:id="@+id/NewsDescriptionText6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ChipNewsTitle6"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Headline Description"
+                        android:textColor="#ff0000" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/NewsDescriptionText6">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/PrevArticleChip6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:text="Previous Article"
+                            android:textAlignment="center" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/NextArticleChip6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:text="Next Article"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <!--
+                Section Between News Headlines
+                -->
+
+
+
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

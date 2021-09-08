@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
-import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 
 public class EntertainmentNewsPart {
 
@@ -129,13 +128,13 @@ public class EntertainmentNewsPart {
         ResponseEntertainmentJSON = responseEntertainmentJSON;
     }
 
-    public EntertainmentNewsPart(FragmentAtaglanceBinding b) {
-        PrevArticleChip6 = b.PrevArticleChip6;
-        NextArticleChip6 = b.NextArticleChip6;
-        ChipURLLink6 = b.ChipURLLink6;
-        NewsDescriptionText6 = b.NewsDescriptionText6;
-        ChipNewsTitle6 = b.ChipNewsTitle6;
-        ImageNews6 = b.ImageNews6;
+    public EntertainmentNewsPart(View b) {
+        PrevArticleChip6 = b.findViewById(R.id.PrevArticleChip6);
+        NextArticleChip6 = b.findViewById(R.id.NextArticleChip6);
+        ChipURLLink6 = b.findViewById(R.id.ChipURLLink6);
+        NewsDescriptionText6 = b.findViewById(R.id.NewsDescriptionText6);
+        ChipNewsTitle6 = b.findViewById(R.id.ChipNewsTitle6);
+        ImageNews6 = b.findViewById(R.id.ImageNews6);
         SetOnClickListeners();
     }
 
@@ -207,7 +206,7 @@ public class EntertainmentNewsPart {
             DifferentFunctions.writeToFile(Mcontext,"JSON_ENTERTAINMENTNEWS_CACHE.json", JsonRequest);
         }
         String Response = readFromFile(Mcontext, "JSON_ENTERTAINMENTNEWS_CACHE.json");
-
+        ResponseEntertainmentJSON = Response;
         MyTitlesArrayListForEntertainmentNews = ParseJSONWorldNews(Response, "news_title");
         ChipNewsTitle6.setText(MyTitlesArrayListForEntertainmentNews.get(0));
 

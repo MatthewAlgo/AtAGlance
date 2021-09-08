@@ -7,25 +7,29 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import app.matthewsgalaxy.ataglance.databinding.FragmentSearchinterestsBinding;
+import app.matthewsgalaxy.ataglance.R;
 
 public class searchInterestsFragment extends Fragment {
-    private FragmentSearchinterestsBinding binding;
-
+    private View PubView;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentSearchinterestsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return inflater.inflate(R.layout.fragment_localsearch, container, false);
+    }
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        PubView = view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        PubView = null;
     }
 }

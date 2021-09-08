@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONWorldNews;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.MyTitlesArrayListForWorldNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseScienceNews;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
-import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
+
 
 public class ScienceNewsPart {
     public Chip PrevArticleChip2, NextArticleChip2,ChipURLLink2;
@@ -129,13 +130,13 @@ public class ScienceNewsPart {
         ResponseScienceJSON = responseScienceJSON;
     }
 
-    public ScienceNewsPart(FragmentAtaglanceBinding b){
-        PrevArticleChip2 = b.PrevArticleChip2;
-        NextArticleChip2 = b.NextArticleChip2;
-        ChipURLLink2 = b.ChipURLLink2;
-        NewsDescriptionText2 = b.NewsDescriptionText2;
-        ChipNewsTitle2 = b.ChipNewsTitle2;
-        ImageNews2 = b.ImageNews2;
+    public ScienceNewsPart(View b){
+        PrevArticleChip2 = b.findViewById(R.id.PrevArticleChip2);
+        NextArticleChip2 = b.findViewById(R.id.NextArticleChip2);
+        ChipURLLink2 = b.findViewById(R.id.ChipURLLink2);
+        NewsDescriptionText2 = b.findViewById(R.id.NewsDescriptionText2);
+        ChipNewsTitle2 = b.findViewById(R.id.ChipNewsTitle2);
+        ImageNews2 = b.findViewById(R.id.ImageNews2);
         SetOnClickListeners();
     }
     private void SetOnClickListeners(){
@@ -206,7 +207,7 @@ public class ScienceNewsPart {
         }
         String Response = readFromFile(Mcontext, "JSON_SCIENCENEWS_CACHE.json");
         MyTitlesArrayListForScienceNews = ParseJSONWorldNews(Response,"news_title");
-
+        ResponseScienceNews = Response;
         if(Response != null && Response != "") {
 
             ChipNewsTitle2.setText(MyTitlesArrayListForScienceNews.get(0));

@@ -1,71 +1,80 @@
 package app.matthewsgalaxy.ataglance;
 
-import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.View;
-import android.view.Menu;
+import android.os.Message;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment;
+import app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForecastFragment;
+import app.matthewsgalaxy.ataglance.UserInterface.ExtendedHeadlines.extendedHeadlinesFragment;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import app.matthewsgalaxy.ataglance.databinding.ActivityMainBinding;
-
-public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        Toolbar Toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(Toolbar);
 
-        setSupportActionBar(binding.appBarMain.toolbar);
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                 R.id.nav_home, R.id.nav_extendedforecast, R.id.nav_extededheadlines, R.id.nav_searchinterests)
-                 .setOpenableLayout(drawer)
-                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, Toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // We open our ataglance fragment immediately
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new AtAGlanceFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new AtAGlanceFragment()).commit();
+                break;
+            case R.id.nav_news:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new extendedHeadlinesFragment()).commit();
+                break;
+            case R.id.nav_weather:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new extendedForecastFragment()).commit();
+                break;
+            case R.id.Aboutme:
+                Toast.makeText(this, "share", Toast.LENGTH_LONG).show();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else{
+            super.onBackPressed();
+        }
     }
-
 
 }

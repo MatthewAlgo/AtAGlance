@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
-import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
+
 
 public class TechnologyNewsPart {
     public Chip PrevArticleChip3, NextArticleChip3, ChipURLLink3;
@@ -128,13 +128,13 @@ public class TechnologyNewsPart {
         ResponseTechnologyJSON = responseTechnologyJSON;
     }
 
-    public TechnologyNewsPart(FragmentAtaglanceBinding b) {
-        PrevArticleChip3 = b.PrevArticleChip3;
-        NextArticleChip3 = b.NextArticleChip3;
-        ChipURLLink3 = b.ChipURLLink3;
-        NewsDescriptionText3 = b.NewsDescriptionText3;
-        ChipNewsTitle3 = b.ChipNewsTitle3;
-        ImageNews3 = b.ImageNews3;
+    public TechnologyNewsPart(View b) {
+        PrevArticleChip3 = b.findViewById(R.id.PrevArticleChip3);
+        NextArticleChip3 = b.findViewById(R.id.NextArticleChip3);
+        ChipURLLink3 = b.findViewById(R.id.ChipURLLink3);
+        NewsDescriptionText3 = b.findViewById(R.id.NewsDescriptionText3);
+        ChipNewsTitle3 = b.findViewById(R.id.ChipNewsTitle3);
+        ImageNews3 = b.findViewById(R.id.ImageNews3);
         SetOnClickListeners();
     }
 
@@ -206,7 +206,7 @@ public class TechnologyNewsPart {
             DifferentFunctions.writeToFile(MyContext,"JSON_TECHNEWS_CACHE.json", JsonRequest);
         }
         String Response = readFromFile(MyContext, "JSON_TECHNEWS_CACHE.json");
-
+        ResponseTechnologyJSON = Response;
         MyTitlesArrayListForTechnologyNews = ParseJSONWorldNews(Response, "news_title");
         ChipNewsTitle3.setText(MyTitlesArrayListForTechnologyNews.get(0));
 

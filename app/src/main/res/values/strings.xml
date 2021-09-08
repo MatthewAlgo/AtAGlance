@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">AtAGlance</string>
-
-
-    <string name="menu_home">Home</string>
-    <string name="menu_extendedforecast">Extended Forecast</string>
-    <string name="menu_extendedheadlines">Extended Headlines</string>
-    <string name="menu_searchinterests">Search Interests</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 </resources>

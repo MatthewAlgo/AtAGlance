@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,31 +22,35 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdapterClasses.RecyclerViewForecastAdapter;
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
-import app.matthewsgalaxy.ataglance.databinding.FragmentExtendedforecastBinding;
+import app.matthewsgalaxy.ataglance.R;
 
 public class extendedForecastFragment extends Fragment {
-    private FragmentExtendedforecastBinding binding;
+    private View PubView;
+    private RecyclerView recyclerView;
+
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        binding = FragmentExtendedforecastBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        PubView = inflater.inflate(R.layout.fragment_weatherforecastfrag, container, false);
+        recyclerView = PubView.findViewById(R.id.recyclerviewforecast);
 
         InitRecyclerView();
-        return root;
+        return PubView;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        PubView = null;
     }
 
     private void InitRecyclerView(){
         Log.d(TAG, "InitRecyclerView: init recyclerview");
-        RecyclerView recyclerView = binding.recyclerviewforecast;
 
         // For debugging purposes
         ArrayList<String> ArrayListConditions;

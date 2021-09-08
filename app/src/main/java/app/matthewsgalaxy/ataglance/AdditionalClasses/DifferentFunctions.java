@@ -1,12 +1,20 @@
 package app.matthewsgalaxy.ataglance.AdditionalClasses;
 
+import static android.content.ContentValues.TAG;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseBusinessNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseEntertainmentNews;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseJsonForecast;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseJsonWeather;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponsePoliticsNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseScienceNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseTechNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseWorldNews;
 
 import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import app.matthewsgalaxy.ataglance.Interfaces.DifferentFunctionsDeclaration;
+import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.BusinessNewsPart;
 
 public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
@@ -290,11 +299,33 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
     // Other Functions
 
-    public static Pair<Integer, Integer> GetHourAndMinutesFromTimeStamp(String UnixTimeStamp){
-        int timeStampValue = Integer.parseInt(UnixTimeStamp);
+    public static Pair<Integer, Integer> GetHourAndMinutesFromTimeStamp(String UnixTimeStamp, Context context){
+        int timeStampValue = 0;
+        try {
+            timeStampValue = Integer.parseInt(UnixTimeStamp);
+        }catch (Exception e){
+            Log.d(TAG, "GetHourAndMinutesFromTimeStamp: " + e.getMessage());
+            Toast.makeText(context, "Error while processing the timestamp. Please try again later", Toast.LENGTH_SHORT).show();
+        }
         // System.out.println("MINUTES: " + timeStampValue / 60 % 60);
         // System.out.println("HOUR: " + timeStampValue / 3600 % 24);
-        return new Pair<Integer, Integer>(timeStampValue/60%60, timeStampValue / 3600 %24);
+        if(timeStampValue != 0) {
+            return new Pair<Integer, Integer>(timeStampValue / 60 % 60, timeStampValue / 3600 % 24);
+        }else{
+            return new Pair<Integer, Integer>(0,0);
+        }
+        // TODO: java.lang.NumberFormatException: s == null
+        //        at java.lang.Integer.parseInt(Integer.java:577)
+        //        at java.lang.Integer.parseInt(Integer.java:650)
+        //        at app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.GetHourAndMinutesFromTimeStamp(DifferentFunctions.java:294)
+        //        at app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment$6$1.run(AtAGlanceFragment.java:482)
+        //        at android.os.Handler.handleCallback(Handler.java:938)
+        //        at android.os.Handler.dispatchMessage(Handler.java:99)
+        //        at android.os.Looper.loop(Looper.java:223)
+        //        at android.app.ActivityThread.main(ActivityThread.java:7656)
+        //        at java.lang.reflect.Method.invoke(Native Method)
+        //        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
+        //        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:947)
     }
     public static boolean isDaylightFunction(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){
         // Temporary Implementation
@@ -391,6 +422,23 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
             // Error or empty string
         }
 
+    }
+    public static String ReturnNewsResponseJSON(String Choice) {
+        switch (Choice){
+            case "science":
+                return ResponseScienceNews;
+            case "world":
+                return ResponseWorldNews;
+            case "business":
+                return ResponseBusinessNews;
+            case "tech":
+                return ResponseTechNews;
+            case "entertainment":
+                return ResponseEntertainmentNews;
+            case "politics":
+                return ResponsePoliticsNews;
+        }
+        return null;
     }
     public static String ProcessTimeStamp(String timeStamp){
         Date Date = new Date(Long.parseLong(timeStamp) * 1000L);

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -39,7 +40,6 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
 import app.matthewsgalaxy.ataglance.R;
-import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -91,6 +91,7 @@ public class AtAGlanceFragment extends Fragment {
     public static ArrayList<String> MyURLArrayListForWorldNews;
     public static ArrayList<String> MyIMGURLArrayListForWorldNews;
     private static int CURRENT_ARTICLE = 0;
+    private View PubView;
 
     public double LATITUDE;
     public double LONGITUDE;
@@ -100,7 +101,8 @@ public class AtAGlanceFragment extends Fragment {
     public static boolean connected = false;
     public static String APIKEY, APIURL_WEATHER, REQUEST_TYPE, APIURL_FORECAST, APIKEY_NEWS, NEWSAPI_WORLD,
             NEWSAPI_SCIENCE, NEWSAPI_TECHNOLOGY, NEWSAPI_POLITICS, NEWSAPI_BUSINESS, NEWSAPI_ENTERTAINMENT;
-    public static String ResponseJSON, ResponseJsonForecast, ResponseJsonWeather;
+    public static String ResponseJSON, ResponseJsonForecast, ResponseJsonWeather, ResponseScienceNews,
+        ResponseWorldNews, ResponseBusinessNews, ResponsePoliticsNews, ResponseTechNews, ResponseEntertainmentNews;
 
     public static boolean isDaylightAtCall = true;
     public static Pair<Integer, Integer> SunriseGlobalHourPair, SunsetGlobalHourPair;
@@ -115,7 +117,6 @@ public class AtAGlanceFragment extends Fragment {
 
 
     // FOR THE NEWS PARTS
-    protected FragmentAtaglanceBinding binding;
     ScienceNewsPart MyScienceNewsPart;
     TechnologyNewsPart MyTechnologyNewsPart;
     BusinessNewsPart MyBusinessNewsPart;
@@ -135,54 +136,55 @@ public class AtAGlanceFragment extends Fragment {
         mContext = null;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_ataglancefrag, container, false);
 
-        binding = FragmentAtaglanceBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        MainCurrentCondition = (ImageView) view.findViewById(R.id.MainImageView);
+        MainConditionTextJava = view.findViewById(R.id.MainConditionText);
+        TempChip = view.findViewById(R.id.chipTemperature);
+        chipCurrentWeatherPromptJava = view.findViewById(R.id.chipCurrentWeatherPrompt);
+        chipHumidity = view.findViewById(R.id.chipHumidity);
+        chipWind = view.findViewById(R.id.chipWind);
 
-        /////// Application For the main Layout File
-        ///////// VARIABLES IDENTIFICATION
-        MainCurrentCondition = binding.MainImageView;
-        MainConditionTextJava = binding.MainConditionText;
-        TempChip = binding.chipTemperature;
-        chipCurrentWeatherPromptJava = binding.chipCurrentWeatherPrompt;
-        chipHumidity = binding.chipHumidity;
-        chipWind = binding.chipWind;
+        // Images for hourly forecast                                   // Chips For hourly forecast                            // TextViews for TIME
+        ImageHour1 = view.findViewById(R.id.ImageHour1);                     ChipHour1 = view.findViewById(R.id.ChipHour1);               ChipHourUpperText1 = view.findViewById(R.id.ChipHourUpperText1);
+        ImageHour4 = view.findViewById(R.id.ImageHour4);                     ChipHour4 = view.findViewById(R.id.ChipHour4);               ChipHourUpperText4 = view.findViewById(R.id.ChipHourUpperText4);
+        ImageHour3 = view.findViewById(R.id.ImageHour3);                     ChipHour3 = view.findViewById(R.id.ChipHour3);               ChipHourUpperText3 = view.findViewById(R.id.ChipHourUpperText3);
+        ImageHour5 = view.findViewById(R.id.ImageHour5);                     ChipHour5 = view.findViewById(R.id.ChipHour5);               ChipHourUpperText5 = view.findViewById(R.id.ChipHourUpperText5);
+        ImageHour6 = view.findViewById(R.id.ImageHour6);                     ChipHour6 = view.findViewById(R.id.ChipHour6);               ChipHourUpperText6 = view.findViewById(R.id.ChipHourUpperText6);
+        ImageHour2 = view.findViewById(R.id.ImageHour2);                     ChipHour2 = view.findViewById(R.id.ChipHour2);               ChipHourUpperText2 = view.findViewById(R.id.ChipHourUpperText2);
+        ImageHour7 = view.findViewById(R.id.ImageHour7);                     ChipHour7 = view.findViewById(R.id.ChipHour7);               ChipHourUpperText7 = view.findViewById(R.id.ChipHourUpperText7);
+        ImageHour8 = view.findViewById(R.id.ImageHour8);                     ChipHour8 = view.findViewById(R.id.ChipHour8);               ChipHourUpperText8 = view.findViewById(R.id.ChipHourUpperText8);
+        ImageHour9 = view.findViewById(R.id.ImageHour9);                     ChipHour9 = view.findViewById(R.id.ChipHour9);               ChipHourUpperText9 = view.findViewById(R.id.ChipHourUpperText9);
+        chipLastUpdated = view.findViewById(R.id.chipLastUpdated);
+        ChipURLLink = view.findViewById(R.id.ChipURLLink);
+        chipHILO = view.findViewById(R.id.chipHILO);
+
+        NewsTitleChip = view.findViewById(R.id.ChipNewsTitle);
+        PrevArticleChip = view.findViewById(R.id.PrevArticleChip);
+        NextArticleChip = view.findViewById(R.id.NextArticleChip);
+        NewsDescriptionText = view.findViewById(R.id.NewsDescriptionText);
+        ImageNews = view.findViewById(R.id.ImageNews);
+        NewsCardView = view.findViewById(R.id.NewsCardView);
+
+        PubView = view;
+
+        MyScienceNewsPart = new ScienceNewsPart(PubView);
+        MyTechnologyNewsPart = new TechnologyNewsPart(PubView);
+        MyBusinessNewsPart = new BusinessNewsPart(PubView);
+        MyPoliticsNewsPart = new PoliticsNewsPart(PubView);
+        MyEntertainmentNewsPart = new EntertainmentNewsPart(PubView);
+
         double LATITUDE, LONGITUDE;
         LATITUDE = LONGITUDE = 0;
 
         numberOfInflations++;
-
-
-        // Images for hourly forecast                                   // Chips For hourly forecast                            // TextViews for TIME
-        ImageHour1 = binding.ImageHour1;                     ChipHour1 = binding.ChipHour1;               ChipHourUpperText1 = binding.ChipHourUpperText1;
-        ImageHour2 = binding.ImageHour2;                     ChipHour2 = binding.ChipHour2;               ChipHourUpperText2 = binding.ChipHourUpperText2;
-        ImageHour3 = binding.ImageHour3;                     ChipHour3 = binding.ChipHour3;               ChipHourUpperText3 = binding.ChipHourUpperText3;
-        ImageHour4 = binding.ImageHour4;                     ChipHour4 = binding.ChipHour4;               ChipHourUpperText4 = binding.ChipHourUpperText4;
-        ImageHour5 = binding.ImageHour5;                     ChipHour5 = binding.ChipHour5;               ChipHourUpperText5 = binding.ChipHourUpperText5;
-        ImageHour6 = binding.ImageHour6;                     ChipHour6 = binding.ChipHour6;               ChipHourUpperText6 = binding.ChipHourUpperText6;
-        ImageHour7 = binding.ImageHour7;                     ChipHour7 = binding.ChipHour7;               ChipHourUpperText7 = binding.ChipHourUpperText7;
-        ImageHour8 = binding.ImageHour8;                     ChipHour8 = binding.ChipHour8;               ChipHourUpperText8 = binding.ChipHourUpperText8;
-        ImageHour9 = binding.ImageHour9;                     ChipHour9 = binding.ChipHour9;               ChipHourUpperText9 = binding.ChipHourUpperText9;
-        chipLastUpdated = binding.chipLastUpdated;
-        ChipURLLink = binding.ChipURLLink;
-        chipHILO = binding.chipHILO;
-
-        NewsTitleChip = binding.ChipNewsTitle;
-        PrevArticleChip = binding.PrevArticleChip;
-        NextArticleChip = binding.NextArticleChip;
-        NewsDescriptionText = binding.NewsDescriptionText;
-        ImageNews = binding.ImageNews;
-        NewsCardView = binding.NewsCardView;
-
-
-
-        MyScienceNewsPart = new ScienceNewsPart(binding);
-        MyTechnologyNewsPart = new TechnologyNewsPart(binding);
-        MyBusinessNewsPart = new BusinessNewsPart(binding);
-        MyPoliticsNewsPart = new PoliticsNewsPart(binding);
-        MyEntertainmentNewsPart = new EntertainmentNewsPart(binding);
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
@@ -200,12 +202,12 @@ public class AtAGlanceFragment extends Fragment {
         }
         // Set Click Listeners for the Chips
         SetOnClickListenersForWorldNewsChipsPlusURLChipsForParts();
-        return root;
+        return view;
     }
 
     // For the location permission
     public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
+        if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -401,7 +403,7 @@ public class AtAGlanceFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        PubView = null;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -478,24 +480,24 @@ public class AtAGlanceFragment extends Fragment {
                                     GlobalWSpeedForExtendedForecast = DifferentFunctions.ParseJSONForecast(ResponseJSON, "w_speed");
 
                                     // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
-                                    ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(0));
-                                    ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(1));
-                                    ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(2));
-                                    ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(3));
-                                    ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(4));
-                                    ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(5));
-                                    ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(6));
-                                    ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(7));
-                                    ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8)),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(8));
+                                    ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(0));
+                                    ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(1));
+                                    ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(2));
+                                    ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(3));
+                                    ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(4));
+                                    ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(5));
+                                    ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(6));
+                                    ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(7));
+                                    ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8), requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(8));
 
                                     // Change Chip Values according to temperatures predicted
                                     ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("temperature"));
@@ -559,23 +561,23 @@ public class AtAGlanceFragment extends Fragment {
                                     // TIMESTAMP VALUES IN GMT!
 
                                     /// Process the timestamps
-                                    SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix);
-                                    SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix);
+                                    SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext());
+                                    SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext());
                                     SunriseGlobalHourString = SunriseTimeStampUnix;
                                     SunsetGlobalHourString = SunsetTimeStampUnix;
                                     // We have sunrise / sunset stored globally
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).second);
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).second);
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).second);
+                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
+                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
 
-                                    isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix),
-                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix));
+                                    isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()),
+                                            DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()));
 
                                     System.out.println(isDaylightAtCall);
 
@@ -637,7 +639,7 @@ public class AtAGlanceFragment extends Fragment {
                                     DifferentFunctions.writeToFile(requireContext(),"JSON_WORLDNEWS_CACHE.json", MyResp);
                                 }
                                 ResponseJSON = readFromFile(requireContext(), "JSON_WORLDNEWS_CACHE.json");
-
+                                ResponseWorldNews = ResponseJSON;
                                 if(ResponseJSON != null && ResponseJSON != "") {
                                     MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_title");
                                     NewsTitleChip.setText(MyTitlesArrayListForWorldNews.get(0));
@@ -877,23 +879,23 @@ public class AtAGlanceFragment extends Fragment {
             // TIMESTAMP VALUES IN GMT!
 
             /// Process the timestamps
-            SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix);
-            SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix);
+            SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext());
+            SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext());
             SunriseGlobalHourString = SunriseTimeStampUnix;
             SunsetGlobalHourString = SunsetTimeStampUnix;
             // We have sunrise / sunset stored globally
 
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix).second);
+            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
+            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
 
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix).second);
+            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
+            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
 
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix).second);
+            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
+            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
 
-            isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix));
+            isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()));
 
             System.out.println(isDaylightAtCall);
 
@@ -939,24 +941,24 @@ public class AtAGlanceFragment extends Fragment {
             GlobalWSpeedForExtendedForecast = DifferentFunctions.ParseJSONForecast(RespForForecast, "w_speed");
 
             // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
-            ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(0));
-            ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(1));
-            ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(2));
-            ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(3));
-            ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(4));
-            ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(5));
-            ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(6));
-            ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(7));
-            ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8)),
-                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ConditionsInJson.get(8));
+            ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(0));
+            ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(1));
+            ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(2));
+            ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(3));
+            ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(4));
+            ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(5));
+            ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(6));
+            ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(7));
+            ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(8));
 
             // Change Chip Values according to temperatures predicted
             ConditionsInJson = ParseJSONForecast(RespForForecast, new String("temperature"));
@@ -984,19 +986,19 @@ public class AtAGlanceFragment extends Fragment {
 
         }
         if(fileExists(requireContext(), "JSON_WORLDNEWS_CACHE.json")){
-            String RespForForecast = readFromFile(requireContext(), "JSON_WORLDNEWS_CACHE.json");
-
-            if(RespForForecast != null && RespForForecast != "") {
-                MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(RespForForecast, "news_title");
+            String Response = readFromFile(requireContext(), "JSON_WORLDNEWS_CACHE.json");
+            ResponseWorldNews = Response;
+            if(Response != null && Response != "") {
+                MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(Response, "news_title");
                 NewsTitleChip.setText(MyTitlesArrayListForWorldNews.get(0));
 
-                MyDescriptionsArrayListForWorldNews = ParseJSONWorldNews(RespForForecast, "news_descr");
+                MyDescriptionsArrayListForWorldNews = ParseJSONWorldNews(Response, "news_descr");
                 NewsDescriptionText.setText(MyDescriptionsArrayListForWorldNews.get(0));
 
-                MyURLArrayListForWorldNews = ParseJSONWorldNews(RespForForecast, "news_url");
+                MyURLArrayListForWorldNews = ParseJSONWorldNews(Response, "news_url");
 
                 // To load the first corresponding image
-                MyIMGURLArrayListForWorldNews = ParseJSONWorldNews(RespForForecast, "news_url_to_img");
+                MyIMGURLArrayListForWorldNews = ParseJSONWorldNews(Response, "news_url_to_img");
                 if (MyIMGURLArrayListForWorldNews.get(0) == null || MyIMGURLArrayListForWorldNews.get(0) == "null") {
                     ImageNews.setImageResource(R.drawable.materialwall);
                 } else {
@@ -1006,6 +1008,7 @@ public class AtAGlanceFragment extends Fragment {
         }
         if(fileExists(requireContext(), "JSON_SCIENCENEWS_CACHE.json")){
             String Response = readFromFile(getContext(), "JSON_SCIENCENEWS_CACHE.json");
+            ResponseScienceNews = Response;
             MyScienceNewsPart.MyTitlesArrayListForScienceNews = ParseJSONWorldNews(Response,"news_title");
 
             if(Response != null && Response != "") {
@@ -1031,6 +1034,7 @@ public class AtAGlanceFragment extends Fragment {
         }
         if(fileExists(requireContext(), "JSON_TECHNEWS_CACHE.json")) {
             String Response = readFromFile(requireContext(), "JSON_TECHNEWS_CACHE.json");
+            ResponseTechNews = Response;
 
             MyTechnologyNewsPart.MyTitlesArrayListForTechnologyNews = ParseJSONWorldNews(Response, "news_title");
             MyTechnologyNewsPart.ChipNewsTitle3.setText(MyTechnologyNewsPart.MyTitlesArrayListForTechnologyNews.get(0));
@@ -1052,6 +1056,7 @@ public class AtAGlanceFragment extends Fragment {
         }
         if(fileExists(requireContext(), "JSON_BUSINESSNEWS_CACHE.json")) {
             String Response = readFromFile(requireContext(), "JSON_BUSINESSNEWS_CACHE.json");
+            ResponseBusinessNews = Response;
 
             MyBusinessNewsPart.MyTitlesArrayListForBusinessNews = ParseJSONWorldNews(Response, "news_title");
             MyBusinessNewsPart.ChipNewsTitle4.setText(MyBusinessNewsPart.MyTitlesArrayListForBusinessNews.get(0));
@@ -1073,7 +1078,7 @@ public class AtAGlanceFragment extends Fragment {
         }
         if(fileExists(requireContext(), "JSON_POLITICSNEWS_CACHE.json")) {
             String Response = readFromFile(requireContext(), "JSON_POLITICSNEWS_CACHE.json");
-
+            ResponsePoliticsNews = Response;
 
             MyPoliticsNewsPart.MyTitlesArrayListForPoliticsNews = ParseJSONWorldNews(Response, "news_title");
             MyPoliticsNewsPart.ChipNewsTitle5.setText(MyPoliticsNewsPart.MyTitlesArrayListForPoliticsNews.get(0));
@@ -1095,7 +1100,7 @@ public class AtAGlanceFragment extends Fragment {
         }
         if(fileExists(requireContext(), "JSON_ENTERTAINMENTNEWS_CACHE.json")) {
             String Response = readFromFile(requireContext(), "JSON_ENTERTAINMENTNEWS_CACHE.json");
-
+            ResponseEntertainmentNews = Response;
             MyEntertainmentNewsPart.MyTitlesArrayListForEntertainmentNews = ParseJSONWorldNews(Response, "news_title");
             MyEntertainmentNewsPart.ChipNewsTitle6.setText(MyEntertainmentNewsPart.MyTitlesArrayListForEntertainmentNews.get(0));
 

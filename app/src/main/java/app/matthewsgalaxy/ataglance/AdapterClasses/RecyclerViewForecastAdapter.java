@@ -70,8 +70,8 @@ public class RecyclerViewForecastAdapter extends RecyclerView.Adapter<RecyclerVi
         // Modify The Text for conditions
         holder.MainConditionTextForecast.setText(ArrayListConditions.get(position));
         // Modify Image According to conditions
-        ModifyImageToConditions(holder.MainImageViewForecast, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(GlobalTimeForExtendedForecast.get(position)),
-                DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString)), ImageCodes.get(position));
+        ModifyImageToConditions(holder.MainImageViewForecast, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(GlobalTimeForExtendedForecast.get(position),  mContext.getApplicationContext()),
+                DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, mContext.getApplicationContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, mContext.getApplicationContext())), ImageCodes.get(position));
 
         // Modify the temperature chip text according to the temperatures array
         holder.chipTemperatureForecast.setText(String.format("%.2f", (Double) Double.parseDouble(TemperaturesArray.get(position)) - 273.15) + "°C");

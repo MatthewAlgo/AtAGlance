@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
-import app.matthewsgalaxy.ataglance.databinding.FragmentAtaglanceBinding;
 
 public class PoliticsNewsPart {
     public Chip PrevArticleChip5, NextArticleChip5,ChipURLLink5;
@@ -128,13 +127,13 @@ public class PoliticsNewsPart {
         ResponsePoliticsJSON = responsePoliticsJSON;
     }
 
-    public PoliticsNewsPart(FragmentAtaglanceBinding b) {
-        PrevArticleChip5 = b.PrevArticleChip5;
-        NextArticleChip5 = b.NextArticleChip5;
-        ChipURLLink5 = b.ChipURLLink5;
-        NewsDescriptionText5 = b.NewsDescriptionText5;
-        ChipNewsTitle5 = b.ChipNewsTitle5;
-        ImageNews5 = b.ImageNews5;
+    public PoliticsNewsPart(View b) {
+        PrevArticleChip5 = b.findViewById(R.id.PrevArticleChip5);
+        NextArticleChip5 = b.findViewById(R.id.NextArticleChip5);
+        ChipURLLink5 = b.findViewById(R.id.ChipURLLink5);
+        NewsDescriptionText5 = b.findViewById(R.id.NewsDescriptionText5);
+        ChipNewsTitle5 = b.findViewById(R.id.ChipNewsTitle5);
+        ImageNews5 = b.findViewById(R.id.ImageNews5);
         SetOnClickListeners();
     }
 
@@ -207,7 +206,7 @@ public class PoliticsNewsPart {
         }
         String Response = readFromFile(Mcontext, "JSON_POLITICSNEWS_CACHE.json");
 
-
+        ResponsePoliticsJSON = Response;
         MyTitlesArrayListForPoliticsNews = ParseJSONWorldNews(Response, "news_title");
         ChipNewsTitle5.setText(MyTitlesArrayListForPoliticsNews.get(0));
 
