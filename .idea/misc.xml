@@ -3,17 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.42318059299191374" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.2609375" />
-        <entry key="app/src/main/res/layout/fragment_ataglance.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_ataglance.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_extendedforecast.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_extendedheadlines.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_searchinterests.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/layout_listitem_extheadlines.xml" value="0.12396694214876033" />
+        <entry key="app/src/main/res/layout/layout_listitem_extheadlines.xml" value="0.22" />
         <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.2453125" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.2453125" />
+        <entry key="app/src/main/res/menu/main.xml" value="0.2453125" />
       </map>
     </option>
   </component>

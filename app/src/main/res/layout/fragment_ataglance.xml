@@ -437,8 +437,8 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/NewsCardView"
-                        android:layout_width="324dp"
-                        android:layout_height="285dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/ChipWorldNews"
                         android:layout_marginTop="1dp"
                         app:cardBackgroundColor="#0000FF"
@@ -459,7 +459,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="200dp"
                                 android:layout_centerHorizontal="true"
-                                android:layout_margin="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="10dp"
                                 android:clickable="true"
                                 android:contentDescription="@string/app_name"
                                 android:focusable="true"

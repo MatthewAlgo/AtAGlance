@@ -1,9 +1,11 @@
 package app.matthewsgalaxy.ataglance.UserInterface.AtAGlance;
 
+import static android.content.ContentValues.TAG;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONWorldNews;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -194,9 +196,10 @@ public class BusinessNewsPart {
 
     public void WhatToHappenWhenRequestIsProvided(String JsonRequest, Context MContext) {
         // Write the cached file here
-        if(DifferentFunctions.ParseJSONWorldNews(JsonRequest,"news_title").get(0)==null){
+        if(!ParseJSONWorldNews(JsonRequest, "status").get(0).equals("ok")){
             // Something bad happened
-            Toast.makeText(MContext, "There was a problem in the response for BusinessNews. Please try again later", Toast.LENGTH_LONG).show();
+            // Toast.makeText(MContext, "There was a problem in the response for BusinessNews. Please try again later", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "WhatToHappenWhenRequestIsProvided: Response Error");
         }else {
             // SAVE THE JSON REQUEST LOCALLY
             // THE REQUEST WENT WELL

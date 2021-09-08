@@ -14,19 +14,12 @@
         android:background="@drawable/rounded_corners"
         android:padding="20dp">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/ChipWorldNews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Latest World News"
-            app:chipBackgroundColor="@color/purple_200" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/NewsCardView"
             android:layout_width="314dp"
             android:layout_height="300dp"
-            android:layout_below="@+id/ChipWorldNews"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="-14dp"
             app:cardBackgroundColor="#0000FF"
             app:cardCornerRadius="20dp"
@@ -69,11 +62,9 @@
         <TextView
             android:id="@+id/ChipNewsTitle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/NewsCardView"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
             android:text="Headline Title"
             android:textColor="@color/purple_200"
             android:textStyle="bold|italic" />
@@ -92,30 +83,6 @@
             android:textColor="@color/teal_200" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/NewsDescriptionText">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/PrevArticleChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="Previous Article"
-                android:textAlignment="center" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/NextArticleChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:text="Next Article"
-                android:textAlignment="center" />
-        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

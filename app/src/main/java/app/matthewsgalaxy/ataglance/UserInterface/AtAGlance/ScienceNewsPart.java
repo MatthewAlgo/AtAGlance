@@ -1,10 +1,12 @@
 package app.matthewsgalaxy.ataglance.UserInterface.AtAGlance;
 
+import static android.content.ContentValues.TAG;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONWorldNews;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.MyTitlesArrayListForWorldNews;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -193,9 +195,10 @@ public class ScienceNewsPart {
 
     public void WhatToHappenWhenRequestIsProvided(String JsonRequest, Context Mcontext){
         // Write the cached file here
-        if(DifferentFunctions.ParseJSONWorldNews(JsonRequest,"news_title").get(0)==null){
+        if(!ParseJSONWorldNews(JsonRequest, "status").get(0).equals("ok")){
             // Something bad happened
-            Toast.makeText(Mcontext, "There was a problem in the response for ScienceNews. Please try again later", Toast.LENGTH_LONG).show();
+            //Toast.makeText(Mcontext, "There was a problem in the response for ScienceNews. Please try again later", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "WhatToHappenWhenRequestIsProvided: Response Error");
         }else {
             // SAVE THE JSON REQUEST LOCALLY
             // THE REQUEST WENT WELL

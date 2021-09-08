@@ -111,6 +111,8 @@ public class AtAGlanceFragment extends Fragment {
     public static ArrayList<String> GlobalTimeForExtendedForecast, GlobalHumidityForExtendedForecast,
             GlobalWSpeedForExtendedForecast;
 
+    public static int numberOfInflations = 0;
+
 
     // FOR THE NEWS PARTS
     protected FragmentAtaglanceBinding binding;
@@ -150,6 +152,8 @@ public class AtAGlanceFragment extends Fragment {
         double LATITUDE, LONGITUDE;
         LATITUDE = LONGITUDE = 0;
 
+        numberOfInflations++;
+
 
         // Images for hourly forecast                                   // Chips For hourly forecast                            // TextViews for TIME
         ImageHour1 = binding.ImageHour1;                     ChipHour1 = binding.ChipHour1;               ChipHourUpperText1 = binding.ChipHourUpperText1;
@@ -182,12 +186,16 @@ public class AtAGlanceFragment extends Fragment {
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
-
-        if(isOnline()){
-            checkLocationPermission();
+        if(numberOfInflations == 1) {
+            if (isOnline()) {
+                checkLocationPermission();
+            } else {
+                Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
+                //checkLocationPermission();
+                SetterFunctionWhenOffline();
+            }
         }else{
-            Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
-            //checkLocationPermission();
+            // Load as if the user is offline from the cache
             SetterFunctionWhenOffline();
         }
         // Set Click Listeners for the Chips
@@ -620,9 +628,9 @@ public class AtAGlanceFragment extends Fragment {
                                 }
                             }else if(REQUEST_TYPE_LOC.equals("news_world")){
                                 // Here we will check for the availability of the file
-                                if(DifferentFunctions.ParseJSONWorldNews(ResponseJSON,"news_title")==null){
+                                if(!ParseJSONWorldNews(ResponseJSON, "status").get(0).equals("ok")){
                                     // Something bad happened
-                                    Toast.makeText(getContext(), "There was a problem in the response for WorldNews. Please try again later", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "The news response is outdated. Maybe today's calls have expired. Please try again later", Toast.LENGTH_SHORT).show();
                                 }else {
                                     // SAVE THE JSON REQUEST LOCALLY
                                     // THE REQUEST WENT WELL
