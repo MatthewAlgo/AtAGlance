@@ -189,11 +189,12 @@ public class AtAGlanceFragment extends Fragment {
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
         if(numberOfInflations == 1) {
-            if (isOnline()) {
+            if (isOnline(requireActivity())) {
+                SetterFunctionWhenOffline();
                 checkLocationPermission();
             } else {
                 Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
-                //checkLocationPermission();
+                checkLocationPermission();
                 SetterFunctionWhenOffline();
             }
         }else{
@@ -654,7 +655,10 @@ public class AtAGlanceFragment extends Fragment {
                                     if (MyIMGURLArrayListForWorldNews.get(0) == null || MyIMGURLArrayListForWorldNews.get(0) == "null") {
                                         ImageNews.setImageResource(R.drawable.materialwall);
                                     } else {
-                                        Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                                        if(isOnline(requireActivity()))
+                                            Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                                        else
+                                            ImageNews.setImageResource(R.drawable.materialwall);
                                     }
                                 }
                             }else if(REQUEST_TYPE_LOC.equals("news_science")) {
@@ -692,7 +696,10 @@ public class AtAGlanceFragment extends Fragment {
                         ImageNews.setImageResource(R.drawable.materialwall);
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
+                                if(isOnline(requireActivity()))
+                                    Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
+                                else
+                                    ImageNews.setImageResource(R.drawable.materialwall);
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -718,7 +725,11 @@ public class AtAGlanceFragment extends Fragment {
 
                         if(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE) != "null" && MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
+                                if (isOnline(requireActivity())) {
+                                    Picasso.get().load(MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE)).fit().centerInside().into(ImageNews); // Set Image
+                                }else{
+                                    ImageNews.setImageResource(R.drawable.materialwall);
+                                }
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews.setImageResource(R.drawable.materialwall);
@@ -738,7 +749,7 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if(MyURLArrayListForWorldNews !=null) {
                     try {
-                        SetOnClickListenersForUrlInBrowser(MyURLArrayListForWorldNews.get(CURRENT_ARTICLE));
+                        SetOnClickListenersForUrlInBrowser(MyURLArrayListForWorldNews.get(CURRENT_ARTICLE), requireActivity());
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -755,7 +766,7 @@ public class AtAGlanceFragment extends Fragment {
                 if(MyScienceNewsPart.MyURLArrayListForScienceNews !=null) {
                     try {
 
-                        SetOnClickListenersForUrlInBrowser(MyScienceNewsPart.MyURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber));
+                        SetOnClickListenersForUrlInBrowser(MyScienceNewsPart.MyURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber), requireActivity());
 
                     }catch (Exception e){
                         e.printStackTrace();
@@ -771,7 +782,7 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if (MyTechnologyNewsPart.MyURLArrayListForTechnologyNews != null) {
                     try {
-                        SetOnClickListenersForUrlInBrowser(MyTechnologyNewsPart.MyURLArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber));
+                        SetOnClickListenersForUrlInBrowser(MyTechnologyNewsPart.MyURLArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -785,7 +796,7 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if (MyBusinessNewsPart.MyURLArrayListForBusinessNews != null) {
                     try {
-                        SetOnClickListenersForUrlInBrowser(MyBusinessNewsPart.MyURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber));
+                        SetOnClickListenersForUrlInBrowser(MyBusinessNewsPart.MyURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -799,7 +810,7 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if (MyPoliticsNewsPart.MyURLArrayListForPoliticsNews != null) {
                     try {
-                        SetOnClickListenersForUrlInBrowser(MyPoliticsNewsPart.MyURLArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber));
+                        SetOnClickListenersForUrlInBrowser(MyPoliticsNewsPart.MyURLArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -813,7 +824,7 @@ public class AtAGlanceFragment extends Fragment {
             public void onClick(View v) {
                 if (MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews != null) {
                     try {
-                        SetOnClickListenersForUrlInBrowser(MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber));
+                        SetOnClickListenersForUrlInBrowser(MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -824,20 +835,20 @@ public class AtAGlanceFragment extends Fragment {
     /// To Open the URL's in browser
 
     /// Functions that depend on the current fragment -> (StartActivity + requireActivity and others)
-    public void SetOnClickListenersForUrlInBrowser(String URL){
+    public static void SetOnClickListenersForUrlInBrowser(String URL, Context Ctx){
         try {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URL));
-            startActivity(browserIntent);
+            Ctx.startActivity(browserIntent);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(), "No application can handle this request."
+            Toast.makeText(Ctx, "No application can handle this request."
                     + " Please install a webbrowser", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
     // To fetch if app is online
-    public boolean isOnline() {
+    public static boolean isOnline(Context ctx) {
         try {
-            connectivityManager = (ConnectivityManager) requireActivity()
+            connectivityManager = (ConnectivityManager) ctx
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
 
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -1002,7 +1013,10 @@ public class AtAGlanceFragment extends Fragment {
                 if (MyIMGURLArrayListForWorldNews.get(0) == null || MyIMGURLArrayListForWorldNews.get(0) == "null") {
                     ImageNews.setImageResource(R.drawable.materialwall);
                 } else {
-                    Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                    if(isOnline(requireActivity()))
+                        Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                    else
+                        ImageNews.setImageResource(R.drawable.materialwall);
                 }
             }
         }
@@ -1028,7 +1042,10 @@ public class AtAGlanceFragment extends Fragment {
                 if (MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0) == null || MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0) == "null") {
                     MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
                 } else {
-                    Picasso.get().load(MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(MyScienceNewsPart.ImageNews2); // Set Image
+                    if(isOnline(requireActivity()))
+                        Picasso.get().load(MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(MyScienceNewsPart.ImageNews2); // Set Image
+                    else
+                        MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
                 }
             }
         }
@@ -1051,7 +1068,10 @@ public class AtAGlanceFragment extends Fragment {
             if(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) == null || MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) == "null"){
                 MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
             }else {
-                Picasso.get().load(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(MyTechnologyNewsPart.ImageNews3); // Set Image
+                if(isOnline(requireActivity()))
+                    Picasso.get().load(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(MyTechnologyNewsPart.ImageNews3); // Set Image
+                else
+                    MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
             }
         }
         if(fileExists(requireContext(), "JSON_BUSINESSNEWS_CACHE.json")) {
@@ -1073,7 +1093,11 @@ public class AtAGlanceFragment extends Fragment {
             if(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) == null || MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) == "null"){
                 MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
             }else {
-                Picasso.get().load(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0)).fit().centerInside().into(MyBusinessNewsPart.ImageNews4); // Set Image
+                if (isOnline(requireActivity())) {
+                    Picasso.get().load(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0)).fit().centerInside().into(MyBusinessNewsPart.ImageNews4); // Set Image
+                }else{
+                    MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
+                }
             }
         }
         if(fileExists(requireContext(), "JSON_POLITICSNEWS_CACHE.json")) {
@@ -1095,7 +1119,10 @@ public class AtAGlanceFragment extends Fragment {
             if(MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0) == null || MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0) == "null"){
                 MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
             }else {
-                Picasso.get().load(MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0)).fit().centerInside().into(MyPoliticsNewsPart.ImageNews5); // Set Image
+                if(isOnline(requireActivity()))
+                    Picasso.get().load(MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0)).fit().centerInside().into(MyPoliticsNewsPart.ImageNews5); // Set Image
+                else
+                    MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
             }
         }
         if(fileExists(requireContext(), "JSON_ENTERTAINMENTNEWS_CACHE.json")) {
@@ -1116,7 +1143,11 @@ public class AtAGlanceFragment extends Fragment {
             if(MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0) == null || MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0) == "null"){
                 MyEntertainmentNewsPart.ImageNews6.setImageResource(R.drawable.materialwall);
             }else {
-                Picasso.get().load(MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0)).fit().centerInside().into(MyEntertainmentNewsPart.ImageNews6); // Set Image
+                if (isOnline(requireActivity())) {
+                    Picasso.get().load(MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0)).fit().centerInside().into(MyEntertainmentNewsPart.ImageNews6); // Set Image
+                }else{
+                    MyEntertainmentNewsPart.ImageNews6.setImageResource(R.drawable.materialwall);
+                }
             }
         }
 

@@ -5,8 +5,10 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -149,7 +151,10 @@ public class EntertainmentNewsPart {
                         ImageNews6.setImageResource(R.drawable.materialwall);
                         if (!MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews6); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews6); // Set Image
+                                else
+                                    ImageNews6.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews6.setImageResource(R.drawable.materialwall);
@@ -176,7 +181,10 @@ public class EntertainmentNewsPart {
 
                         if (MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews6); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews6); // Set Image
+                                else
+                                    ImageNews6.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews6.setImageResource(R.drawable.materialwall);
@@ -222,7 +230,10 @@ public class EntertainmentNewsPart {
         if(MyIMGURLArrayListForEntertainmentNews.get(0) == null || MyIMGURLArrayListForEntertainmentNews.get(0) == "null"){
             ImageNews6.setImageResource(R.drawable.materialwall);
         }else {
-            Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(0)).fit().centerInside().into(ImageNews6); // Set Image
+            if(AtAGlanceFragment.isOnline(Mcontext))
+                Picasso.get().load(MyIMGURLArrayListForEntertainmentNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews6); // Set Image
+            else
+                ImageNews6.setImageResource(R.drawable.materialwall);
         }
     }
 

@@ -12,11 +12,19 @@ import android.os.Message;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Arrays;
 
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForecastFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedHeadlines.extendedHeadlinesFragment;
+import app.matthewsgalaxy.ataglance.UserInterface.LocalInformation.localInformationFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -43,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.fragment_container, new AtAGlanceFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+
     }
 
     @Override
@@ -60,8 +70,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new extendedForecastFragment()).commit();
                 break;
+            case R.id.nav_local:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new localInformationFragment()).commit();
+                break;
             case R.id.Aboutme:
-                Toast.makeText(this, "share", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Hi! I am MatthewAlgo, a teenage developer and Linux enthusiast.\n I developed this app mainly to learn the structure" +
+                        "of an Android Application.", Toast.LENGTH_LONG).show();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

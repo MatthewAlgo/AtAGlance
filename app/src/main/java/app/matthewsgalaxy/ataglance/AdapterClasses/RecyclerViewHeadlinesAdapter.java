@@ -5,8 +5,10 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ProcessTimeStamp;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ReturnForecastResponseJSON;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SetOnClickListenersForUrlInBrowser;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SunriseGlobalHourString;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SunsetGlobalHourString;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.isOnline;
 
 import android.content.Context;
 import android.util.Log;
@@ -38,6 +40,8 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
     private ArrayList<String> TitlesArrayList;
     private ArrayList<String> DescriptionsArrayList;
     private ArrayList<String> ImageURLArrayList;
+
+    private Chip ChipURLLink;
 
     private Context mContext;
 
@@ -71,7 +75,17 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
 
 
         // Modify Image According to URL -> Picasso
-        Picasso.get().load(ImageURLArrayList.get(position)).fit().centerInside().into(holder.ImageNews);
+        if(isOnline(mContext)) {
+            Picasso.get().load(ImageURLArrayList.get(position)).fit().centerInside().into(holder.ImageNews);
+        }else{
+            holder.ImageNews.setImageResource(R.drawable.materialwall);
+        }
+        ChipURLLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.getPosition()), view.getContext());
+            }
+        });
 
     }
 
@@ -85,7 +99,6 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
        RelativeLayout RelativeLatestNews,RellayoutWithNewsImage;
        CardView NewsCardView;
        ImageView ImageNews;
-       Chip ChipURLLink;
        TextView ChipNewsTitle,NewsDescriptionText;
 
         public ViewHolder(@NonNull View itemView) {

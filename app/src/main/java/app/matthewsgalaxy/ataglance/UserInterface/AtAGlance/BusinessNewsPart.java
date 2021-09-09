@@ -7,6 +7,7 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,7 +149,10 @@ public class BusinessNewsPart {
                         ImageNews4.setImageResource(R.drawable.materialwall);
                         if (!MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews4); // Set Image
+                                if (AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews4); // Set Image
+                                else
+                                    getImageNews4().setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews4.setImageResource(R.drawable.materialwall);
@@ -175,7 +179,10 @@ public class BusinessNewsPart {
 
                         if (MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews4); // Set Image
+                                if (AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews4); // Set Image
+                                else
+                                    getImageNews4().setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews4.setImageResource(R.drawable.materialwall);
@@ -221,7 +228,10 @@ public class BusinessNewsPart {
         if(MyIMGURLArrayListForBusinessNews.get(0) == null || MyIMGURLArrayListForBusinessNews.get(0) == "null"){
             ImageNews4.setImageResource(R.drawable.materialwall);
         }else {
-            Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(0)).fit().centerInside().into(ImageNews4); // Set Image
+            if (AtAGlanceFragment.isOnline(MContext))
+                Picasso.get().load(MyIMGURLArrayListForBusinessNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews4); // Set Image
+            else
+                getImageNews4().setImageResource(R.drawable.materialwall);
         }
     }
 }

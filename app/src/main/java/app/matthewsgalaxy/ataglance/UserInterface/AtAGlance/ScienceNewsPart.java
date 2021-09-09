@@ -5,8 +5,10 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.MyTitlesArrayListForWorldNews;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseScienceNews;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.isOnline;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -150,7 +152,10 @@ public class ScienceNewsPart {
                         ImageNews2.setImageResource(R.drawable.materialwall);
                         if(!MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
+                                if(isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
+                                else
+                                    ImageNews2.setImageResource(R.drawable.materialwall);
                             }catch(Exception e) {
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -177,7 +182,10 @@ public class ScienceNewsPart {
 
                         if(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)!=null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
+                                if(isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
+                                else
+                                    ImageNews2.setImageResource(R.drawable.materialwall);
                             }catch(Exception e){
                                 e.printStackTrace();
                                 ImageNews2.setImageResource(R.drawable.materialwall);
@@ -225,7 +233,10 @@ public class ScienceNewsPart {
             if (MyIMGURLArrayListForScienceNews.get(0) == null || MyIMGURLArrayListForScienceNews.get(0) == "null") {
                 ImageNews2.setImageResource(R.drawable.materialwall);
             } else {
-                Picasso.get().load(MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(ImageNews2); // Set Image
+                if(isOnline(Mcontext))
+                    Picasso.get().load(MyIMGURLArrayListForScienceNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews2); // Set Image
+                else
+                    ImageNews2.setImageResource(R.drawable.materialwall);
             }
         }
     }

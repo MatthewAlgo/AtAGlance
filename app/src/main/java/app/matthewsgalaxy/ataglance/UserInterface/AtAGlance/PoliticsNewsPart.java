@@ -148,7 +148,10 @@ public class PoliticsNewsPart {
                         ImageNews5.setImageResource(R.drawable.materialwall);
                         if (!MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews5); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews5); // Set Image
+                                else
+                                    ImageNews5.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews5.setImageResource(R.drawable.materialwall);
@@ -175,7 +178,10 @@ public class PoliticsNewsPart {
 
                         if (MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews5); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews5); // Set Image
+                                else
+                                    ImageNews5.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews5.setImageResource(R.drawable.materialwall);
@@ -222,7 +228,10 @@ public class PoliticsNewsPart {
         if(MyIMGURLArrayListForPoliticsNews.get(0) == null || MyIMGURLArrayListForPoliticsNews.get(0) == "null"){
             ImageNews5.setImageResource(R.drawable.materialwall);
         }else {
-            Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(0)).fit().centerInside().into(ImageNews5); // Set Image
+            if(AtAGlanceFragment.isOnline(Mcontext))
+                Picasso.get().load(MyIMGURLArrayListForPoliticsNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews5); // Set Image
+            else
+                ImageNews5.setImageResource(R.drawable.materialwall);
         }
     }
 

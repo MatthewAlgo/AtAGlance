@@ -4,12 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.26145833333333335" />
+        <entry key="app/src/main/res/drawable/rounded_corners_color.xml" value="0.15989583333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2609375" />
         <entry key="app/src/main/res/layout/fragment_ataglancefrag.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/fragment_homefrag.xml" value="0.183547103051747" />
         <entry key="app/src/main/res/layout/fragment_localsearch.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/layout/fragment_newsheadlinesfrag.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/fragment_searchinformationfrag.xml" value="0.12083333333333333" />
         <entry key="app/src/main/res/layout/fragment_weatherforecastfrag.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.23369565217391305" />
+        <entry key="app/src/main/res/layout/layout_listitem_extheadlines.xml" value="0.21014492753623187" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.2609375" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.24479166666666666" />
       </map>

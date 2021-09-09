@@ -5,6 +5,7 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -149,7 +150,10 @@ public class TechnologyNewsPart {
                         ImageNews3.setImageResource(R.drawable.materialwall);
                         if (!MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber).equals("null") && MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
+                                else
+                                    ImageNews3.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews3.setImageResource(R.drawable.materialwall);
@@ -176,7 +180,10 @@ public class TechnologyNewsPart {
 
                         if (MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != "null" && MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber) != null) {
                             try {
-                                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
+                                if(AtAGlanceFragment.isOnline(v.getContext()))
+                                    Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
+                                else
+                                    ImageNews3.setImageResource(R.drawable.materialwall);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 ImageNews3.setImageResource(R.drawable.materialwall);
@@ -222,7 +229,10 @@ public class TechnologyNewsPart {
         if(MyIMGURLArrayListForTechnologyNews.get(0) == null || MyIMGURLArrayListForTechnologyNews.get(0) == "null"){
             ImageNews3.setImageResource(R.drawable.materialwall);
         }else {
-            Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(ImageNews3); // Set Image
+            if(AtAGlanceFragment.isOnline(MyContext))
+                Picasso.get().load(MyIMGURLArrayListForTechnologyNews.get(CurrentArticleNumber)).fit().centerInside().into(ImageNews3); // Set Image
+            else
+                ImageNews3.setImageResource(R.drawable.materialwall);
         }
     }
 
