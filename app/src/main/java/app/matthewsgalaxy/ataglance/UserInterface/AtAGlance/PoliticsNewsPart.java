@@ -25,10 +25,10 @@ public class PoliticsNewsPart {
     public ImageView ImageNews5;
     public int CurrentArticleNumber=0;
 
-    public ArrayList<String> MyTitlesArrayListForPoliticsNews;
-    public ArrayList<String> MyDescriptionsArrayListForPoliticsNews;
-    public ArrayList<String> MyURLArrayListForPoliticsNews;
-    public ArrayList<String> MyIMGURLArrayListForPoliticsNews;
+    public static ArrayList<String> MyTitlesArrayListForPoliticsNews;
+    public static ArrayList<String> MyDescriptionsArrayListForPoliticsNews;
+    public static ArrayList<String> MyURLArrayListForPoliticsNews;
+    public static ArrayList<String> MyIMGURLArrayListForPoliticsNews;
     public String ResponsePoliticsJSON;
 
     public Chip getPrevArticleChip5() {

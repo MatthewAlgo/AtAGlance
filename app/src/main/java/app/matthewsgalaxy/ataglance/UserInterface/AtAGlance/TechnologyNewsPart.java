@@ -27,10 +27,10 @@ public class TechnologyNewsPart {
     public ImageView ImageNews3;
     public int CurrentArticleNumber = 0;
 
-    public ArrayList<String> MyTitlesArrayListForTechnologyNews;
-    public ArrayList<String> MyDescriptionsArrayListForTechnologyNews;
-    public ArrayList<String> MyURLArrayListForTechnologyNews;
-    public ArrayList<String> MyIMGURLArrayListForTechnologyNews;
+    public static ArrayList<String> MyTitlesArrayListForTechnologyNews;
+    public static ArrayList<String> MyDescriptionsArrayListForTechnologyNews;
+    public static ArrayList<String> MyURLArrayListForTechnologyNews;
+    public static ArrayList<String> MyIMGURLArrayListForTechnologyNews;
     public String ResponseTechnologyJSON;
 
     public Chip getPrevArticleChip3() {

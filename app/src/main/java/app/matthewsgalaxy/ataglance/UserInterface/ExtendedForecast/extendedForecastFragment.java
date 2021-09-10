@@ -9,8 +9,10 @@ import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFrag
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.PixelCopy;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,35 +64,38 @@ public class extendedForecastFragment extends Fragment {
         ArrayList<String> Humidityarray = new ArrayList<>();
         ArrayList<String> Windspeedarr = new ArrayList<>();
 
+        try {
+            // Init the array of conditions
+            ArrayListConditions = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "description");
+            for (int i = 0; i < ArrayListConditions.size(); ++i) {
+                ArrayListConditions.set(i, DifferentFunctions.ToCamelCaseWord(ArrayListConditions.get(i)));
+            }
 
-        // Init the array of conditions
-        ArrayListConditions = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "description");
-        for(int i=0;i<ArrayListConditions.size();++i){
-            ArrayListConditions.set(i, DifferentFunctions.ToCamelCaseWord(ArrayListConditions.get(i)));
+            // Init the image codes array
+            ImageCodes = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "id_icon");
+
+            // Init the Temperatures array
+            Temperatures = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("temperature"));
+
+            // Init the timestamps array
+            CurrentTimeLOC = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("time"));
+
+            // Init the Humidity array
+            Humidityarray = GlobalHumidityForExtendedForecast;
+
+            // Init the Wind Speed Array
+            Windspeedarr = GlobalWSpeedForExtendedForecast;
+
+            RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter(ArrayListConditions,
+                    ImageCodes, Temperatures, Windspeedarr, CurrentTimeLOC, MinMaxTemp, Humidityarray, getContext()); // Call the Constructor for the adapter
+
+            recyclerView.setAdapter(adapter);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+
+        }catch(Exception e){
+            Toast.makeText(PubView.getContext(), "Error while retrieving data. Please try again when you activate your internet connection", Toast.LENGTH_LONG);
         }
-
-        // Init the image codes array
-        ImageCodes = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), "id_icon");
-
-        // Init the Temperatures array
-        Temperatures = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("temperature"));
-
-        // Init the timestamps array
-        CurrentTimeLOC = DifferentFunctions.ParseJSONForecast(DifferentFunctions.ReturnForecastResponseJSON(), new String("time"));
-
-        // Init the Humidity array
-        Humidityarray = GlobalHumidityForExtendedForecast;
-
-        // Init the Wind Speed Array
-        Windspeedarr = GlobalWSpeedForExtendedForecast;
-
-        RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter(ArrayListConditions,
-                ImageCodes, Temperatures, Windspeedarr, CurrentTimeLOC, MinMaxTemp, Humidityarray, getContext()); // Call the Constructor for the adapter
-
-        recyclerView.setAdapter(adapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
     }
 
 

@@ -28,10 +28,10 @@ public class EntertainmentNewsPart {
     public ImageView ImageNews6;
     public int CurrentArticleNumber=0;
 
-    public ArrayList<String> MyTitlesArrayListForEntertainmentNews;
-    public ArrayList<String> MyDescriptionsArrayListForEntertainamentNews;
-    public ArrayList<String> MyURLArrayListForEntertainmentNews;
-    public ArrayList<String> MyIMGURLArrayListForEntertainmentNews;
+    public static ArrayList<String> MyTitlesArrayListForEntertainmentNews;
+    public static ArrayList<String> MyDescriptionsArrayListForEntertainamentNews;
+    public static ArrayList<String> MyURLArrayListForEntertainmentNews;
+    public static ArrayList<String> MyIMGURLArrayListForEntertainmentNews;
     public String ResponseEntertainmentJSON;
 
     public Chip getPrevArticleChip6() {

@@ -188,10 +188,13 @@ public class AtAGlanceFragment extends Fragment {
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
+
         if(numberOfInflations == 1) {
             if (isOnline(requireActivity())) {
-                SetterFunctionWhenOffline();
-                checkLocationPermission();
+                Toast.makeText(getContext(), "Loading Data...", Toast.LENGTH_SHORT).show();
+                checkLocationPermission(); // Calls the internet for API'S
+                SetterFunctionWhenOffline(); // Reloads from cache
+                Toast.makeText(getContext(), "Data loaded", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
                 checkLocationPermission();
@@ -677,7 +680,8 @@ public class AtAGlanceFragment extends Fragment {
                     });
                 }else{
                     // Most likely we are offline and the request failed
-                    Toast.makeText(requireContext(), "Error while processing the request. Loading backup data...", Toast.LENGTH_SHORT);
+                    // Toast.makeText(requireContext(), "Error while processing the request. Loading backup data...", Toast.LENGTH_SHORT);
+                    System.out.println("Error while processing the request. Loading backup data...");
                 }
 
             }

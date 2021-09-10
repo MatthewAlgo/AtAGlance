@@ -7,7 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -75,9 +77,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.fragment_container, new localInformationFragment()).commit();
                 break;
             case R.id.Aboutme:
-                Toast.makeText(this, "Hi! I am MatthewAlgo, a teenage developer and Linux enthusiast.\n I developed this app mainly to learn the structure" +
-                        "of an Android Application.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Hi! I Am MatthewAlgo, A Developer And Linux Enthusiast. I Developed This App Mainly To Learn The Structure" +
+                        " Of An Android Application. And To Have Fun \ud83d\ude01 ", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.Refresh:
+                Intent i = new Intent(MainActivity.this, MainActivity.class);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(i);
+                overridePendingTransition(0, 0);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

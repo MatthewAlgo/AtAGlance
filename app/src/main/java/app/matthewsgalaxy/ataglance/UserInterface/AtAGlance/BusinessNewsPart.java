@@ -26,10 +26,10 @@ public class BusinessNewsPart {
     public ImageView ImageNews4;
     public int CurrentArticleNumber=0;
 
-    public ArrayList<String> MyTitlesArrayListForBusinessNews;
-    public ArrayList<String> MyDescriptionsArrayListForBusinessNews;
-    public ArrayList<String> MyURLArrayListForBusinessNews;
-    public ArrayList<String> MyIMGURLArrayListForBusinessNews;
+    public static ArrayList<String> MyTitlesArrayListForBusinessNews;
+    public static ArrayList<String> MyDescriptionsArrayListForBusinessNews;
+    public static ArrayList<String> MyURLArrayListForBusinessNews;
+    public static ArrayList<String> MyIMGURLArrayListForBusinessNews;
     public String ResponseBusinessJSON;
 
     public Chip getPrevArticleChip4() {

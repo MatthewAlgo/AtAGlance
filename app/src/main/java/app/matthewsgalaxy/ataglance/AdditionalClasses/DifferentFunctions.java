@@ -305,7 +305,6 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
             timeStampValue = Integer.parseInt(UnixTimeStamp);
         }catch (Exception e){
             Log.d(TAG, "GetHourAndMinutesFromTimeStamp: " + e.getMessage());
-            Toast.makeText(context, "Error while processing the timestamp. Please try again later", Toast.LENGTH_SHORT).show();
         }
         // System.out.println("MINUTES: " + timeStampValue / 60 % 60);
         // System.out.println("HOUR: " + timeStampValue / 3600 % 24);

@@ -1,10 +1,461 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <fragment android:id="@+id/autocomplete_fragment"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+        android:orientation="horizontal"
+       >
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_weight="4"
+        android:id="@+id/Inputtext"
+        android:hint="Enter Your Location Here"
+        android:gravity="left"
+        />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:id="@+id/confirm_button"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_weight="1">
 
+        </com.google.android.material.chip.Chip>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintCurrentConds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:orientation="vertical">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipCurrentWeatherPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Weather Conditions"
+            app:chipBackgroundColor="@color/purple_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipLastUpdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Updated At"
+            app:chipBackgroundColor="@color/teal_200"
+            app:layout_constraintEnd_toEndOf="@+id/chipCurrentWeatherPrompt"
+            app:layout_constraintStart_toStartOf="@+id/chipCurrentWeatherPrompt"
+            app:layout_constraintTop_toBottomOf="@+id/chipCurrentWeatherPrompt" />
+
+        <ImageView
+            android:id="@+id/MainImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/clear_day"
+            app:layout_constraintEnd_toEndOf="@+id/chipLastUpdated"
+            app:layout_constraintStart_toStartOf="@+id/chipLastUpdated"
+            app:layout_constraintTop_toBottomOf="@+id/chipLastUpdated" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/MainConditionText"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CURRENT CONDITIONS"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="@+id/MainImageView"
+            app:layout_constraintStart_toStartOf="@+id/MainImageView"
+            app:layout_constraintTop_toBottomOf="@+id/MainImageView" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTemperature"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="°C/°F/°K"
+            android:textSize="@android:dimen/app_icon_size"
+            app:chipIcon="@mipmap/pngthermo"
+            app:layout_constraintEnd_toEndOf="@+id/MainConditionText"
+            app:layout_constraintStart_toStartOf="@+id/MainConditionText"
+            app:layout_constraintTop_toBottomOf="@+id/MainConditionText" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HUMIDITY"
+            app:chipIcon="@mipmap/drop"
+            app:layout_constraintEnd_toEndOf="@+id/chipTemperature"
+            app:layout_constraintStart_toStartOf="@+id/chipTemperature"
+            app:layout_constraintTop_toBottomOf="@+id/chipTemperature" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipWind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:text="WIND"
+            app:chipIcon="@mipmap/windypng"
+            app:layout_constraintEnd_toEndOf="@+id/chipHumidity"
+            app:layout_constraintStart_toStartOf="@+id/chipHumidity"
+            app:layout_constraintTop_toBottomOf="@+id/chipHumidity" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipHILO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HIGH / LOW"
+            app:chipIcon="@mipmap/hi_lo_temp"
+            app:layout_constraintEnd_toEndOf="@+id/chipWind"
+            app:layout_constraintStart_toStartOf="@+id/chipWind"
+            app:layout_constraintTop_toBottomOf="@+id/chipWind" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeForecast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ConstraintCurrentConds"
+        android:background="@drawable/rounded_corners"
+        android:padding="20dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/ChipInfoForecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="At A Glance - 24-Hour Forecast"
+            app:chipBackgroundColor="@color/purple_200" />
+
+        <HorizontalScrollView
+            android:id="@+id/Horziscroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ChipInfoForecast"
+            android:layout_centerHorizontal="true"
+            android:padding="20dp"
+
+            >
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText1"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour1"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText2"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour2"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText3"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour3"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText4"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour4"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour5"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText5"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour5"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour6"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText6"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour6"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour7"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText7"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour7"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour8"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText8"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour8"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHourUpperText9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="TIME" />
+
+                    <ImageView
+                        android:id="@+id/ImageHour9"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/ChipHourUpperText9"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/cloudy_night_2" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/ChipHour9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ImageHour9"
+                        android:layout_centerHorizontal="true"
+                        android:text="°C/°F/°K" />
+
+                </RelativeLayout>
+                <!-- END OF HOUR SECTION -->
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+    </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
