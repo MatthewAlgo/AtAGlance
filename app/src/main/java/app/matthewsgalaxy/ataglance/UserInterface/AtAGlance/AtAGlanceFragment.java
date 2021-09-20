@@ -39,6 +39,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
+import app.matthewsgalaxy.ataglance.AdditionalClasses.EncryptUtils;
 import app.matthewsgalaxy.ataglance.R;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -296,6 +297,7 @@ public class AtAGlanceFragment extends Fragment {
         NEWSAPI_POLITICS = "https://newsapi.org/v2/top-headlines?language=en&category=politics&apiKey=" + APIKEY_NEWS;
         NEWSAPI_BUSINESS = "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=" + APIKEY_NEWS;
         NEWSAPI_ENTERTAINMENT = "https://newsapi.org/v2/top-headlines?language=en&category=entertainment&apiKey=" + APIKEY_NEWS;
+
 
         DoInBackgroundRequest("weather");
         DoInBackgroundRequest("forecast");
@@ -885,6 +887,7 @@ public class AtAGlanceFragment extends Fragment {
         // For current weather conditions JSON
         if(fileExists(requireContext(), "JSON_WEATHER_CACHE.json")){
             String RespForWeather = readFromFile(requireContext(), "JSON_WEATHER_CACHE.json");
+
             ResponseJsonWeather = RespForWeather;
 
             // IF THE REQUEST WAS MADE ONLY FOR THE CURRENT WEATHER///////////////////////////////////////////////////////////////////
@@ -1031,7 +1034,16 @@ public class AtAGlanceFragment extends Fragment {
                     ImageNews.setImageResource(R.drawable.materialwall);
                 } else {
                     if(isOnline(requireActivity()))
-                        Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                        try {
+                            if (MyIMGURLArrayListForWorldNews.get(0) != null || MyIMGURLArrayListForWorldNews.get(0) != "") {
+                                Picasso.get().load(MyIMGURLArrayListForWorldNews.get(0)).fit().centerInside().into(ImageNews); // Set Image
+                            } else {
+                                ImageNews.setImageResource(R.drawable.materialwall);
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                            ImageNews.setImageResource(R.drawable.materialwall);
+                        }
                     else
                         ImageNews.setImageResource(R.drawable.materialwall);
                 }
@@ -1060,7 +1072,16 @@ public class AtAGlanceFragment extends Fragment {
                     MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
                 } else {
                     if(isOnline(requireActivity()))
-                        Picasso.get().load(MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(MyScienceNewsPart.ImageNews2); // Set Image
+                        try{
+                            if(MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0) != null || MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0) != "") {
+                                Picasso.get().load(MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(0)).fit().centerInside().into(MyScienceNewsPart.ImageNews2); // Set Image
+                            }else{
+                                MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                            MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
+                        }
                     else
                         MyScienceNewsPart.ImageNews2.setImageResource(R.drawable.materialwall);
                 }
@@ -1085,10 +1106,21 @@ public class AtAGlanceFragment extends Fragment {
             if(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) == null || MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) == "null"){
                 MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
             }else {
+
                 if(isOnline(requireActivity()))
-                    Picasso.get().load(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(MyTechnologyNewsPart.ImageNews3); // Set Image
+                    try {
+                        if (MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) != null || MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0) != "") {
+                            Picasso.get().load(MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(0)).fit().centerInside().into(MyTechnologyNewsPart.ImageNews3); // Set Image
+                        } else {
+                            MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
+                    }
                 else
                     MyTechnologyNewsPart.ImageNews3.setImageResource(R.drawable.materialwall);
+
             }
         }
         if(fileExists(requireContext(), "JSON_BUSINESSNEWS_CACHE.json")) {
@@ -1110,11 +1142,19 @@ public class AtAGlanceFragment extends Fragment {
             if(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) == null || MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) == "null"){
                 MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
             }else {
-                if (isOnline(requireActivity())) {
-                    Picasso.get().load(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0)).fit().centerInside().into(MyBusinessNewsPart.ImageNews4); // Set Image
-                }else{
+                if(isOnline(requireActivity()))
+                    try {
+                        if (MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) != null || MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0) != "") {
+                            Picasso.get().load(MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(0)).fit().centerInside().into(MyBusinessNewsPart.ImageNews4); // Set Image
+                        } else {
+                            MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
+                    }
+                else
                     MyBusinessNewsPart.ImageNews4.setImageResource(R.drawable.materialwall);
-                }
             }
         }
         if(fileExists(requireContext(), "JSON_POLITICSNEWS_CACHE.json")) {
@@ -1140,6 +1180,22 @@ public class AtAGlanceFragment extends Fragment {
                     Picasso.get().load(MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0)).fit().centerInside().into(MyPoliticsNewsPart.ImageNews5); // Set Image
                 else
                     MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
+
+                if(isOnline(requireActivity()))
+                    try {
+                        if (MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0) != null || MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0) != "") {
+                            Picasso.get().load(MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(0)).fit().centerInside().into(MyPoliticsNewsPart.ImageNews5); // Set Image
+                        } else {
+                            MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
+                    }
+                else
+                    MyPoliticsNewsPart.ImageNews5.setImageResource(R.drawable.materialwall);
+
+
             }
         }
         if(fileExists(requireContext(), "JSON_ENTERTAINMENTNEWS_CACHE.json")) {
@@ -1164,6 +1220,18 @@ public class AtAGlanceFragment extends Fragment {
                     Picasso.get().load(MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0)).fit().centerInside().into(MyEntertainmentNewsPart.ImageNews6); // Set Image
                 }else{
                     MyEntertainmentNewsPart.ImageNews6.setImageResource(R.drawable.materialwall);
+
+
+                    try {
+                        if (MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0) != null || MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0) != "") {
+                            Picasso.get().load(MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(0)).fit().centerInside().into(MyEntertainmentNewsPart.ImageNews6); // Set Image
+                        } else {
+                            MyEntertainmentNewsPart.ImageNews6.setImageResource(R.drawable.materialwall);
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        MyEntertainmentNewsPart.ImageNews6.setImageResource(R.drawable.materialwall);
+                    }
                 }
             }
         }
