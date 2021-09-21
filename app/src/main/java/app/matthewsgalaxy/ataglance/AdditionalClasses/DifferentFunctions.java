@@ -202,6 +202,12 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
                 return Long.toString(sunset);
             }
 
+            if(Request_Descr == "country"){
+                JSONObject SysObject = (JSONObject) JsonReader.get("sys");
+                String PrefixLoc = SysObject.getString("country");
+                return PrefixLoc;
+            }
+
 
             // Gets the wind speed and wind direction
             if(Request_Descr == "w_speed"){

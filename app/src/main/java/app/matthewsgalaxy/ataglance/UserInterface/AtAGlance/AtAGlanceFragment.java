@@ -1289,7 +1289,7 @@ public class AtAGlanceFragment extends Fragment {
 
         System.out.println("RESPONSE READ FROM FILE (WORLD NEWS): " + ResponseJSON);
         DifferentFunctions.writeToFile(getActivity(),"JSON_WORLDNEWS_CACHE.json", ResponseJSON);
-        Toast.makeText(getActivity(), "The information is out of date! One or more files did not exist and the API for news is locked for 24 hours", Toast.LENGTH_LONG).show();
+        // Toast.makeText(getActivity(), "The information is out of date! One or more files did not exist and the API for news is locked for 24 hours", Toast.LENGTH_LONG).show();
 
         if(ResponseJSON != null && ResponseJSON != "") {
             MyTitlesArrayListForWorldNews = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_title");

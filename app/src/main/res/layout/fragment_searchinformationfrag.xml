@@ -39,6 +39,7 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
+            android:id="@+id/LinLayInterests"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -451,11 +452,17 @@
                 </RelativeLayout>
                 <!-- END OF HOUR SECTION -->
 
-
             </LinearLayout>
+
 
         </HorizontalScrollView>
     </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/LocalNewsRecView">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

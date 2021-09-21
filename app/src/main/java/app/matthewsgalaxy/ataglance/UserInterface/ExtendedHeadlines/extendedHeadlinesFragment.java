@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdapterClasses.RecyclerViewForecastAdapter;
@@ -28,6 +29,11 @@ import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.EntertainmentNewsPar
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.PoliticsNewsPart;
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.ScienceNewsPart;
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.TechnologyNewsPart;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class extendedHeadlinesFragment extends Fragment {
 
@@ -78,6 +84,7 @@ public class extendedHeadlinesFragment extends Fragment {
         super.onDestroyView();
         PubView = null;
     }
+
     public void InitRecyclerView(){
 
         // Append The values of each and every Title from the list
