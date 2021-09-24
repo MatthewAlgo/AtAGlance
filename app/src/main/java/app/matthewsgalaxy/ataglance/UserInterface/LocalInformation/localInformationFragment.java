@@ -58,6 +58,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class localInformationFragment extends Fragment implements View.OnClickListener{
+    private static String GlobalResp;
+
     private View PubView;
     EditText InputText;
     Chip ConfirmButton;
@@ -75,6 +77,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
 
     boolean isDaylightAtCall;
+    boolean doneLoadingWeather = false;
 
     // FOR PERSONALIZED NEWS ARTICLES
 
@@ -88,7 +91,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
     public ArrayList<String> DescriptionsArrayList;
     public ArrayList<String> ImageURLArrayList;
 
-    private String JSONNewsResponse, JsonWeatherResponse, JsonForecastResponse;
+    private static String JSONNewsResponse, JsonWeatherResponse, JsonForecastResponse;
     private String Country;
 
     // ---------------------------
@@ -151,18 +154,18 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
     private String CallNewsApiLocal(String CityPrefix){
         OkHttpClient client = new OkHttpClient();
-        final String[] API_CALL_CITY = {"https://newsapi.org/v2/top-headlines?country=" + CityPrefix + "&apiKey=82de6527ef904da08c127287e4044c27"};
-        final String[] GlobalResp = new String[1];
+        String API_CALL_CITY = "https://newsapi.org/v2/top-headlines?country=" + CityPrefix + "&apiKey=82de6527ef904da08c127287e4044c27";
 
         // For Getting our response
         Request request = new Request.Builder()
-                .url(API_CALL_CITY[0])
+                .url(API_CALL_CITY)
                 .build();
 
-        final Call[] call = {client.newCall(request)};
-        call[0].enqueue(new Callback() {
-            public void onResponse(Call call, Response response){
-                GlobalResp[0] = response.toString();
+        Call callf = client.newCall(request);
+        callf.enqueue(new Callback() {
+
+            public void onResponse(@NonNull Call call, @NonNull Response response){
+                localInformationFragment.GlobalResp = response.toString();
             }
 
             public void onFailure(Call call, IOException e) {
@@ -171,9 +174,8 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         });
         // Return the result after the request was made
 
-
-        if(GlobalResp[0] != null || GlobalResp[0] != ""){
-            return GlobalResp[0];
+        if (localInformationFragment.GlobalResp != null && !localInformationFragment.GlobalResp.equals("")) {
+            return GlobalResp;
         }else{
             return null;
         }
@@ -196,18 +198,21 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
                     DoInBackgroundRequestLocal("forecast");
                 } catch (Exception exception) {
                     System.out.println(exception.getMessage());
+                    System.out.println("This is soo stupid");
                 }
 
             }
 
             // ~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION
-            try{
+            try {
+                while(!doneLoadingWeather) { } // Wait
 
-                //if(JsonWeatherResponse!=null) {
-                //    Country = ParseJSONCurrentWeather(JsonWeatherResponse, "country");
-                //    JSONNewsResponse = CallNewsApiLocal(Country);
-                //    InitRecyclerViewWithCountry(JSONNewsResponse);
-                //}
+                // ~~~~~~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION AFTER THE WEATHER CALL
+                Country = ParseJSONCurrentWeather(localInformationFragment.JsonWeatherResponse, "country");
+                System.out.println("COUNTRY: " + Country);
+                JSONNewsResponse = CallNewsApiLocal(Country);
+                System.out.println(JSONNewsResponse);
+                //InitRecyclerViewWithCountry(JSONNewsResponse);
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -223,9 +228,9 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         OkHttpClient client = new OkHttpClient();
         Request request = null;
 
-        if (REQUEST_TYPE_LOC == "weather") {
+        if (REQUEST_TYPE_LOC.equals( "weather")) {
             request = new Request.Builder().url(APISTRING_WEATHERCURRENT).build();
-        } else if (REQUEST_TYPE_LOC == "forecast") {
+        } else if (REQUEST_TYPE_LOC.equals("forecast")) {
             request = new Request.Builder().url(APISTRING_WEATHERFORECAST).build();
         }
 
@@ -252,7 +257,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
                                 // Parse JSON and Get an ArrayList of conditions
                                 if (REQUEST_TYPE_LOC.equals("forecast")) {
 
-                                    if (ResponseJSON != null && ResponseJSON != "") {
+                                    if (ResponseJSON != null && !ResponseJSON.equals("")) {
                                         // Now we read the file and put the response inside
                                         JsonForecastResponse = ResponseJSON;
 
@@ -309,7 +314,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
                                     }
                                 } else if (REQUEST_TYPE_LOC.equals("weather")) {
                                     // IF THE REQUEST WAS MADE ONLY FOR THE CURRENT WEATHER///////////////////////////////////////////////////////////////////
-                                    if (ResponseJSON != null && ResponseJSON != "") {
+                                    if (ResponseJSON != null && !ResponseJSON.equals("")) {
                                         JsonWeatherResponse = ResponseJSON;
 
                                         // Get the current date and time and set the upper chip
@@ -326,7 +331,8 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
                                         String LocationByLatAndLong = ParseJSONCurrentWeather(ResponseJSON, "city_name");
                                         // Try to fetch city name - This should not be equal to "Globe"
-                                        if (LocationByLatAndLong == "Globe") {
+                                        assert LocationByLatAndLong != null;
+                                        if (LocationByLatAndLong.equals("Globe")) {
                                             Toast.makeText(getContext(), "Error while fetching your current location. Please try again later.", Toast.LENGTH_LONG).show();
                                         }
 
@@ -403,6 +409,8 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
                                         TempChip.setText(String.format("%.2f", (Double) Double.parseDouble(ToModifyCurrentTemperature) - 273.15) + "°C");
 
                                         chipHILO.setText("High - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax")) - 273.15) + "°C" + " | Low - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin")) - 273.15) + "°C");
+                                        doneLoadingWeather = true;
+
                                     }
 
                                 }

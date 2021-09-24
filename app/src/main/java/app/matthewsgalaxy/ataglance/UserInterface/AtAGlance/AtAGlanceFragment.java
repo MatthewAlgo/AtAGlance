@@ -577,19 +577,19 @@ public class AtAGlanceFragment extends Fragment {
                                     SunsetGlobalHourString = SunsetTimeStampUnix;
                                     // We have sunrise / sunset stored globally
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
+                                    // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
+                                    // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
+                                    // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
+                                    // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
 
-                                    System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
-                                    System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
+                                    // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
+                                    // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
 
                                     isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()),
                                             DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()));
 
-                                    System.out.println(isDaylightAtCall);
+                                    // System.out.println(isDaylightAtCall);
 
 
                                     chipCurrentWeatherPromptJava.setText("Current Weather Conditions for " + LocationByLatAndLong);
