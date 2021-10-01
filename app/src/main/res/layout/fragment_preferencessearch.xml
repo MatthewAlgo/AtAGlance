@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".UserInterface.ExtendedForecast.extendedForecastFragment">
+    <!-- World News -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/Llayout"
+        >
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:id="@+id/Inputtext"
+            android:hint="Enter Your Location Here"
+            android:gravity="left"
+            />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:id="@+id/confirm_button"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_weight="1">
+
+        </com.google.android.material.chip.Chip>
+
+    </LinearLayout>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_ehead_world"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Llayout"
+        android:layout_centerHorizontal="true"
+        android:text="Top World News Right Now"
+        android:textColor="#00ff00"
+        android:textStyle="bold"
+        app:chipBackgroundColor="#0000ff" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewheadlines_wrld"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chip_ehead_world" />
+
+
+
+</RelativeLayout>

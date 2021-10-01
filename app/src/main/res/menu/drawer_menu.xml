@@ -16,6 +16,9 @@
         <item android:id="@+id/nav_local"
             android:icon="@drawable/ic_baseline_checklist_24"
             android:title="Local Information"/>
+        <item android:id="@+id/nav_search"
+            android:icon="@drawable/ic_baseline_art_track_24"
+            android:title="Search For Interests"/>
 
 
     </group>

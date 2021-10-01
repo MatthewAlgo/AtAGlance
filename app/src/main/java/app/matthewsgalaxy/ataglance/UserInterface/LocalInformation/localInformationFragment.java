@@ -130,19 +130,24 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         TempChip = view.findViewById(R.id.chipTemperature);
         chipHILO = view.findViewById(R.id.chipHILO);
 
-        ConfirmButton.setOnClickListener(this);
+        try {
 
-        // Check Internet Availability
-        if(!isOnline(PubView.getContext())){
-            Toast.makeText(PubView.getContext(),"You are not connected! Please Check Your Internet Connection And Try Again!" + InputText.getText().toString(),Toast.LENGTH_LONG).show();
+            ConfirmButton.setOnClickListener(this);
+
+            // Check Internet Availability
+            if (!isOnline(PubView.getContext())) {
+                Toast.makeText(PubView.getContext(), "You are not connected! Please Check Your Internet Connection And Try Again!" + InputText.getText().toString(), Toast.LENGTH_LONG).show();
+            }
+
+            // ~~~~~~~~~~~~~~~~~ To be used together with the recview for local news
+            recyclerView = PubView.findViewById(R.id.LocalNewsRecView);
+            ChipURLLink = PubView.findViewById(R.id.ChipURLLink);
+            //
+
+            InitRecyclerView();
+        }catch (Exception exception){ // Catches errors if needed
+            System.out.println(exception.getMessage().toString());
         }
-
-        // ~~~~~~~~~~~~~~~~~ To be used together with the recview for local news
-        recyclerView = PubView.findViewById(R.id.LocalNewsRecView);
-        ChipURLLink = PubView.findViewById(R.id.ChipURLLink);
-        //
-
-        InitRecyclerView();
         return PubView;
     }
 
@@ -155,7 +160,6 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
     private String CallNewsApiLocal(String CityPrefix){
         OkHttpClient client = new OkHttpClient();
         String API_CALL_CITY = "https://newsapi.org/v2/top-headlines?country=" + CityPrefix + "&apiKey=82de6527ef904da08c127287e4044c27";
-
         // For Getting our response
         Request request = new Request.Builder()
                 .url(API_CALL_CITY)
@@ -165,7 +169,26 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         callf.enqueue(new Callback() {
 
             public void onResponse(@NonNull Call call, @NonNull Response response){
-                localInformationFragment.GlobalResp = response.toString();
+                // We got the response -> We have to set everything up
+                // ~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION
+                try {
+                    String responseData = response.body().string();
+                    // ~~~~~~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION AFTER THE WEATHER CALL
+                    requireActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            System.out.println("Country: "+CityPrefix);
+                            System.out.println("Global Response: "+responseData);
+                            System.out.println(responseData);
+
+                            InitRecyclerViewWithCountry(responseData);
+                        }
+                    });
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             public void onFailure(Call call, IOException e) {
@@ -174,11 +197,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         });
         // Return the result after the request was made
 
-        if (localInformationFragment.GlobalResp != null && !localInformationFragment.GlobalResp.equals("")) {
-            return GlobalResp;
-        }else{
-            return null;
-        }
+        return null;
     }
 
     @Override
@@ -198,24 +217,8 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
                     DoInBackgroundRequestLocal("forecast");
                 } catch (Exception exception) {
                     System.out.println(exception.getMessage());
-                    System.out.println("This is soo stupid");
                 }
 
-            }
-
-            // ~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION
-            try {
-                while(!doneLoadingWeather) { } // Wait
-
-                // ~~~~~~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION AFTER THE WEATHER CALL
-                Country = ParseJSONCurrentWeather(localInformationFragment.JsonWeatherResponse, "country");
-                System.out.println("COUNTRY: " + Country);
-                JSONNewsResponse = CallNewsApiLocal(Country);
-                System.out.println(JSONNewsResponse);
-                //InitRecyclerViewWithCountry(JSONNewsResponse);
-
-            }catch (Exception e){
-                e.printStackTrace();
             }
 
         }else{
@@ -410,6 +413,33 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
                                         chipHILO.setText("High - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax")) - 273.15) + "°C" + " | Low - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin")) - 273.15) + "°C");
                                         doneLoadingWeather = true;
+                                        /*
+
+                                        // ~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION
+                                        try {
+
+                                            // ~~~~~~~~~~~~~~~~ TRY TO UPDATE THE NEWS SECTION AFTER THE WEATHER CALL
+                                            Country = ParseJSONCurrentWeather(localInformationFragment.JsonWeatherResponse, "country");
+                                            System.out.println("Country: " + Country);
+                                            JSONNewsResponse = CallNewsApiLocal(Country);
+                                            System.out.println("Global Response: "+ GlobalResp);
+                                            System.out.println(JSONNewsResponse);
+                                            InitRecyclerViewWithCountry(JSONNewsResponse);
+
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                        */
+
+                                        try{
+                                            Country = ParseJSONCurrentWeather(localInformationFragment.JsonWeatherResponse, "country");
+                                            CallNewsApiLocal(Country);
+
+                                        }catch(Exception exc){
+                                            exc.printStackTrace();
+                                        }
+
+
 
                                     }
 
@@ -436,13 +466,10 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
         // Append The values of each and every Title from the list
         try {
             TitlesArrayList = AtAGlanceFragment.MyTitlesArrayListForWorldNews;
-            // TitlesArrayList = DifferentFunctions.ParseJSONWorldNews(DifferentFunctions.ReturnNewsResponseJSON("world"), "news_title");
 
             DescriptionsArrayList = AtAGlanceFragment.MyDescriptionsArrayListForWorldNews;
 
-
             ArrayListURLValues = AtAGlanceFragment.MyURLArrayListForWorldNews;
-
 
             ImageURLArrayList = AtAGlanceFragment.MyIMGURLArrayListForWorldNews;
 
@@ -466,13 +493,17 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
     public void InitRecyclerViewWithCountry(String ResponseJSON){
         // Append The values of each and every Title from the list
         try {
-            TitlesArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_title");
+            this.TitlesArrayList.clear();
+            this.TitlesArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_title");
 
-            DescriptionsArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_descr");
+            this.DescriptionsArrayList.clear();
+            this.DescriptionsArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_descr");
 
-            ArrayListURLValues = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_url");
+            this.ArrayListURLValues.clear();
+            this.ArrayListURLValues = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_url");
 
-            ImageURLArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_url_to_img");
+            this.ImageURLArrayList.clear();
+            this.ImageURLArrayList = DifferentFunctions.ParseJSONWorldNews(ResponseJSON, "news_url_to_img");
 
 
             if(!TitlesArrayList.isEmpty()) {

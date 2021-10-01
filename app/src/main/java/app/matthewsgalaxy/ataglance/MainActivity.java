@@ -29,6 +29,7 @@ import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForecastFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedHeadlines.extendedHeadlinesFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.LocalInformation.localInformationFragment;
+import app.matthewsgalaxy.ataglance.UserInterface.SearchInterests.searchInterestsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -78,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new localInformationFragment()).commit();
                 break;
+            case R.id.nav_search:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new searchInterestsFragment()).commit();
+                break;
+
             case R.id.Aboutme:
                 Toast.makeText(this, "Hi! I Am MatthewAlgo, A Developer And Linux Enthusiast. I Developed This App Mainly To Learn The Structure" +
                         " Of An Android Application. And To Have Fun \ud83d\ude01 ", Toast.LENGTH_LONG).show();

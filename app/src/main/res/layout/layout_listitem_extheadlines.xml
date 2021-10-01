@@ -63,7 +63,7 @@
         android:layout_centerInParent="true"
         android:text="Headline Title"
         android:textAlignment="center"
-        android:textColor="#00ff00"
+        android:textColor="#0000ff"
         android:textStyle="bold" />
 
     <TextView
