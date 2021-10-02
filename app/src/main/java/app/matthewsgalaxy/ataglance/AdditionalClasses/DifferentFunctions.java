@@ -46,10 +46,15 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
             JSONObject JSReader = new JSONObject(RequestJSON);
             if (WhatDoYouWantFromMe.equals("status")) {
                 MyArrayList.add(JSReader.getString("status"));
+                return MyArrayList;
             }
 
             // Getting the list of News Articles (Array of objects)
             JSONArray NewsHeadlines= JSReader.getJSONArray("articles");
+            if(WhatDoYouWantFromMe.equals("articles_number")){
+                MyArrayList.add(Integer.toString(NewsHeadlines.length()));
+                return MyArrayList;
+            }
             for(int i=0;i<NewsHeadlines.length();++i){
                 JSONObject NEWS_HEADLINE = NewsHeadlines.getJSONObject(i);
 
