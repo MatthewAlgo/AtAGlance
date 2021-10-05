@@ -56,6 +56,7 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONForecast;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONWorldNews;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ToCamelCaseWord;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.WriteJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.fileExists;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 
@@ -1234,6 +1235,10 @@ public class AtAGlanceFragment extends Fragment {
                     }
                 }
             }
+            // TEST - WRITE JSON TO A FILE, FORMATTED
+            WriteJSONWithStarred(requireContext(), MyEntertainmentNewsPart.getMyTitlesArrayListForEntertainmentNews(),
+                    MyEntertainmentNewsPart.getMyDescriptionsArrayListForEntertainamentNews(), MyEntertainmentNewsPart.getMyURLArrayListForEntertainmentNews(),
+                    MyEntertainmentNewsPart.getMyIMGURLArrayListForEntertainmentNews());
         }
 
     }

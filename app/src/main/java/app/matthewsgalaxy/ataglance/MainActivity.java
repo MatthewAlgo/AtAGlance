@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Refresh:
                 Intent i = new Intent(MainActivity.this, MainActivity.class);
                 finish();
+                AtAGlanceFragment.numberOfInflations=0;
                 overridePendingTransition(0, 0);
                 startActivity(i);
                 overridePendingTransition(0, 0);

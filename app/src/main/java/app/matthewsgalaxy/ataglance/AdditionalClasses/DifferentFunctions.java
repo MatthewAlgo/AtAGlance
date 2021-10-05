@@ -11,6 +11,7 @@ import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFrag
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseWorldNews;
 
 import android.content.Context;
+import android.util.JsonReader;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -370,9 +372,10 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         // The sun did not rise yet in terms of hours
         return false;
     }
-        /*
+        return true;
 
-
+    }
+    public static boolean IsDaylightFunctionSmart(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){
         // First Check For Hours
         if(CurrentHour.second > SunriseHour.second){
             // We are more than sunrise in terms of hours
@@ -407,11 +410,6 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
             return false;
         }
 
-
-
-
-        return true;
-        */
         return true;
 
     }
@@ -511,6 +509,67 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         File file = new File(dir, filename);
         boolean deleted = file.delete();
         return deleted;
+    }
+
+    public static void WriteJSONWithStarred(Context C,ArrayList<String> TitlesAL, ArrayList<String> DescAL, ArrayList<String> URLAL,
+                                              ArrayList<String> IMGURLAL){
+        JSONArray JsonArray = new JSONArray();
+        for(int i=0;i<TitlesAL.size();++i) {
+            JSONObject JsonObject = new JSONObject();
+
+            try {
+                JsonObject.put("Title", TitlesAL.get(i));
+                JsonObject.put("Description", DescAL.get(i));
+                JsonObject.put("URL", URLAL.get(i));
+                JsonObject.put("IMGURL", IMGURLAL.get(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JsonArray.put(JsonObject);
+        }
+
+        JSONObject mainObj = new JSONObject();
+        try {
+            mainObj.put("JSONArray", JsonArray);
+            String MainObjectString = mainObj.toString();
+            writeToFile(C,"JSON_SAVED_ITEMS_CACHE.json",MainObjectString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public static ArrayList<ArrayList<String>> ReadJSONWithStarred(Context C){
+        String StringReadFromFile = readFromFile(C, "JSON_SAVED_ITEMS_CACHE.json");
+
+        ArrayList<String> TALIST = null, DESCRALIST=null, URLALIST=null, IMGURLALIST=null;
+        ArrayList<ArrayList<String>> TOBERETURNED = null;
+        JSONObject JsonReader = null;
+        try {
+            JsonReader = new JSONObject(StringReadFromFile);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONArray MyMainArray = JsonReader.getJSONArray("JSONArray");
+            for(int i=0; i<MyMainArray.length();++i){
+                JSONObject MyObjAtIndex = (JSONObject) MyMainArray.get(i);
+
+                TALIST.add(MyObjAtIndex.getString("Title"));
+                DESCRALIST.add(MyObjAtIndex.getString("Description"));
+                URLALIST.add(MyObjAtIndex.getString("URL"));
+                IMGURLALIST.add(MyObjAtIndex.getString("IMGURL"));
+
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TOBERETURNED.add(TALIST);
+        TOBERETURNED.add(DESCRALIST);
+        TOBERETURNED.add(URLALIST);
+        TOBERETURNED.add(IMGURLALIST);
+
+        return TOBERETURNED;
+
     }
 
 }
