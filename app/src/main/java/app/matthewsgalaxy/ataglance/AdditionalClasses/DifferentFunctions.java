@@ -38,6 +38,12 @@ import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.BusinessNewsPart;
 
 public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
+    // Global variables - For Read Later
+    public static ArrayList<String> MyTitlesFaves;
+    public static ArrayList<String> MyDescriptionsFaves;
+    public static ArrayList<String> MyURLFaves;
+    public static ArrayList<String> MyImagesURLFaves;
+
     public DifferentFunctions(){}
 
     // Parse The JSON Files
@@ -319,25 +325,12 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         }catch (Exception e){
             Log.d(TAG, "GetHourAndMinutesFromTimeStamp: " + e.getMessage());
         }
-        // System.out.println("MINUTES: " + timeStampValue / 60 % 60);
-        // System.out.println("HOUR: " + timeStampValue / 3600 % 24);
+
         if(timeStampValue != 0) {
             return new Pair<Integer, Integer>(timeStampValue / 60 % 60, timeStampValue / 3600 % 24);
         }else{
             return new Pair<Integer, Integer>(0,0);
         }
-        // TODO: java.lang.NumberFormatException: s == null
-        //        at java.lang.Integer.parseInt(Integer.java:577)
-        //        at java.lang.Integer.parseInt(Integer.java:650)
-        //        at app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.GetHourAndMinutesFromTimeStamp(DifferentFunctions.java:294)
-        //        at app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment$6$1.run(AtAGlanceFragment.java:482)
-        //        at android.os.Handler.handleCallback(Handler.java:938)
-        //        at android.os.Handler.dispatchMessage(Handler.java:99)
-        //        at android.os.Looper.loop(Looper.java:223)
-        //        at android.app.ActivityThread.main(ActivityThread.java:7656)
-        //        at java.lang.reflect.Method.invoke(Native Method)
-        //        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
-        //        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:947)
     }
     public static boolean isDaylightFunction(Pair<Integer, Integer> CurrentHour, Pair<Integer, Integer> SunriseHour,Pair<Integer, Integer> SunsetHour){
         // Temporary Implementation
@@ -511,6 +504,8 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         return deleted;
     }
 
+    // For STARRED Function
+
     public static void WriteJSONWithStarred(Context C,ArrayList<String> TitlesAL, ArrayList<String> DescAL, ArrayList<String> URLAL,
                                               ArrayList<String> IMGURLAL){
         JSONArray JsonArray = new JSONArray();
@@ -540,8 +535,8 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
     public static ArrayList<ArrayList<String>> ReadJSONWithStarred(Context C){
         String StringReadFromFile = readFromFile(C, "JSON_SAVED_ITEMS_CACHE.json");
 
-        ArrayList<String> TALIST = null, DESCRALIST=null, URLALIST=null, IMGURLALIST=null;
-        ArrayList<ArrayList<String>> TOBERETURNED = null;
+        ArrayList<String> TALIST = new ArrayList<>(), DESCRALIST=new ArrayList<>(), URLALIST=new ArrayList<>(), IMGURLALIST=new ArrayList<>();
+        ArrayList<ArrayList<String>> TOBERETURNED =new ArrayList<ArrayList<String>>();
         JSONObject JsonReader = null;
         try {
             JsonReader = new JSONObject(StringReadFromFile);
@@ -570,6 +565,32 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
         return TOBERETURNED;
 
+    }
+    public static void FillFromArrays(ArrayList<String> Titles, ArrayList<String> Descr,
+                                      ArrayList<String> URL, ArrayList<String> ImgURL){
+        MyTitlesFaves = Titles;
+        MyDescriptionsFaves = Descr;
+        MyURLFaves = URL;
+        MyImagesURLFaves = ImgURL;
+    }
+    public static void FillFromFile(Context C){
+        ArrayList<ArrayList<String>> ReturnedFromFunction = ReadJSONWithStarred(C);
+        MyTitlesFaves = ReturnedFromFunction.get(0);
+        MyDescriptionsFaves = ReturnedFromFunction.get(1);
+        MyURLFaves = ReturnedFromFunction.get(2);
+        MyImagesURLFaves = ReturnedFromFunction.get(3);
+    }
+    public static void DeleteElementFromFavesArray(int element){
+        MyTitlesFaves.remove(element);
+        MyDescriptionsFaves.remove(element);
+        MyURLFaves.remove(element);
+        MyImagesURLFaves.remove(element);
+    }
+    public static void AddElementToFavesArray(String Title, String Descr, String URL, String ImgURL){
+        MyTitlesFaves.add(Title);
+        MyDescriptionsFaves.add(Descr);
+        MyURLFaves.add(URL);
+        MyImagesURLFaves.add(ImgURL);
     }
 
 }

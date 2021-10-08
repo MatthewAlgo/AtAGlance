@@ -1,9 +1,14 @@
 package app.matthewsgalaxy.ataglance.AdapterClasses;
 
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyDescriptionsFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyImagesURLFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyTitlesFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyURLFaves;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONForecast;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ProcessTimeStamp;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ReturnForecastResponseJSON;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.WriteJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SetOnClickListenersForUrlInBrowser;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SunriseGlobalHourString;
@@ -42,7 +47,7 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
     private ArrayList<String> DescriptionsArrayList;
     private ArrayList<String> ImageURLArrayList;
 
-    private Chip ChipURLLink;
+    private Chip ChipURLLink,ChipAddToFaves;
 
     private Context mContext;
 
@@ -52,7 +57,6 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
         TitlesArrayList=titlesArrayList;
         DescriptionsArrayList = descriptionsArrayList;
         ImageURLArrayList = imageURLArrayList;
-        this.mContext = mContext;
     }
 
     @NonNull
@@ -60,6 +64,7 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
     public RecyclerViewHeadlinesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem_extheadlines, parent, false);
         RecyclerViewHeadlinesAdapter.ViewHolder holder = new RecyclerViewHeadlinesAdapter.ViewHolder(view);
+        this.mContext = view.getContext();
         return holder;
     }
 
@@ -69,15 +74,15 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
         // Load The Features
         try {
             // Modify The Text for Titles
-            if (TitlesArrayList.get(position) != null && TitlesArrayList.get(position) != "" && TitlesArrayList.get(position) != "null") {
-                holder.ChipNewsTitle.setText(TitlesArrayList.get(position));
+            if (TitlesArrayList.get(holder.getAdapterPosition()) != null && TitlesArrayList.get(holder.getAdapterPosition()) != "" && TitlesArrayList.get(holder.getAdapterPosition()) != "null") {
+                holder.ChipNewsTitle.setText(TitlesArrayList.get(holder.getAdapterPosition()));
             } else {
                 holder.ChipNewsTitle.setText("This Article Has No Title");
             }
 
             // Modify the Descriptions Text for Descriptions
-            if (DescriptionsArrayList.get(position) != null && DescriptionsArrayList.get(position) != "" && DescriptionsArrayList.get(position) != "null") {
-                holder.NewsDescriptionText.setText(DescriptionsArrayList.get(position));
+            if (DescriptionsArrayList.get(holder.getAdapterPosition()) != null && DescriptionsArrayList.get(holder.getAdapterPosition()) != "" && DescriptionsArrayList.get(holder.getAdapterPosition()) != "null") {
+                holder.NewsDescriptionText.setText(DescriptionsArrayList.get(holder.getAdapterPosition()));
             } else {
                 holder.NewsDescriptionText.setText("This article has no description");
             }
@@ -85,7 +90,7 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
             // Modify Image According to URL -> Picasso
             if (isOnline(mContext)) {
                 try {
-                    Picasso.get().load(ImageURLArrayList.get(position)).fit().centerInside().into(holder.ImageNews);
+                    Picasso.get().load(ImageURLArrayList.get(holder.getAdapterPosition())).fit().centerInside().into(holder.ImageNews);
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                     holder.ImageNews.setImageResource(R.drawable.materialwall); // Load Backup image
@@ -96,9 +101,27 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
             ChipURLLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.getPosition()), view.getContext());
+                    SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.getAdapterPosition()), view.getContext());
                 }
             });
+            ChipAddToFaves.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        DifferentFunctions.AddElementToFavesArray(ArrayListURLValues.get(holder.getAdapterPosition()),
+                                DescriptionsArrayList.get(holder.getAdapterPosition()), ArrayListURLValues.get(holder.getAdapterPosition()),
+                                ImageURLArrayList.get(holder.getAdapterPosition()));
+                        // Rewrite the file
+                        WriteJSONWithStarred(mContext,MyTitlesFaves,MyDescriptionsFaves,MyURLFaves,MyImagesURLFaves);
+
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception exc){
+                        exc.printStackTrace();
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
         }catch(Exception exc){
             System.out.println(exc.getMessage());
             Toast.makeText(mContext.getApplicationContext(), "There Was A Problem While Displaying the News List", Toast.LENGTH_SHORT).show();
@@ -127,6 +150,7 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
             NewsCardView = itemView.findViewById(R.id.NewsCardView);
             ImageNews = itemView.findViewById(R.id.ImageNews);
             ChipURLLink = itemView.findViewById(R.id.ChipURLLink);
+            ChipAddToFaves = itemView.findViewById(R.id.ChipAddToFaves);
             ChipNewsTitle = itemView.findViewById(R.id.ChipNewsTitle);
             NewsDescriptionText = itemView.findViewById(R.id.NewsDescriptionText);
 

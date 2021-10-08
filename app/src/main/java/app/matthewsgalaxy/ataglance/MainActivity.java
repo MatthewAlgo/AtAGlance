@@ -23,6 +23,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment;
@@ -30,9 +31,12 @@ import app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForec
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedHeadlines.extendedHeadlinesFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.LocalInformation.localInformationFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.SearchInterests.searchInterestsFragment;
+import app.matthewsgalaxy.ataglance.UserInterface.StarredArticles.starredArticlesFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.fragment_container, new searchInterestsFragment()).commit();
                 break;
 
+            case R.id.nav_starred:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new starredArticlesFragment()).commit();
+                break;
+
             case R.id.Aboutme:
                 Toast.makeText(this, "Hi! I Am MatthewAlgo, A Developer And Linux Enthusiast. I Developed This App Mainly To Learn The Structure" +
                         " Of An Android Application. And To Have Fun \ud83d\ude01 ", Toast.LENGTH_LONG).show();
@@ -102,13 +111,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
-
-
 
 }

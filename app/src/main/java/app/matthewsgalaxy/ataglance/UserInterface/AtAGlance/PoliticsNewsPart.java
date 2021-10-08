@@ -20,7 +20,7 @@ import app.matthewsgalaxy.ataglance.R;
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
 
 public class PoliticsNewsPart {
-    public Chip PrevArticleChip5, NextArticleChip5,ChipURLLink5;
+    public Chip PrevArticleChip5, NextArticleChip5,ChipURLLink5,ChipURLLink5ReadLater;
     public TextView NewsDescriptionText5,ChipNewsTitle5;
     public ImageView ImageNews5;
     public int CurrentArticleNumber=0;
@@ -131,6 +131,8 @@ public class PoliticsNewsPart {
         PrevArticleChip5 = b.findViewById(R.id.PrevArticleChip5);
         NextArticleChip5 = b.findViewById(R.id.NextArticleChip5);
         ChipURLLink5 = b.findViewById(R.id.ChipURLLink5);
+        ChipURLLink5ReadLater = b.findViewById(R.id.ChipURLLink5ReadLater);
+
         NewsDescriptionText5 = b.findViewById(R.id.NewsDescriptionText5);
         ChipNewsTitle5 = b.findViewById(R.id.ChipNewsTitle5);
         ImageNews5 = b.findViewById(R.id.ImageNews5);

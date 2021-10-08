@@ -25,7 +25,7 @@ import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
 
 
 public class ScienceNewsPart {
-    public Chip PrevArticleChip2, NextArticleChip2,ChipURLLink2;
+    public Chip PrevArticleChip2, NextArticleChip2,ChipURLLink2,ChipURLLink2ReadLater;
     public TextView NewsDescriptionText2,ChipNewsTitle2;
     public ImageView ImageNews2;
     public int CurrentArticleNumber=0;
@@ -136,6 +136,7 @@ public class ScienceNewsPart {
         PrevArticleChip2 = b.findViewById(R.id.PrevArticleChip2);
         NextArticleChip2 = b.findViewById(R.id.NextArticleChip2);
         ChipURLLink2 = b.findViewById(R.id.ChipURLLink2);
+        ChipURLLink2ReadLater = b.findViewById(R.id.ChipURLLink2ReadLater);
         NewsDescriptionText2 = b.findViewById(R.id.NewsDescriptionText2);
         ChipNewsTitle2 = b.findViewById(R.id.ChipNewsTitle2);
         ImageNews2 = b.findViewById(R.id.ImageNews2);

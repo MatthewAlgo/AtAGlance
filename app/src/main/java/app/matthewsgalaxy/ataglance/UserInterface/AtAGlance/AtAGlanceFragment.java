@@ -39,7 +39,6 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
-import app.matthewsgalaxy.ataglance.AdditionalClasses.EncryptUtils;
 import app.matthewsgalaxy.ataglance.R;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -50,11 +49,16 @@ import okhttp3.Response;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.location.LocationManager.GPS_PROVIDER;
-import static java.security.AccessController.getContext;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.AddElementToFavesArray;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ModifyImageToConditions;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyDescriptionsFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyImagesURLFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyTitlesFaves;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyURLFaves;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONCurrentWeather;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONForecast;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONWorldNews;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ReadJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ToCamelCaseWord;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.WriteJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.fileExists;
@@ -87,7 +91,9 @@ public class AtAGlanceFragment extends Fragment {
     private Chip PrevArticleChip, NextArticleChip;
     private ImageView ImageNews;
     private CardView NewsCardView;
+
     private Chip ChipURLLink;
+    private Chip ChipAddToReadLater;
 
 
     public static ArrayList<String> MyTitlesArrayListForWorldNews;
@@ -169,6 +175,7 @@ public class AtAGlanceFragment extends Fragment {
         ImageHour9 = view.findViewById(R.id.ImageHour9);                     ChipHour9 = view.findViewById(R.id.ChipHour9);               ChipHourUpperText9 = view.findViewById(R.id.ChipHourUpperText9);
         chipLastUpdated = view.findViewById(R.id.chipLastUpdated);
         ChipURLLink = view.findViewById(R.id.ChipURLLink);
+        ChipAddToReadLater = view.findViewById(R.id.ChipAddToReadLater);
         chipHILO = view.findViewById(R.id.chipHILO);
 
         NewsTitleChip = view.findViewById(R.id.ChipNewsTitle);
@@ -193,6 +200,29 @@ public class AtAGlanceFragment extends Fragment {
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
+
+        // Read the buffer from file for starred
+        if(fileExists(requireContext(),"JSON_SAVED_ITEMS_CACHE.json")) {
+            try {
+                if(ReadJSONWithStarred(requireContext()).get(0) != null && ReadJSONWithStarred(requireContext()).get(0)!= null) {
+                    MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
+                    MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
+                    MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
+                    MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+                }
+            }catch (Exception exc){
+                exc.printStackTrace();
+            }
+        }
+        try {
+
+            System.out.println("READ FROM FAVOURITES TITLES: " + MyTitlesFaves.get(0));
+            System.out.println("READ FROM DESCRIPTIONS TITLES: " + MyDescriptionsFaves.get(0));
+            System.out.println("READ FROM URL TITLES: " + MyURLFaves.get(0));
+            System.out.println("READ FROM IMAGEURL TITLES: " + MyImagesURLFaves.get(0));
+        }catch (Exception exc){
+            System.out.println("Maybe some of the arrays are empty");
+        }
 
         if(numberOfInflations == 1) {
             fillStringsWithJunkIfFilesAreNonExistent();
@@ -278,6 +308,7 @@ public class AtAGlanceFragment extends Fragment {
                 } catch (NullPointerException e) {
                     System.out.println(e.getMessage());
                     System.out.println("Error Fetching Latitude and Longitude Data");
+                    Toast.makeText(requireContext(), "Error Fetching Latitude and Longitude Data", Toast.LENGTH_SHORT).show();
                 }
             }
             InitURLsAndExecuteBackGroundRequests(true);
@@ -776,6 +807,25 @@ public class AtAGlanceFragment extends Fragment {
                 }
             }
         });
+        ChipAddToReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyURLArrayListForWorldNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyTitlesArrayListForWorldNews.get(CURRENT_ARTICLE), MyDescriptionsArrayListForWorldNews.get(CURRENT_ARTICLE),
+                                MyURLArrayListForWorldNews.get(CURRENT_ARTICLE), MyIMGURLArrayListForWorldNews.get(CURRENT_ARTICLE));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         //// Set other onClick Listeners for different parts -> Fragment has to be recognized by the activity
         /// For science news Part
@@ -789,6 +839,25 @@ public class AtAGlanceFragment extends Fragment {
                         SetOnClickListenersForUrlInBrowser(MyScienceNewsPart.MyURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber), requireActivity());
 
                     }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        MyScienceNewsPart.ChipURLLink2ReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyScienceNewsPart.MyTitlesArrayListForScienceNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyScienceNewsPart.MyTitlesArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber), MyScienceNewsPart.MyDescriptionsArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber),
+                                MyScienceNewsPart.MyURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber), MyScienceNewsPart.MyIMGURLArrayListForScienceNews.get(MyScienceNewsPart.CurrentArticleNumber));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -809,6 +878,25 @@ public class AtAGlanceFragment extends Fragment {
                 }
             }
         });
+        MyTechnologyNewsPart.ChipURLLink3ReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyTechnologyNewsPart.MyTitlesArrayListForTechnologyNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyTechnologyNewsPart.MyTitlesArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber), MyTechnologyNewsPart.MyDescriptionsArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber),
+                                MyTechnologyNewsPart.MyURLArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber), MyTechnologyNewsPart.MyIMGURLArrayListForTechnologyNews.get(MyTechnologyNewsPart.CurrentArticleNumber));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         /////////////////////////////////
         /// For Business news Part
         MyBusinessNewsPart.ChipURLLink4.setOnClickListener(new View.OnClickListener() {
@@ -818,6 +906,25 @@ public class AtAGlanceFragment extends Fragment {
                     try {
                         SetOnClickListenersForUrlInBrowser(MyBusinessNewsPart.MyURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        MyBusinessNewsPart.ChipURLLink4ReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyBusinessNewsPart.MyTitlesArrayListForBusinessNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyBusinessNewsPart.MyTitlesArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber), MyBusinessNewsPart.MyDescriptionsArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber),
+                                MyBusinessNewsPart.MyURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber), MyBusinessNewsPart.MyIMGURLArrayListForBusinessNews.get(MyBusinessNewsPart.CurrentArticleNumber));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -837,6 +944,25 @@ public class AtAGlanceFragment extends Fragment {
                 }
             }
         });
+        MyPoliticsNewsPart.ChipURLLink5ReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyPoliticsNewsPart.MyTitlesArrayListForPoliticsNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyPoliticsNewsPart.MyTitlesArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber), MyPoliticsNewsPart.MyDescriptionsArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber),
+                                MyPoliticsNewsPart.MyURLArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber), MyPoliticsNewsPart.MyIMGURLArrayListForPoliticsNews.get(MyPoliticsNewsPart.CurrentArticleNumber));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         ///////////////////////////////
         /// For Entertainment news Part
         MyEntertainmentNewsPart.ChipURLLink6.setOnClickListener(new View.OnClickListener() {
@@ -846,6 +972,25 @@ public class AtAGlanceFragment extends Fragment {
                     try {
                         SetOnClickListenersForUrlInBrowser(MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber), requireActivity());
                     } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        MyEntertainmentNewsPart.ChipURLLink6ReadLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(MyEntertainmentNewsPart.MyTitlesArrayListForEntertainmentNews !=null) {
+                    try {
+
+                        AddElementToFavesArray(MyEntertainmentNewsPart.MyTitlesArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber), MyEntertainmentNewsPart.MyDescriptionsArrayListForEntertainamentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber),
+                                MyEntertainmentNewsPart.MyURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber), MyEntertainmentNewsPart.MyIMGURLArrayListForEntertainmentNews.get(MyEntertainmentNewsPart.CurrentArticleNumber));
+
+                        WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
+                                MyURLFaves, MyImagesURLFaves);
+                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -916,15 +1061,6 @@ public class AtAGlanceFragment extends Fragment {
             SunriseGlobalHourString = SunriseTimeStampUnix;
             SunsetGlobalHourString = SunsetTimeStampUnix;
             // We have sunrise / sunset stored globally
-
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
-
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
-
-            System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
-            System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
 
             isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()),
                     DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()),DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()));

@@ -498,6 +498,14 @@
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
 
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipAddToReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ChipURLLink"
+                                android:layout_centerHorizontal="true"
+                                android:text="Read Later" />
+
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -571,6 +579,8 @@
                         android:text="Latest Science News"
                         app:chipBackgroundColor="@color/purple_200" />
 
+
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/NewsCardView2"
                         android:layout_width="match_parent"
@@ -608,6 +618,16 @@
                                 android:layout_below="@+id/ImageNews2"
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink2ReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_below="@+id/ChipURLLink2"
+                                android:text="Read Later"
+                                app:chipBackgroundColor="@color/purple_200" />
+
 
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
@@ -721,6 +741,14 @@
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
 
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink3ReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ChipURLLink3"
+                                android:layout_centerHorizontal="true"
+                                android:text="Read Later" />
+
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -831,6 +859,14 @@
                                 android:layout_below="@+id/ImageNews4"
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink4ReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ChipURLLink4"
+                                android:layout_centerHorizontal="true"
+                                android:text="Read Later" />
 
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
@@ -943,6 +979,14 @@
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
 
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink5ReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ChipURLLink5"
+                                android:layout_centerHorizontal="true"
+                                android:text="Read Later" />
+
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -1053,6 +1097,14 @@
                                 android:layout_below="@+id/ImageNews6"
                                 android:layout_centerHorizontal="true"
                                 android:text="Press Here For Details" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/ChipURLLink6ReadLater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ChipURLLink6"
+                                android:layout_centerHorizontal="true"
+                                android:text="Read Later" />
 
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>

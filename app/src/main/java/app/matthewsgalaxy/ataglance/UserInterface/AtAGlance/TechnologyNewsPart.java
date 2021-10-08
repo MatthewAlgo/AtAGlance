@@ -22,7 +22,7 @@ import app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions;
 
 
 public class TechnologyNewsPart {
-    public Chip PrevArticleChip3, NextArticleChip3, ChipURLLink3;
+    public Chip PrevArticleChip3, NextArticleChip3, ChipURLLink3, ChipURLLink3ReadLater;
     public TextView NewsDescriptionText3, ChipNewsTitle3;
     public ImageView ImageNews3;
     public int CurrentArticleNumber = 0;
@@ -133,6 +133,7 @@ public class TechnologyNewsPart {
         PrevArticleChip3 = b.findViewById(R.id.PrevArticleChip3);
         NextArticleChip3 = b.findViewById(R.id.NextArticleChip3);
         ChipURLLink3 = b.findViewById(R.id.ChipURLLink3);
+        ChipURLLink3ReadLater = b.findViewById(R.id.ChipURLLink3ReadLater);
         NewsDescriptionText3 = b.findViewById(R.id.NewsDescriptionText3);
         ChipNewsTitle3 = b.findViewById(R.id.ChipNewsTitle3);
         ImageNews3 = b.findViewById(R.id.ImageNews3);

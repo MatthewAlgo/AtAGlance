@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".UserInterface.StarredArticles.starredArticlesFragment">
+    <!-- World News -->
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_ehead_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Starred Articles (Read Later)"
+        android:textColor="#00ff00"
+        android:textStyle="bold"
+        app:chipBackgroundColor="#0000ff" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewheadlines_star"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chip_ehead_star" />
+
+
+
+</RelativeLayout>

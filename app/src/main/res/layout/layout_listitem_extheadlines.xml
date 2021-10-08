@@ -13,11 +13,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/NewsCardView"
-        android:layout_width="314dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-14dp"
-        app:cardBackgroundColor="#f0000f"
+        app:cardBackgroundColor="#908f40"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
@@ -27,7 +26,7 @@
         <RelativeLayout
             android:id="@+id/RellayoutWithNewsImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="true">
 
             <ImageView
@@ -51,6 +50,14 @@
                 android:layout_below="@+id/ImageNews"
                 android:layout_centerHorizontal="true"
                 android:text="Press Here For Details" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/ChipAddToFaves"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ChipURLLink"
+                android:layout_centerHorizontal="true"
+                android:text="Read Later" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

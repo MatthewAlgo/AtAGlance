@@ -19,6 +19,9 @@
         <item android:id="@+id/nav_search"
             android:icon="@drawable/ic_baseline_art_track_24"
             android:title="Search For Interests"/>
+        <item android:id="@+id/nav_starred"
+            android:icon="@drawable/ic_baseline_star_border_24"
+            android:title="Starred Items"/>
 
 
     </group>
@@ -26,11 +29,11 @@
 
         <menu>
             <item android:id="@+id/Refresh"
-                android:icon="@drawable/ic_baseline_house_24"
+                android:icon="@drawable/ic_baseline_refresh_24"
                 android:title="Refresh"/>
             <item
                 android:id="@+id/Aboutme"
-                android:icon="@drawable/ic_baseline_house_24"
+                android:icon="@drawable/ic_baseline_push_pin_24"
                 android:title="About Me"/>
         </menu>
     </item>
