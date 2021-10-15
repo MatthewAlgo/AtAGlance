@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_weatherforecastfrag.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.23369565217391305" />
         <entry key="app/src/main/res/layout/layout_listitem_extheadlines.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/layout_listitem_starredheads.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/layout_listitem_starredheads.xml" value="0.5" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.2609375" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.24479166666666666" />
       </map>

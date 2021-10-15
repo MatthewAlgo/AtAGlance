@@ -581,16 +581,20 @@ public class DifferentFunctions implements DifferentFunctionsDeclaration {
         MyImagesURLFaves = ReturnedFromFunction.get(3);
     }
     public static void DeleteElementFromFavesArray(int element){
-        MyTitlesFaves.remove(element);
-        MyDescriptionsFaves.remove(element);
-        MyURLFaves.remove(element);
-        MyImagesURLFaves.remove(element);
+        try {
+            MyTitlesFaves.remove(element);
+            MyDescriptionsFaves.remove(element);
+            MyURLFaves.remove(element);
+            MyImagesURLFaves.remove(element);
+        }catch (Exception e){
+            System.out.println("Could not remove an element");
+        }
     }
     public static void AddElementToFavesArray(String Title, String Descr, String URL, String ImgURL){
-        MyTitlesFaves.add(Title);
-        MyDescriptionsFaves.add(Descr);
-        MyURLFaves.add(URL);
-        MyImagesURLFaves.add(ImgURL);
+        MyTitlesFaves.add(0, Title);
+        MyDescriptionsFaves.add(0, Descr);
+        MyURLFaves.add(0, URL);
+        MyImagesURLFaves.add(0, ImgURL);
     }
 
 }

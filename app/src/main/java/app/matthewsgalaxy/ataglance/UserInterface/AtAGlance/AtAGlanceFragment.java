@@ -202,26 +202,33 @@ public class AtAGlanceFragment extends Fragment {
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
 
         // Read the buffer from file for starred
-        if(fileExists(requireContext(),"JSON_SAVED_ITEMS_CACHE.json")) {
-            try {
-                if(ReadJSONWithStarred(requireContext()).get(0) != null && ReadJSONWithStarred(requireContext()).get(0)!= null) {
+        if(numberOfInflations == 1) {
+            if (fileExists(requireContext(), "JSON_SAVED_ITEMS_CACHE.json")) {
+                try {
+                    if (ReadJSONWithStarred(requireContext()).get(0) != null && !ReadJSONWithStarred(requireContext()).get(0).isEmpty()) {
+                        // TODO: Resolve reset at a secondary call of the home screen of the starred items
+                        MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
+                        MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
+                        MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
+                        MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+                    }
                     MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
                     MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
                     MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
                     MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+                } catch (Exception exc) {
+                    exc.printStackTrace();
                 }
-            }catch (Exception exc){
-                exc.printStackTrace();
             }
-        }
-        try {
+            try {
 
-            System.out.println("READ FROM FAVOURITES TITLES: " + MyTitlesFaves.get(0));
-            System.out.println("READ FROM DESCRIPTIONS TITLES: " + MyDescriptionsFaves.get(0));
-            System.out.println("READ FROM URL TITLES: " + MyURLFaves.get(0));
-            System.out.println("READ FROM IMAGEURL TITLES: " + MyImagesURLFaves.get(0));
-        }catch (Exception exc){
-            System.out.println("Maybe some of the arrays are empty");
+                System.out.println("READ FROM FAVOURITES TITLES: " + MyTitlesFaves.get(0));
+                System.out.println("READ FROM DESCRIPTIONS TITLES: " + MyDescriptionsFaves.get(0));
+                System.out.println("READ FROM URL TITLES: " + MyURLFaves.get(0));
+                System.out.println("READ FROM IMAGEURL TITLES: " + MyImagesURLFaves.get(0));
+            } catch (Exception exc) {
+                System.out.println("Maybe some of the arrays are empty");
+            }
         }
 
         if(numberOfInflations == 1) {

@@ -49,10 +49,17 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public RecyclerViewStarredAdapter(ArrayList<String> arrayListURLValues, ArrayList<String> titlesArrayList,ArrayList<String> descriptionsArrayList,
                                         ArrayList<String> imageURLArrayList) {
-        ArrayListURLValues = MyURLFaves;
-        TitlesArrayList=MyTitlesFaves;
-        DescriptionsArrayList = MyDescriptionsFaves;
-        ImageURLArrayList = MyImagesURLFaves;
+        ArrayListURLValues = arrayListURLValues;
+        TitlesArrayList=titlesArrayList;
+        DescriptionsArrayList = descriptionsArrayList;
+        ImageURLArrayList = imageURLArrayList;
+
+        if(TitlesArrayList == null) {
+            ArrayListURLValues = MyURLFaves;
+            TitlesArrayList = MyTitlesFaves;
+            DescriptionsArrayList = MyDescriptionsFaves;
+            ImageURLArrayList = MyImagesURLFaves;
+        }
     }
 
 
@@ -63,10 +70,16 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         RecyclerViewStarredAdapter.ViewHolder holder = new RecyclerViewStarredAdapter.ViewHolder(view);
         this.mContext = view.getContext();
         try{
-            MyTitlesFaves = ReadJSONWithStarred(mContext).get(0);
+            TitlesArrayList = ReadJSONWithStarred(mContext).get(0);
+            DescriptionsArrayList = ReadJSONWithStarred(mContext).get(1);
+            ArrayListURLValues = ReadJSONWithStarred(mContext).get(2);
+            ImageURLArrayList = ReadJSONWithStarred(mContext).get(3);
+
+            MyURLFaves = ReadJSONWithStarred(mContext).get(0);
             MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
             MyURLFaves = ReadJSONWithStarred(mContext).get(2);
             MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -79,15 +92,15 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         // Load The Features
         try {
             // Modify The Text for Titles
-            if (MyTitlesFaves.get(holder.getAdapterPosition()) != null && MyTitlesFaves.get(holder.getAdapterPosition()) != "" && MyTitlesFaves.get(holder.getAdapterPosition()) != "null") {
-                holder.ChipNewsTitle.setText(MyTitlesFaves.get(holder.getAdapterPosition()));
+            if (TitlesArrayList.get(holder.getAdapterPosition()) != null && TitlesArrayList.get(holder.getAdapterPosition()) != "" && TitlesArrayList.get(holder.getAdapterPosition()) != "null") {
+                holder.ChipNewsTitle.setText(TitlesArrayList.get(holder.getAdapterPosition()));
             } else {
                 holder.ChipNewsTitle.setText("This Article Has No Title");
             }
 
             // Modify the Descriptions Text for Descriptions
-            if (MyDescriptionsFaves.get(holder.getAdapterPosition()) != null && MyDescriptionsFaves.get(holder.getAdapterPosition()) != "" && MyDescriptionsFaves.get(holder.getAdapterPosition()) != "null") {
-                holder.NewsDescriptionText.setText(MyDescriptionsFaves.get(holder.getAdapterPosition()));
+            if (DescriptionsArrayList.get(holder.getAdapterPosition()) != null && DescriptionsArrayList.get(holder.getAdapterPosition()) != "" && DescriptionsArrayList.get(holder.getAdapterPosition()) != "null") {
+                holder.NewsDescriptionText.setText(DescriptionsArrayList.get(holder.getAdapterPosition()));
             } else {
                 holder.NewsDescriptionText.setText("This article has no description");
             }
@@ -95,7 +108,10 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
             // Modify Image According to URL -> Picasso
             if (isOnline(mContext)) {
                 try {
-                    Picasso.get().load(MyImagesURLFaves.get(holder.getAdapterPosition())).fit().centerInside().into(holder.ImageNews);
+                    Picasso.get().load(ImageURLArrayList.get(holder.getAdapterPosition())).fit().centerInside().into(holder.ImageNews);
+                    if(ImageURLArrayList.isEmpty()) {
+                        holder.ImageNews.setImageResource(R.drawable.materialwall);
+                    }
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                     holder.ImageNews.setImageResource(R.drawable.materialwall); // Load Backup image
@@ -106,7 +122,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
             ChipURLLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SetOnClickListenersForUrlInBrowser(MyURLFaves.get(holder.getAdapterPosition()), view.getContext());
+                    SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.getAdapterPosition()), view.getContext());
                 }
             });
             ChipRemoveItem.setOnClickListener(new View.OnClickListener() {
@@ -114,25 +130,42 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                 public void onClick(View view) {
                     try {
                         if(holder.getAdapterPosition() == -1){
-                            DeleteElementFromFavesArray(0);
+                            try {
+                                DeleteElementFromFavesArray(0);
 
-                            notifyItemRemoved(holder.getAdapterPosition()+1);
+                                notifyItemRemoved(holder.getAdapterPosition() + 1);
+                            }catch (Exception E){
+                                E.printStackTrace();
+                            }
                         }else {
                             DeleteElementFromFavesArray(holder.getAdapterPosition());
 
-                            WriteJSONWithStarred(mContext,MyTitlesFaves,MyDescriptionsFaves,MyURLFaves,MyImagesURLFaves);
+                            // Remove item at position from arraylist
+                            TitlesArrayList.remove(holder.getAdapterPosition());
+                            DescriptionsArrayList.remove(holder.getAdapterPosition());
+                            ArrayListURLValues.remove(holder.getAdapterPosition());
+                            ImageURLArrayList.remove(holder.getAdapterPosition());
 
-                            /*
-                             TODO:
-                             ArrayList<ArrayList<String>> Updated = ReadJSONWithStarred(mContext);
-                             MyTitlesFaves = Updated.get(0);
-                             MyDescriptionsFaves = Updated.get(1);
-                             MyURLFaves = Updated.get(2);
-                             MyImagesURLFaves = Updated.get(3);
-                             Toast.makeText(mContext, "Deleted item at position: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                            */
+                            WriteJSONWithStarred(mContext,TitlesArrayList,DescriptionsArrayList,ArrayListURLValues,ImageURLArrayList);
+
+                            ArrayList<ArrayList<String>> Updated = ReadJSONWithStarred(mContext);
+                            TitlesArrayList = Updated.get(0);
+                            DescriptionsArrayList = Updated.get(1);
+                            ArrayListURLValues= Updated.get(2);
+                            ImageURLArrayList = Updated.get(3);
+
+                            // Update the URL Faves
+
+                            MyTitlesFaves = ReadJSONWithStarred(mContext).get(0);
+                            MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
+                            MyURLFaves = ReadJSONWithStarred(mContext).get(2);
+                            MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
+
+                            Toast.makeText(mContext, "Deleted item at position: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+
 
                             notifyItemRemoved(holder.getAdapterPosition());
+                            notifyItemRangeChanged(holder.getAdapterPosition(), getItemCount());
                             Toast.makeText(mContext, "Successfully deleted item ", Toast.LENGTH_SHORT).show();
 
                         }

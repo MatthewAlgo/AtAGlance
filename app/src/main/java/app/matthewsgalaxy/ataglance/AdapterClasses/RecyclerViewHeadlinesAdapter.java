@@ -7,6 +7,7 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.MyURLFaves;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ParseJSONForecast;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ProcessTimeStamp;
+import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ReadJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ReturnForecastResponseJSON;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.WriteJSONWithStarred;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.GlobalTimeForExtendedForecast;
@@ -70,7 +71,7 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHeadlinesAdapter.ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: called");
+        // Log.d(TAG, "onBindViewHolder: called");
         // Load The Features
         try {
             // Modify The Text for Titles
@@ -91,6 +92,9 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
             if (isOnline(mContext)) {
                 try {
                     Picasso.get().load(ImageURLArrayList.get(holder.getAdapterPosition())).fit().centerInside().into(holder.ImageNews);
+                    if(ImageURLArrayList.isEmpty()) {
+                        holder.ImageNews.setImageResource(R.drawable.materialwall);
+                    }
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                     holder.ImageNews.setImageResource(R.drawable.materialwall); // Load Backup image
@@ -108,7 +112,13 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View view) {
                     try{
-                        DifferentFunctions.AddElementToFavesArray(ArrayListURLValues.get(holder.getAdapterPosition()),
+                        MyTitlesFaves = ReadJSONWithStarred(mContext).get(0);
+                        MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
+                        MyURLFaves = ReadJSONWithStarred(mContext).get(2);
+                        MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
+
+
+                        DifferentFunctions.AddElementToFavesArray(TitlesArrayList.get(holder.getAdapterPosition()),
                                 DescriptionsArrayList.get(holder.getAdapterPosition()), ArrayListURLValues.get(holder.getAdapterPosition()),
                                 ImageURLArrayList.get(holder.getAdapterPosition()));
                         // Rewrite the file
