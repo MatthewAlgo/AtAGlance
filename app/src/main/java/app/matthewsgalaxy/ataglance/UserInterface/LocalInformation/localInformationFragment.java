@@ -7,6 +7,8 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.ToCamelCaseWord;
 import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.readFromFile;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.APIKEY;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseJsonForecast;
+import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.ResponseJsonWeather;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SunriseGlobalHourString;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.isOnline;
 
@@ -109,7 +111,7 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
         InputText = PubView.findViewById(R.id.Inputtext);
         ConfirmButton = PubView.findViewById(R.id.confirm_button);
-        View view = PubView;
+        View view = PubView; MContext = view.getContext();
 
         ImageHour1 = view.findViewById(R.id.ImageHour1);                     ChipHour1 = view.findViewById(R.id.ChipHour1);               ChipHourUpperText1 = view.findViewById(R.id.ChipHourUpperText1);
         ImageHour4 = view.findViewById(R.id.ImageHour4);                     ChipHour4 = view.findViewById(R.id.ChipHour4);               ChipHourUpperText4 = view.findViewById(R.id.ChipHourUpperText4);
@@ -142,10 +144,17 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
 
             // ~~~~~~~~~~~~~~~~~ To be used together with the recview for local news
             recyclerView = PubView.findViewById(R.id.LocalNewsRecView);
+            recyclerView.setNestedScrollingEnabled(false);
+
             ChipURLLink = PubView.findViewById(R.id.ChipURLLink);
             //
 
             InitRecyclerView();
+
+            // Load weather conditions
+            loadDefaultWeatherConds();
+            loadDefaultWeatherForecast();
+
         }catch (Exception exception){ // Catches errors if needed
             System.out.println(exception.getMessage().toString());
         }
@@ -565,6 +574,182 @@ public class localInformationFragment extends Fragment implements View.OnClickLi
             System.out.println(LinearTopUS);
             System.out.println(LinearTesla);
             System.out.println(LinearWSJ);
+        }
+    }
+    public void loadDefaultWeatherForecast(){
+
+        String ResponseJSON = ResponseJsonForecast;
+        // Here we will check for the availability of the file
+        if(Integer.parseInt(ParseJSONForecast(ResponseJSON, "cod").get(0)) != 200){
+            // Something bad happened
+            Toast.makeText(MContext, "There was a problem in the response for Forecast. Please try again later", Toast.LENGTH_LONG).show();
+        }else {
+            // SAVE THE JSON REQUEST LOCALLY
+            // THE REQUEST WENT WELL
+            DifferentFunctions.writeToFile(requireContext(),"JSON_FORECAST_CACHE.json", ResponseJSON);
+        }
+        String ResponseJsonForecast = ResponseJSON;
+        if(ResponseJSON != null && ResponseJSON != "") {
+            // Now we read the file and put the response inside
+
+            // IF THE REQUEST WAS MADE FOR THE WEATHER FORECAST////////////////////////////////////////////////////////////////////////
+            ArrayList<String> ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("id_icon"));
+            ArrayList<String> TimeStamps = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
+
+            ArrayList<String> GlobalTimeForExtendedForecast = ParseJSONForecast(ResponseJSON, new String("time_stamp"));
+            ArrayList<String> GlobalHumidityForExtendedForecast = ParseJSONForecast(ResponseJSON, "humidity");
+            ArrayList<String> GlobalWSpeedForExtendedForecast = DifferentFunctions.ParseJSONForecast(ResponseJSON, "w_speed");
+
+            // CHANGE IMAGES OF HOUR FORECAST ACCORDING TO IDS
+            ModifyImageToConditions(ImageHour1, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(0), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(0));
+            ModifyImageToConditions(ImageHour2, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(1), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(1));
+            ModifyImageToConditions(ImageHour3, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(2), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(2));
+            ModifyImageToConditions(ImageHour4, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(3), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(3));
+            ModifyImageToConditions(ImageHour5, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(4), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(4));
+            ModifyImageToConditions(ImageHour6, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(5), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(5));
+            ModifyImageToConditions(ImageHour7, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(6), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(6));
+            ModifyImageToConditions(ImageHour8, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(7), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(7));
+            ModifyImageToConditions(ImageHour9, DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStamps.get(8), requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseGlobalHourString, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetGlobalHourString, requireContext())), ConditionsInJson.get(8));
+
+            // Change Chip Values according to temperatures predicted
+            ConditionsInJson = ParseJSONForecast(ResponseJSON, new String("temperature"));
+            ChipHour1.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(0)) - 273.15) + "°C");
+            ChipHour2.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(1)) - 273.15) + "°C");
+            ChipHour3.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(2)) - 273.15) + "°C");
+            ChipHour4.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(3)) - 273.15) + "°C");
+            ChipHour5.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(4)) - 273.15) + "°C");
+            ChipHour6.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(5)) - 273.15) + "°C");
+            ChipHour7.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(6)) - 273.15) + "°C");
+            ChipHour8.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(7)) - 273.15) + "°C");
+            ChipHour9.setText(String.format("%.2f", (Double) Double.parseDouble(ConditionsInJson.get(8)) - 273.15) + "°C");
+
+            // Change TextView Values according to the corresponding time
+            ChipHourUpperText1.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(0));
+            ChipHourUpperText2.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(1));
+            ChipHourUpperText3.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(2));
+            ChipHourUpperText4.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(3));
+            ChipHourUpperText5.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(4));
+            ChipHourUpperText6.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(5));
+            ChipHourUpperText7.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(6));
+            ChipHourUpperText8.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(7));
+            ChipHourUpperText9.setText(ParseJSONForecast(ResponseJSON, new String("time")).get(8));
+        }
+    }
+    public void loadDefaultWeatherConds(){
+        String ResponseJSON = ResponseJsonWeather;
+        // Here we will check for the availability of the file
+        if(Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "cod")) != 200){
+            // Something bad happened
+            Toast.makeText(getContext(), "There was a problem in the response for Weather. Please try again later", Toast.LENGTH_LONG).show();
+        }else {
+            // SAVE THE JSON REQUEST LOCALLY
+            // THE REQUEST WENT WELL
+            DifferentFunctions.writeToFile(requireContext(),"JSON_WEATHER_CACHE.json", ResponseJsonWeather);
+        }
+        ResponseJSON = readFromFile(requireContext(), "JSON_WEATHER_CACHE.json");
+        ResponseJsonWeather = ResponseJSON;
+
+        // IF THE REQUEST WAS MADE ONLY FOR THE CURRENT WEATHER///////////////////////////////////////////////////////////////////
+        if(ResponseJSON != null && ResponseJSON != "") {
+            // Get the current date and time and set the upper chip
+            Date CurrentDate = new Date((long) 1000 * Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "time")));
+            Time CurrentTime = new Time((long) 1000 * Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "time")));
+            chipLastUpdated.setText("Updated At: " + CurrentDate.toString() + " " + CurrentTime.toString());
+
+            // SAVE THE JSON REQUEST LOCALLY
+            // try { WriteStringToFile(ResponseJSON, "FILE_JSON_WEATHER.json"); } catch (IOException e) { e.printStackTrace(); }
+
+            // MODIFY THE DESCRIPTION TEXTVIEW
+            // System.out.println(Integer.parseInt(ParseJSONCurrentWeather(ResponseJSON, "cod"))); -> Call returns 200 if OK
+            String ToModifyCurrentConds = ParseJSONCurrentWeather(ResponseJSON, "description");
+
+            String LocationByLatAndLong = ParseJSONCurrentWeather(ResponseJSON, "city_name");
+            // Try to fetch city name - This should not be equal to "Globe"
+            if (LocationByLatAndLong == "Globe") {
+                Toast.makeText(getContext(), "Error while fetching your current location. Please try again later.", Toast.LENGTH_LONG).show();
+            }
+
+            String TimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "time");
+            String SunriseTimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "sunrise");
+            String SunsetTimeStampUnix = ParseJSONCurrentWeather(ResponseJSON, "sunset");
+            // TIMESTAMP VALUES IN GMT!
+
+            /// Process the timestamps
+            Pair<Integer, Integer> SunriseGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext());
+            Pair<Integer, Integer> SunsetGlobalHourPair = DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext());
+            SunriseGlobalHourString = SunriseTimeStampUnix;
+            SunsetGlobalHourString = SunsetTimeStampUnix;
+            // We have sunrise / sunset stored globally
+
+            // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).first);
+            // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()).second);
+
+            // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).first);
+            // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()).second);
+
+            // System.out.println("Minutes: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).first);
+            // System.out.println("Hours: " + DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()).second);
+
+            isDaylightAtCall = DifferentFunctions.isDaylightFunction(DifferentFunctions.GetHourAndMinutesFromTimeStamp(TimeStampUnix, requireContext()),
+                    DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunriseTimeStampUnix, requireContext()), DifferentFunctions.GetHourAndMinutesFromTimeStamp(SunsetTimeStampUnix, requireContext()));
+
+            // System.out.println(isDaylightAtCall);
+
+
+            chipCurrentWeatherPromptJava.setText("Current Weather Conditions for " + LocationByLatAndLong);
+            MainConditionTextJava.setText(ToCamelCaseWord(ToModifyCurrentConds));
+            String ToModifyCurrentCondsImage = ParseJSONCurrentWeather(ResponseJSON, "conditions_id");
+
+            // Set humidity in forecast
+            String HumidityRightNow = ParseJSONCurrentWeather(ResponseJSON, "humidity");
+            String AdditionalConditions = "Unknown condition";
+            double valuehumid = Double.parseDouble(HumidityRightNow);
+            if (valuehumid < 20) {
+                AdditionalConditions = "Dry";
+            } else if (valuehumid >= 20 && valuehumid <= 60) {
+                AdditionalConditions = "Comfortable";
+            } else if (valuehumid > 60) {
+                AdditionalConditions = "Humid";
+            }
+            chipHumidity.setText(HumidityRightNow + "% - " + AdditionalConditions);
+
+
+            String WindConditions = null;
+            double WindSpeed = Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "w_speed")) * 0.001 * 3600;
+            if (WindSpeed == 0) {
+                WindConditions = "No Wind";
+            }
+            if (WindSpeed < 5 && WindSpeed > 0) {
+                WindConditions = "Light Breeze";
+            }
+            if (WindSpeed >= 5 && WindSpeed < 20) {
+                WindConditions = "Light Wind";
+            }
+            if (WindSpeed >= 20 && WindSpeed < 30) {
+                WindConditions = "Moderate Wind";
+            }
+            if (WindSpeed >= 30) {
+                WindConditions = "Strong Wind";
+            }
+            chipWind.setText("Speed - " + String.format("%.2f", (Double) WindSpeed) + "km/h" + " - " + WindConditions);
+
+            // MODIFY THE MAIN ICON
+            ModifyImageToConditions(MainCurrentCondition, isDaylightAtCall, ToModifyCurrentCondsImage);
+
+            // MODIFY THE TEMPERATURE
+            String ToModifyCurrentTemperature = ParseJSONCurrentWeather(ResponseJSON, "temperature");
+            TempChip.setText(String.format("%.2f", (Double) Double.parseDouble(ToModifyCurrentTemperature) - 273.15) + "°C");
+
+            chipHILO.setText("High - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmax")) - 273.15) + "°C" + " | Low - " + String.format("%.1f", Double.parseDouble(ParseJSONCurrentWeather(ResponseJSON, "tmin")) - 273.15) + "°C");
         }
     }
 }

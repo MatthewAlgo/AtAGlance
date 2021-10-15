@@ -201,11 +201,12 @@ public class AtAGlanceFragment extends Fragment {
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
 
-        // Read the buffer from file for starred
+
         if(numberOfInflations == 1) {
+            // Read the buffer from file for starred
             if (fileExists(requireContext(), "JSON_SAVED_ITEMS_CACHE.json")) {
                 try {
-                    if (ReadJSONWithStarred(requireContext()).get(0) != null && !ReadJSONWithStarred(requireContext()).get(0).isEmpty()) {
+                    if (!ReadJSONWithStarred(requireContext()).get(0).isEmpty()) {
                         // TODO: Resolve reset at a secondary call of the home screen of the starred items
                         MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
                         MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
@@ -229,9 +230,7 @@ public class AtAGlanceFragment extends Fragment {
             } catch (Exception exc) {
                 System.out.println("Maybe some of the arrays are empty");
             }
-        }
 
-        if(numberOfInflations == 1) {
             fillStringsWithJunkIfFilesAreNonExistent();
             if (isOnline(requireActivity())) {
                 Toast.makeText(getContext(), "Loading Data...", Toast.LENGTH_SHORT).show();
