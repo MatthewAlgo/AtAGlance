@@ -623,10 +623,10 @@
                                 android:id="@+id/ChipURLLink2ReadLater"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
                                 android:layout_below="@+id/ChipURLLink2"
+                                android:layout_centerHorizontal="true"
                                 android:text="Read Later"
-                                app:chipBackgroundColor="@color/purple_200" />
+                                 />
 
 
                         </RelativeLayout>
@@ -702,7 +702,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:text="Latest Technology News"
-                        app:chipBackgroundColor="#f0ff0f" />
+                        app:chipBackgroundColor="#ff0000" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/NewsCardView3"

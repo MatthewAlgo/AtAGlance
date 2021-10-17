@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="..\:/Users/MatthewAlgo/Desktop/AndroidStudio/AtAGlance/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/MatthewAlgo/Desktop/AndroidStudio/AtAGlance/app/src/main/res/layout/activity_splash.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/MatthewAlgo/Desktop/AndroidStudio/AtAGlance/app/src/main/res/layout/fragment_ataglancefrag.xml" value="0.17300724637681159" />
@@ -11,10 +12,12 @@
         <entry key="..\:/Users/MatthewAlgo/Desktop/AndroidStudio/AtAGlance/app/src/main/res/menu/drawer_menu.xml" value="0.24" />
         <entry key="..\:/Users/MatthewAlgo/Projects/AtAGlance/app/src/main/res/layout/fragment_preferencessearch.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/MatthewAlgo/Projects/AtAGlance/app/src/main/res/layout/fragment_searchinformationfrag.xml" value="0.1598731884057971" />
+        <entry key="app/src/main/res/drawable/ic_bubble_background.xml" value="0.27708333333333335" />
         <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/drawable/rounded_corners_color.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2609375" />
-        <entry key="app/src/main/res/layout/fragment_ataglancefrag.xml" value="0.15" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/fragment_ataglancefrag.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_homefrag.xml" value="0.183547103051747" />
         <entry key="app/src/main/res/layout/fragment_localsearch.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/layout/fragment_newsheadlinesfrag.xml" value="0.2453125" />
@@ -25,10 +28,14 @@
         <entry key="app/src/main/res/layout/layout_listitem_extforecast.xml" value="0.23369565217391305" />
         <entry key="app/src/main/res/layout/layout_listitem_extheadlines.xml" value="0.5" />
         <entry key="app/src/main/res/layout/layout_listitem_starredheads.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/layout_splash_background.xml" value="0.67" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.2609375" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.24479166666666666" />
       </map>
     </option>
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/layout_splash_background.xml" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

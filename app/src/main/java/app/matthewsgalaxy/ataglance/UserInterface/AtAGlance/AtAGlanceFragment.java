@@ -123,7 +123,7 @@ public class AtAGlanceFragment extends Fragment {
     public static ArrayList<String> GlobalTimeForExtendedForecast, GlobalHumidityForExtendedForecast,
             GlobalWSpeedForExtendedForecast;
 
-    public static int numberOfInflations = 0;
+    public static int numberOfHomeInflations = 0;
     public static int numberOfErrorCallsOnRequest = 0;
 
 
@@ -196,13 +196,13 @@ public class AtAGlanceFragment extends Fragment {
         double LATITUDE, LONGITUDE;
         LATITUDE = LONGITUDE = 0;
 
-        numberOfInflations++;
+        numberOfHomeInflations++;
 
         APIKEY = "135e028a4a2ff09b2427b0156dd32030"; // API KEY FOR WEATHER REQUESTS
         APIKEY_NEWS = "82de6527ef904da08c127287e4044c27"; // API KEY FOR NEWS REQUESTS
 
 
-        if(numberOfInflations == 1) {
+        if(numberOfHomeInflations == 1) {
             // Read the buffer from file for starred
             if (fileExists(requireContext(), "JSON_SAVED_ITEMS_CACHE.json")) {
                 try {
@@ -212,11 +212,9 @@ public class AtAGlanceFragment extends Fragment {
                         MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
                         MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
                         MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+
                     }
-                    MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
-                    MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
-                    MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
-                    MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+
                 } catch (Exception exc) {
                     exc.printStackTrace();
                 }
@@ -227,6 +225,7 @@ public class AtAGlanceFragment extends Fragment {
                 System.out.println("READ FROM DESCRIPTIONS TITLES: " + MyDescriptionsFaves.get(0));
                 System.out.println("READ FROM URL TITLES: " + MyURLFaves.get(0));
                 System.out.println("READ FROM IMAGEURL TITLES: " + MyImagesURLFaves.get(0));
+
             } catch (Exception exc) {
                 System.out.println("Maybe some of the arrays are empty");
             }

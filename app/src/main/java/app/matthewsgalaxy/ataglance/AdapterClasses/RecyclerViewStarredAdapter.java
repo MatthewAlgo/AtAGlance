@@ -12,6 +12,7 @@ import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFrag
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.isOnline;
 
 import android.content.Context;
+import android.icu.text.CaseMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,20 +70,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem_starredheads, parent, false);
         RecyclerViewStarredAdapter.ViewHolder holder = new RecyclerViewStarredAdapter.ViewHolder(view);
         this.mContext = view.getContext();
-        try{
-            TitlesArrayList = ReadJSONWithStarred(mContext).get(0);
-            DescriptionsArrayList = ReadJSONWithStarred(mContext).get(1);
-            ArrayListURLValues = ReadJSONWithStarred(mContext).get(2);
-            ImageURLArrayList = ReadJSONWithStarred(mContext).get(3);
 
-            MyURLFaves = ReadJSONWithStarred(mContext).get(0);
-            MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
-            MyURLFaves = ReadJSONWithStarred(mContext).get(2);
-            MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return holder;
     }
 
@@ -160,9 +148,6 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                             MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
                             MyURLFaves = ReadJSONWithStarred(mContext).get(2);
                             MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
-
-                            Toast.makeText(mContext, "Deleted item at position: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-
 
                             notifyItemRemoved(holder.getAdapterPosition());
                             notifyItemRangeChanged(holder.getAdapterPosition(), getItemCount());

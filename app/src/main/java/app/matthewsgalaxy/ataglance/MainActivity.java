@@ -1,7 +1,5 @@
 package app.matthewsgalaxy.ataglance;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,21 +8,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.net.URL;
 
 import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment;
 import app.matthewsgalaxy.ataglance.UserInterface.ExtendedForecast.extendedForecastFragment;
@@ -45,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar Toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(Toolbar);
+
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -96,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Aboutme:
                 Toast.makeText(this, "Hi! I Am MatthewAlgo, A Developer And Linux Enthusiast. I Developed This App Mainly To Learn The Structure" +
                         " Of An Android Application. And To Have Fun \ud83d\ude01 ", Toast.LENGTH_LONG).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/MatthewAlgo"));
+                this.startActivity(browserIntent);
                 break;
             case R.id.Refresh:
                 Intent i = new Intent(MainActivity.this, MainActivity.class);
                 finish();
-                AtAGlanceFragment.numberOfInflations=0;
+                AtAGlanceFragment.numberOfHomeInflations =0;
                 overridePendingTransition(0, 0);
                 startActivity(i);
                 overridePendingTransition(0, 0);
