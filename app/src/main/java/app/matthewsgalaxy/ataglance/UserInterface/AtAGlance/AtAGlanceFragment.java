@@ -232,10 +232,8 @@ public class AtAGlanceFragment extends Fragment {
 
             fillStringsWithJunkIfFilesAreNonExistent();
             if (isOnline(requireActivity())) {
-                Toast.makeText(getContext(), "Loading Data...", Toast.LENGTH_SHORT).show();
                 checkLocationPermission(); // Calls the internet for API'S
                 SetterFunctionWhenOffline(); // Reloads from cache
-                Toast.makeText(getContext(), "Data loaded", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "You Are Offline! Please Check Your Internet Connection And Try Again", Toast.LENGTH_LONG).show();
                 checkLocationPermission();
@@ -823,9 +821,9 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+
                         e.printStackTrace();
                     }
                 }
@@ -860,9 +858,9 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
+
                         e.printStackTrace();
                     }
                 }
@@ -894,9 +892,8 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -927,9 +924,8 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -960,9 +956,8 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -993,9 +988,8 @@ public class AtAGlanceFragment extends Fragment {
 
                         WriteJSONWithStarred(requireContext(), MyTitlesFaves,MyDescriptionsFaves,
                                 MyURLFaves, MyImagesURLFaves);
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception e){
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }

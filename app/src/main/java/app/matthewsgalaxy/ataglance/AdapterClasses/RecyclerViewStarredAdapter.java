@@ -170,13 +170,9 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                             MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
 
                             notifyDataSetChanged();
-
-                            Toast.makeText(mContext, "Successfully deleted item ", Toast.LENGTH_SHORT).show();
-
                         }
                     }catch (Exception e){
                         e.printStackTrace();
-                        Toast.makeText(mContext, "Failed To Delete Item. Tried to delete item at position: " + holder.position, Toast.LENGTH_SHORT).show();
                     }
                 }
             });

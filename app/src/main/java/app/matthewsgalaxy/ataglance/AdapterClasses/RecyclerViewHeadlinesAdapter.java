@@ -134,10 +134,9 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
                         // Rewrite the file
                         WriteJSONWithStarred(mContext,MyTitlesFaves,MyDescriptionsFaves,MyURLFaves,MyImagesURLFaves);
 
-                        Toast.makeText(mContext, "Added Item to Read Later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Added item to \"read later\"", Toast.LENGTH_SHORT).show();
                     }catch (Exception exc){
                         exc.printStackTrace();
-                        Toast.makeText(mContext, "Could not add item to Read Later", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
