@@ -18,12 +18,38 @@
         android:textColor="#0f00f0"
         android:layout_margin="5dp"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ChipTitle"
+        android:orientation="horizontal"
+        android:id="@+id/EdText"
+        >
+        <EditText
+            android:layout_margin="10dp"
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:id="@+id/EditText"
+            android:layout_height="wrap_content"
+            android:hint="Insert Your Location Here">
+        </EditText>
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purple_500"
+            app:chipBackgroundColor="@color/quantum_yellow"
+            android:text="Confirm"
+            android:id="@+id/ConfirmChip"
+            android:layout_margin="10dp">
+        </com.google.android.material.chip.Chip>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:layout_below="@+id/ChipTitle"
+        android:layout_below="@+id/EdText"
         android:id="@+id/recyclerviewforecast">
 
     </androidx.recyclerview.widget.RecyclerView>
