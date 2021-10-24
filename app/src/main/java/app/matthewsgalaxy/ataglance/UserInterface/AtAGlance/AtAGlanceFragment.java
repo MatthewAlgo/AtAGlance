@@ -1376,10 +1376,15 @@ public class AtAGlanceFragment extends Fragment {
                     }
                 }
             }
-            // TEST - WRITE JSON TO A FILE, FORMATTED
-            // WriteJSONWithStarred(requireContext(), MyEntertainmentNewsPart.getMyTitlesArrayListForEntertainmentNews(),
-            //         MyEntertainmentNewsPart.getMyDescriptionsArrayListForEntertainamentNews(), MyEntertainmentNewsPart.getMyURLArrayListForEntertainmentNews(),
-            //         MyEntertainmentNewsPart.getMyIMGURLArrayListForEntertainmentNews());
+            if (!fileExists(requireContext(), "JSON_SAVED_ITEMS_CACHE.json")) {
+                WriteJSONWithStarred(requireContext(), MyEntertainmentNewsPart.getMyTitlesArrayListForEntertainmentNews(),
+                         MyEntertainmentNewsPart.getMyDescriptionsArrayListForEntertainamentNews(), MyEntertainmentNewsPart.getMyURLArrayListForEntertainmentNews(),
+                         MyEntertainmentNewsPart.getMyIMGURLArrayListForEntertainmentNews());
+                MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
+                MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
+                MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
+                MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+            }
         }
 
     }

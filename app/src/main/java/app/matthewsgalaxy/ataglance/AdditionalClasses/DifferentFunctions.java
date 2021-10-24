@@ -39,10 +39,10 @@ import app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.BusinessNewsPart;
 public class DifferentFunctions implements DifferentFunctionsDeclaration {
 
     // Global variables - For Read Later
-    public static ArrayList<String> MyTitlesFaves;
-    public static ArrayList<String> MyDescriptionsFaves;
-    public static ArrayList<String> MyURLFaves;
-    public static ArrayList<String> MyImagesURLFaves;
+    public static ArrayList<String> MyTitlesFaves = new ArrayList<>();
+    public static ArrayList<String> MyDescriptionsFaves= new ArrayList<>();
+    public static ArrayList<String> MyURLFaves= new ArrayList<>();
+    public static ArrayList<String> MyImagesURLFaves= new ArrayList<>();
 
     public DifferentFunctions(){}
 

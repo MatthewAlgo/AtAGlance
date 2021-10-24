@@ -81,8 +81,6 @@ public class starredArticlesFragment extends Fragment {
     }
 
     public void InitRecyclerView(){
-
-
         // Append The values of each and every Title from the list
         try {
 
