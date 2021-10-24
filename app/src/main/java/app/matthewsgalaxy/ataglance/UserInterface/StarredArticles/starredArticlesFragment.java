@@ -37,10 +37,10 @@ public class starredArticlesFragment extends Fragment {
     private Chip ChipURLLink, ChipDeleteItem;
 
 
-    public ArrayList<String> ArrayListURLValues;
-    public ArrayList<String> TitlesArrayList;
-    public ArrayList<String> DescriptionsArrayList;
-    public ArrayList<String> ImageURLArrayList;
+    public ArrayList<String> ArrayListURLValues = new ArrayList<>();
+    public ArrayList<String> TitlesArrayList = new ArrayList<>();
+    public ArrayList<String> DescriptionsArrayList = new ArrayList<>();
+    public ArrayList<String> ImageURLArrayList = new ArrayList<>();
 
 
 
@@ -82,6 +82,7 @@ public class starredArticlesFragment extends Fragment {
 
     public void InitRecyclerView(){
 
+
         // Append The values of each and every Title from the list
         try {
 
@@ -94,7 +95,6 @@ public class starredArticlesFragment extends Fragment {
                             MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
                             MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
                         }
-                        // Toast.makeText(requireContext(),"LOADED FROM STARRED FRAGMENT ==> "+MyTitlesFaves.get(0), Toast.LENGTH_SHORT).show();
 
                     }
                 }catch (Exception exc){
@@ -102,13 +102,12 @@ public class starredArticlesFragment extends Fragment {
                 }
             }
 
-            if(!MyTitlesFaves.isEmpty()) {
-                RecyclerViewStarredAdapter adapter = new RecyclerViewStarredAdapter(MyURLFaves, MyTitlesFaves, MyDescriptionsFaves, MyImagesURLFaves); // Call the Constructor for the adapter
-                recyclerView.setAdapter(adapter);
-                // recyclerView.setNestedScrollingEnabled(false);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                recyclerView.setLayoutManager(layoutManager);
-            }
+            RecyclerViewStarredAdapter adapter = new RecyclerViewStarredAdapter(MyURLFaves, MyTitlesFaves, MyDescriptionsFaves, MyImagesURLFaves); // Call the Constructor for the adapter
+            recyclerView.setAdapter(adapter);
+            // recyclerView.setNestedScrollingEnabled(false);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+
 
         }catch(Exception e){
             System.out.println(e.getMessage());

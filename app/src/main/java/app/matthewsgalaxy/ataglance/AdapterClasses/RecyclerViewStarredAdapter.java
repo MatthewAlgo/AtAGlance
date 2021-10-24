@@ -11,6 +11,7 @@ import static app.matthewsgalaxy.ataglance.AdditionalClasses.DifferentFunctions.
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.SetOnClickListenersForUrlInBrowser;
 import static app.matthewsgalaxy.ataglance.UserInterface.AtAGlance.AtAGlanceFragment.isOnline;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.icu.text.CaseMap;
 import android.util.Log;
@@ -38,15 +39,27 @@ import app.matthewsgalaxy.ataglance.UserInterface.StarredArticles.starredArticle
 public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerViewStarredAdapter.ViewHolder>{
     private static final String TAG = "Cannot invoke method length() on null object";
 
-    private ArrayList<String> ArrayListURLValues;
-    private ArrayList<String> TitlesArrayList;
-    private ArrayList<String> DescriptionsArrayList;
-    private ArrayList<String> ImageURLArrayList;
+    private ArrayList<String> ArrayListURLValues = new ArrayList<>();
+    private ArrayList<String> TitlesArrayList = new ArrayList<>();
+    private ArrayList<String> DescriptionsArrayList = new ArrayList<>();
+    private ArrayList<String> ImageURLArrayList = new ArrayList<>();
 
     private Chip ChipURLLink;
     private Chip ChipRemoveItem;
 
     private Context mContext;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
 
     public RecyclerViewStarredAdapter(ArrayList<String> arrayListURLValues, ArrayList<String> titlesArrayList,ArrayList<String> descriptionsArrayList,
                                         ArrayList<String> imageURLArrayList) {
@@ -75,20 +88,23 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewStarredAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewStarredAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.setIsRecyclable(false);
         Log.d(TAG, "onBindViewHolder: called");
+        holder.position = position;
+
         // Load The Features
         try {
             // Modify The Text for Titles
-            if (TitlesArrayList.get(holder.getAdapterPosition()) != null && TitlesArrayList.get(holder.getAdapterPosition()) != "" && TitlesArrayList.get(holder.getAdapterPosition()) != "null") {
-                holder.ChipNewsTitle.setText(TitlesArrayList.get(holder.getAdapterPosition()));
+            if (TitlesArrayList.get(holder.position) != null && TitlesArrayList.get(holder.position) != "" && TitlesArrayList.get(holder.position) != "null") {
+                holder.ChipNewsTitle.setText(TitlesArrayList.get(holder.position));
             } else {
                 holder.ChipNewsTitle.setText("This Article Has No Title");
             }
 
             // Modify the Descriptions Text for Descriptions
-            if (DescriptionsArrayList.get(holder.getAdapterPosition()) != null && DescriptionsArrayList.get(holder.getAdapterPosition()) != "" && DescriptionsArrayList.get(holder.getAdapterPosition()) != "null") {
-                holder.NewsDescriptionText.setText(DescriptionsArrayList.get(holder.getAdapterPosition()));
+            if (DescriptionsArrayList.get(holder.position) != null && DescriptionsArrayList.get(holder.position) != "" && DescriptionsArrayList.get(holder.position) != "null") {
+                holder.NewsDescriptionText.setText(DescriptionsArrayList.get(holder.position));
             } else {
                 holder.NewsDescriptionText.setText("This article has no description");
             }
@@ -96,7 +112,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
             // Modify Image According to URL -> Picasso
             if (isOnline(mContext)) {
                 try {
-                    Picasso.get().load(ImageURLArrayList.get(holder.getAdapterPosition())).fit().centerInside().into(holder.ImageNews);
+                    Picasso.get().load(ImageURLArrayList.get(holder.position)).fit().centerInside().into(holder.ImageNews);
                     if(ImageURLArrayList.isEmpty()) {
                         holder.ImageNews.setImageResource(R.drawable.materialwall);
                     }
@@ -110,7 +126,11 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
             ChipURLLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.getAdapterPosition()), view.getContext());
+                    try {
+                        SetOnClickListenersForUrlInBrowser(ArrayListURLValues.get(holder.position), view.getContext());
+                    }catch (Exception e){
+                        Toast.makeText(mContext, "Could not access the link. Please try again later", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             ChipRemoveItem.setOnClickListener(new View.OnClickListener() {
@@ -121,18 +141,18 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                             try {
                                 DeleteElementFromFavesArray(0);
 
-                                notifyItemRemoved(holder.getAdapterPosition() + 1);
+                                notifyItemRemoved(holder.position + 1);
                             }catch (Exception E){
                                 E.printStackTrace();
                             }
                         }else {
-                            DeleteElementFromFavesArray(holder.getAdapterPosition());
+                            DeleteElementFromFavesArray(holder.position);
 
                             // Remove item at position from arraylist
-                            TitlesArrayList.remove(holder.getAdapterPosition());
-                            DescriptionsArrayList.remove(holder.getAdapterPosition());
-                            ArrayListURLValues.remove(holder.getAdapterPosition());
-                            ImageURLArrayList.remove(holder.getAdapterPosition());
+                            TitlesArrayList.remove(holder.position);
+                            DescriptionsArrayList.remove(holder.position);
+                            ArrayListURLValues.remove(holder.position);
+                            ImageURLArrayList.remove(holder.position);
 
                             WriteJSONWithStarred(mContext,TitlesArrayList,DescriptionsArrayList,ArrayListURLValues,ImageURLArrayList);
 
@@ -149,14 +169,14 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                             MyURLFaves = ReadJSONWithStarred(mContext).get(2);
                             MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
 
-                            notifyItemRemoved(holder.getAdapterPosition());
-                            notifyItemRangeChanged(holder.getAdapterPosition(), getItemCount());
+                            notifyDataSetChanged();
+
                             Toast.makeText(mContext, "Successfully deleted item ", Toast.LENGTH_SHORT).show();
 
                         }
                     }catch (Exception e){
                         e.printStackTrace();
-                        Toast.makeText(mContext, "Failed To Delete Item. Tried to delete item at position: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Failed To Delete Item. Tried to delete item at position: " + holder.position, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -173,7 +193,8 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         return TitlesArrayList.size(); // How many list items are in my list
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{ // Holding Views
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        public int position; // Holding Views
 
         RelativeLayout RelativeLatestNews,RellayoutWithNewsImage;
         CardView NewsCardView;

@@ -43,14 +43,24 @@ public class RecyclerViewHeadlinesAdapter extends RecyclerView.Adapter<RecyclerV
 
     private static final String TAG = "Cannot invoke method length() on null object";
 
-    private ArrayList<String> ArrayListURLValues;
-    private ArrayList<String> TitlesArrayList;
-    private ArrayList<String> DescriptionsArrayList;
-    private ArrayList<String> ImageURLArrayList;
+    private ArrayList<String> ArrayListURLValues = new ArrayList<>();
+    private ArrayList<String> TitlesArrayList = new ArrayList<>();
+    private ArrayList<String> DescriptionsArrayList = new ArrayList<>();
+    private ArrayList<String> ImageURLArrayList = new ArrayList<>();
 
     private Chip ChipURLLink,ChipAddToFaves;
 
     private Context mContext;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     public RecyclerViewHeadlinesAdapter(ArrayList<String> arrayListURLValues, ArrayList<String> titlesArrayList,ArrayList<String> descriptionsArrayList,
                                        ArrayList<String> imageURLArrayList) {
