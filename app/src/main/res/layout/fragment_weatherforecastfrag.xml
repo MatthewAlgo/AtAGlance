@@ -24,9 +24,9 @@
         android:layout_below="@+id/ChipTitle"
         android:orientation="horizontal"
         android:id="@+id/EdText"
+        android:layout_margin="2dp"
         >
         <EditText
-            android:layout_margin="10dp"
             android:layout_weight="3"
             android:layout_width="match_parent"
             android:id="@+id/EditText"
@@ -39,8 +39,7 @@
             android:textColor="@color/purple_500"
             app:chipBackgroundColor="@color/quantum_yellow"
             android:text="Confirm"
-            android:id="@+id/ConfirmChip"
-            android:layout_margin="10dp">
+            android:id="@+id/ConfirmChip">
         </com.google.android.material.chip.Chip>
     </LinearLayout>
 
