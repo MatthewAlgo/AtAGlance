@@ -123,7 +123,7 @@ public class extendedForecastFragment extends Fragment implements View.OnClickLi
             // Init the Wind Speed Array
             Windspeedarr = GlobalWSpeedForExtendedForecast;
 
-            InputText.setText("Current Location");
+            InputText.setHint("Try, For Example, \"Bucharest\"");
 
             RecyclerViewForecastAdapter adapter = new RecyclerViewForecastAdapter(ArrayListConditions,
                     ImageCodes, Temperatures, Windspeedarr, CurrentTimeLOC, MinMaxTemp, Humidityarray, getContext()); // Call the Constructor for the adapter

@@ -1370,10 +1370,20 @@ public class AtAGlanceFragment extends Fragment {
                     }
                 }
             }
+
+            ArrayList<String> TitlesWithAddition = new ArrayList<String>(MyEntertainmentNewsPart.getMyTitlesArrayListForEntertainmentNews());
+            TitlesWithAddition.add("AdditionalTitle");
+            ArrayList<String> DescriptionWithAddition = new ArrayList<String>(MyEntertainmentNewsPart.getMyDescriptionsArrayListForEntertainamentNews());
+            DescriptionWithAddition.add("AdditionalDescr");
+            ArrayList<String> URLArrayListWithAddition = new ArrayList<String>(MyEntertainmentNewsPart.getMyURLArrayListForEntertainmentNews());
+            URLArrayListWithAddition.add("AdditionalURL");
+            ArrayList<String> IMGURLWithAddition = new ArrayList<String>(MyEntertainmentNewsPart.getMyIMGURLArrayListForEntertainmentNews());
+            IMGURLWithAddition.add("AdditionalIMGURL");
+
             if (!fileExists(requireContext(), "JSON_SAVED_ITEMS_CACHE.json")) {
-                WriteJSONWithStarred(requireContext(), MyEntertainmentNewsPart.getMyTitlesArrayListForEntertainmentNews(),
-                         MyEntertainmentNewsPart.getMyDescriptionsArrayListForEntertainamentNews(), MyEntertainmentNewsPart.getMyURLArrayListForEntertainmentNews(),
-                         MyEntertainmentNewsPart.getMyIMGURLArrayListForEntertainmentNews());
+                WriteJSONWithStarred(requireContext(), TitlesWithAddition,
+                        DescriptionWithAddition, URLArrayListWithAddition,
+                        IMGURLWithAddition);
                 MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
                 MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
                 MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);

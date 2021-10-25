@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     tools:context=".UserInterface.StarredArticles.starredArticlesFragment">
+
+    <TextView
+        android:id="@+id/TextCrickets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Nothing here but crickets\n¯\\_(ツ)_/¯"
+        android:textAlignment="center"
+        android:textSize="30dp">
+
+    </TextView>
+
     <!-- World News -->
     <com.google.android.material.chip.Chip
         android:id="@+id/chip_ehead_star"

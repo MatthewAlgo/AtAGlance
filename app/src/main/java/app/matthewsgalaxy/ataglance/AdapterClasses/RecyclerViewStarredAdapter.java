@@ -38,7 +38,7 @@ import app.matthewsgalaxy.ataglance.UserInterface.StarredArticles.starredArticle
 
 public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerViewStarredAdapter.ViewHolder>{
     private static final String TAG = "Cannot invoke method length() on null object";
-
+    private long OnBindCalls;
     private ArrayList<String> ArrayListURLValues = new ArrayList<>();
     private ArrayList<String> TitlesArrayList = new ArrayList<>();
     private ArrayList<String> DescriptionsArrayList = new ArrayList<>();
@@ -48,6 +48,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
     private Chip ChipRemoveItem;
 
     private Context mContext;
+    private TextView TextCrickets;
 
     @Override
     public int getItemViewType(int position) {
@@ -59,8 +60,6 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         return position;
     }
 
-
-
     public RecyclerViewStarredAdapter(ArrayList<String> arrayListURLValues, ArrayList<String> titlesArrayList,ArrayList<String> descriptionsArrayList,
                                         ArrayList<String> imageURLArrayList) {
         ArrayListURLValues = arrayListURLValues;
@@ -68,12 +67,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
         DescriptionsArrayList = descriptionsArrayList;
         ImageURLArrayList = imageURLArrayList;
 
-        if(TitlesArrayList == null) {
-            ArrayListURLValues = MyURLFaves;
-            TitlesArrayList = MyTitlesFaves;
-            DescriptionsArrayList = MyDescriptionsFaves;
-            ImageURLArrayList = MyImagesURLFaves;
-        }
+
     }
 
 
@@ -89,9 +83,19 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewStarredAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.setIsRecyclable(false);
+        // holder.setIsRecyclable(false);
         Log.d(TAG, "onBindViewHolder: called");
         holder.position = position;
+        OnBindCalls++;
+        try {
+            if (getItemCount() <= 1) {
+                TextCrickets.setText("Nothing here but crickets\n¯\\_(ツ)_/¯");
+            } else {
+                TextCrickets.setText("");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         // Load The Features
         try {
@@ -134,43 +138,42 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             });
             ChipRemoveItem.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onClick(View view) {
                     try {
-                        if(holder.getAdapterPosition() == -1){
-                            try {
-                                DeleteElementFromFavesArray(0);
 
-                                notifyItemRemoved(holder.position + 1);
-                            }catch (Exception E){
-                                E.printStackTrace();
-                            }
-                        }else {
-                            DeleteElementFromFavesArray(holder.position);
+                        // Remove item at position from arraylist
+                        TitlesArrayList.remove(holder.position);
+                        DescriptionsArrayList.remove(holder.position);
+                        ArrayListURLValues.remove(holder.position);
+                        ImageURLArrayList.remove(holder.position);
 
-                            // Remove item at position from arraylist
-                            TitlesArrayList.remove(holder.position);
-                            DescriptionsArrayList.remove(holder.position);
-                            ArrayListURLValues.remove(holder.position);
-                            ImageURLArrayList.remove(holder.position);
+                        WriteJSONWithStarred(mContext,TitlesArrayList,DescriptionsArrayList,ArrayListURLValues,ImageURLArrayList);
 
-                            WriteJSONWithStarred(mContext,TitlesArrayList,DescriptionsArrayList,ArrayListURLValues,ImageURLArrayList);
+                        ArrayList<ArrayList<String>> Updated = ReadJSONWithStarred(mContext);
+                        TitlesArrayList = Updated.get(0);
+                        DescriptionsArrayList = Updated.get(1);
+                        ArrayListURLValues= Updated.get(2);
+                        ImageURLArrayList = Updated.get(3);
 
-                            ArrayList<ArrayList<String>> Updated = ReadJSONWithStarred(mContext);
-                            TitlesArrayList = Updated.get(0);
-                            DescriptionsArrayList = Updated.get(1);
-                            ArrayListURLValues= Updated.get(2);
-                            ImageURLArrayList = Updated.get(3);
+                        // Update the URL Faves
 
-                            // Update the URL Faves
+                        MyTitlesFaves = ReadJSONWithStarred(mContext).get(0);
+                        MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
+                        MyURLFaves = ReadJSONWithStarred(mContext).get(2);
+                        MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
 
-                            MyTitlesFaves = ReadJSONWithStarred(mContext).get(0);
-                            MyDescriptionsFaves = ReadJSONWithStarred(mContext).get(1);
-                            MyURLFaves = ReadJSONWithStarred(mContext).get(2);
-                            MyImagesURLFaves = ReadJSONWithStarred(mContext).get(3);
+                        notifyItemRemoved(holder.position);
+                        notifyItemRangeChanged(0, getItemCount()+1);
 
-                            notifyDataSetChanged();
+                        if(getItemCount() == 1){
+                            TextCrickets.setText("Nothing here but crickets\n¯\\_(ツ)_/¯");
+                        }else{
+                            TextCrickets.setText("");
                         }
+                        // notifyDataSetChanged();
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -186,7 +189,7 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        return TitlesArrayList.size(); // How many list items are in my list
+        return TitlesArrayList.size()-1; // How many list items are in my list
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -209,6 +212,9 @@ public class RecyclerViewStarredAdapter extends RecyclerView.Adapter<RecyclerVie
             ChipRemoveItem = itemView.findViewById(R.id.ChipRemoveItem);
             ChipNewsTitle = itemView.findViewById(R.id.ChipNewsTitle);
             NewsDescriptionText = itemView.findViewById(R.id.NewsDescriptionText);
+
+            TextCrickets = itemView.findViewById(R.id.TextCrickets);
+
         }
     }
 }

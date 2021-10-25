@@ -87,12 +87,12 @@ public class starredArticlesFragment extends Fragment {
             if(fileExists(requireContext(),"JSON_SAVED_ITEMS_CACHE.json")) {
                 try {
                     if(ReadJSONWithStarred(requireContext()).get(0) != null && !ReadJSONWithStarred(requireContext()).get(0).isEmpty()) {
-                        if(numberOfHomeInflations <= 1) {
-                            MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
-                            MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
-                            MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
-                            MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
-                        }
+
+                        MyTitlesFaves = ReadJSONWithStarred(requireContext()).get(0);
+                        MyDescriptionsFaves = ReadJSONWithStarred(requireContext()).get(1);
+                        MyURLFaves = ReadJSONWithStarred(requireContext()).get(2);
+                        MyImagesURLFaves = ReadJSONWithStarred(requireContext()).get(3);
+
 
                     }
                 }catch (Exception exc){

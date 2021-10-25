@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:id="@+id/Inputtext"
-            android:hint="Enter Your Location Here"
+            android:hint="Try, For Example, 'Bucharest'"
             android:gravity="left"
             />
         <com.google.android.material.chip.Chip
